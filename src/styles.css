@@ -1,1 +1,53 @@
-/* You can add global styles to this file, and also import other style files */
+
+:root {
+  /* Identidad institucional */
+  --color-primary: #18804B;
+  --color-primary-dark: #105C37;
+  --color-secondary: #F2C230;
+
+  /* Colores generales */
+  --color-background: #F5F7F6;
+  --color-text: #18324B;
+  --color-white: #FFFFFF;
+  --color-border: #D1D7DC;
+  --color-muted: #68727D;
+
+  /* Espaciados */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+
+  /* Bordes */
+  --radius-card: 1.25rem;
+  --radius-input: 0.6rem;
+
+  /* Sombras */
+  --shadow-card: 0 12px 40px rgba(0, 0, 0, 0.18);
+
+  /* Ancho máximo */
+  --container-width: 1200px;
+}
+
+/* Configuración general */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: var(--color-text);
+  background: var(--color-background);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}

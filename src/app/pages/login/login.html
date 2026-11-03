@@ -1,0 +1,125 @@
+
+<div class="login-page">
+
+  <!-- Presentación institucional -->
+  <section class="hero">
+
+    <div class="hero-content">
+      <div class="yellow-line"></div>
+
+      <h1>
+        Colegio
+        <strong>José María<br>Obando</strong>
+      </h1>
+
+      <p>
+        Aprender hoy,<br>
+        construir un mejor mañana
+      </p>
+    </div>
+
+  </section>
+
+  <!-- Tarjeta de inicio de sesión -->
+  <section class="login-section">
+
+    <div class="login-card">
+
+      <div class="logo-container">
+        <img
+          src="/logocolegio.png"
+          alt="Logo del colegio"
+        >
+      </div>
+
+      <h2>Iniciar Sesión</h2>
+
+      <p class="subtitle">
+        Accede a tu cuenta institucional
+      </p>
+
+      <form
+        [formGroup]="formulario"
+        (ngSubmit)="iniciarSesion()"
+      >
+
+        <div class="input-group">
+          <span>♟</span>
+
+          <input
+            type="text"
+            formControlName="documento"
+            placeholder="Documento de identidad"
+            autocomplete="username"
+          >
+        </div>
+
+        @if (formulario.get('documento')?.touched &&
+             formulario.get('documento')?.invalid) {
+          <small class="error">
+            El documento es obligatorio.
+          </small>
+        }
+
+        <div class="input-group">
+          <span>🔒</span>
+
+          <input
+            type="password"
+            formControlName="password"
+            placeholder="Contraseña"
+            autocomplete="current-password"
+          >
+        </div>
+
+        @if (formulario.get('password')?.touched &&
+             formulario.get('password')?.invalid) {
+          <small class="error">
+            La contraseña es obligatoria.
+          </small>
+        }
+
+        <div class="form-options">
+          <label>
+            <input type="checkbox">
+            Recordar mi cuenta
+          </label>
+
+          <a routerLink="/recuperar-password">
+            ¿Olvidaste tu contraseña?
+          </a>
+        </div>
+
+        <button class="login-button" type="submit">
+          Ingresar →
+        </button>
+
+      </form>
+
+      <div class="divider">
+        <span>o ingresa con tu perfil</span>
+      </div>
+
+      <div class="profile-buttons">
+        <button type="button">
+          🎓 Profesor
+        </button>
+
+        <button type="button">
+          👥 Estudiante
+        </button>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- Pie de página -->
+  <footer class="footer">
+    <span>🎓</span>
+    <span>Colegio José María Obando</span>
+    <span>•</span>
+    <span>Comprometidos con la educación</span>
+  </footer>
+
+</div>

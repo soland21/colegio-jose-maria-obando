@@ -1,0 +1,375 @@
+
+* {
+  box-sizing: border-box;
+}
+
+.login-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 460px;
+  align-items: center;
+  padding: 40px 6%;
+  position: relative;
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 55, 32, 0.25),
+      rgba(0, 55, 32, 0.05)
+    ),
+    url('/josemariaobando.png') center / cover no-repeat;
+}
+/* Presentación */
+
+.hero {
+  color: white;
+  display: flex;
+  align-items: center;
+  min-height: 500px;
+}
+
+.hero-content {
+  max-width: 520px;
+}
+
+.yellow-line {
+  width: 45px;
+  height: 5px;
+  background: #f2c230;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+.hero h1 {
+  font-size: 38px;
+  font-weight: 400;
+  line-height: 1.05;
+  margin: 0;
+}
+
+.hero h1 strong {
+  display: block;
+  font-size: 52px;
+  font-weight: 800;
+}
+
+.hero p {
+  font-size: 19px;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+/* Tarjeta */
+
+.login-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 430px;
+  background: rgba(255, 255, 255, 0.70);
+  padding: 30px;
+  border-radius: 22px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  text-align: center;
+
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.logo-container img {
+  width: 115px;
+  height: 115px;
+  object-fit: contain;
+}
+
+.login-card h2 {
+  color: #105c37;
+  font-size: 25px;
+  margin: 8px 0;
+}
+
+.subtitle {
+  color: #68727d;
+  font-size: 14px;
+  margin-bottom: 22px;
+}
+
+/* Campos */
+
+.input-group {
+  display: flex;
+  align-items: center;
+  border: 1px solid #d1d7dc;
+  border-radius: 9px;
+  padding: 0 12px;
+  margin-bottom: 12px;
+  height: 48px;
+}
+
+.input-group span {
+  margin-right: 12px;
+}
+
+.input-group input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 13px;
+  background: transparent;
+}
+
+.error {
+  display: block;
+  text-align: left;
+  color: #c62828;
+  margin: -6px 0 10px;
+}
+
+/* Opciones */
+
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  margin: 15px 0;
+  gap: 8px;
+}
+
+.form-options label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.form-options a {
+  color: #18804b;
+  text-decoration: none;
+}
+
+/* Botón principal */
+
+.login-button {
+  width: 100%;
+  padding: 13px;
+  background: #000704;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.login-button:hover {
+  background: #105c37;
+}
+
+/* Separador */
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0 12px;
+  color: #7a828a;
+  font-size: 11px;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #ddd;
+}
+
+/* Perfiles */
+
+.profile-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.profile-buttons button {
+  flex: 1;
+  padding: 11px 5px;
+  border: 1px solid #d5dadd;
+  border-radius: 25px;
+  background: white;
+  color: #34434b;
+  cursor: pointer;
+}
+
+.profile-buttons button:hover {
+  border-color: #18804b;
+  color: #18804b;
+}
+
+/* Pie de página */
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #064d30;
+  color: white;
+  padding: 13px 6%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+}
+
+
+/* =====================================
+   TABLETS
+   ===================================== */
+
+@media screen and (max-width: 1024px) {
+
+  .login-page {
+    grid-template-columns: 1fr 400px;
+    padding: 30px;
+    gap: 20px;
+  }
+
+  .hero h1 {
+    font-size: 32px;
+  }
+
+  .hero h1 strong {
+    font-size: 43px;
+  }
+
+  .hero p {
+    font-size: 17px;
+  }
+
+  .login-card {
+    padding: 25px;
+  }
+
+}
+
+/* =====================================
+   CELULARES
+   ===================================== */
+
+@media screen and (max-width: 768px) {
+
+  .login-page {
+    grid-template-columns: 1fr;
+    min-height: 100vh;
+    padding: 30px 18px 85px;
+    gap: 25px;
+    background-position: center;
+  }
+
+  .hero {
+    min-height: auto;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .hero-content {
+    max-width: 100%;
+  }
+
+  .yellow-line {
+    margin: 0 auto 15px;
+  }
+
+  .hero h1 {
+    font-size: 27px;
+  }
+
+  .hero h1 strong {
+    font-size: 36px;
+  }
+
+  .hero p {
+    font-size: 15px;
+  }
+
+  .login-section {
+    width: 100%;
+  }
+
+  .login-card {
+    width: 100%;
+    max-width: 430px;
+    padding: 25px 20px;
+    margin: 0 auto;
+  }
+
+  .logo-container img {
+    width: 95px;
+    height: 95px;
+  }
+
+  .form-options {
+    flex-wrap: wrap;
+    font-size: 11px;
+  }
+
+  .footer {
+    justify-content: center;
+    text-align: center;
+    flex-wrap: wrap;
+    padding: 12px;
+    gap: 7px;
+  }
+
+}
+
+/* =====================================
+   CELULARES PEQUEÑOS
+   ===================================== */
+
+@media screen and (max-width: 480px) {
+
+  .login-page {
+    padding: 25px 14px 95px;
+    gap: 20px;
+  }
+
+  .hero h1 {
+    font-size: 23px;
+  }
+
+  .hero h1 strong {
+    font-size: 31px;
+  }
+
+  .hero p {
+    font-size: 14px;
+  }
+
+  .login-card {
+    padding: 22px 17px;
+    border-radius: 17px;
+  }
+
+  .login-card h2 {
+    font-size: 22px;
+  }
+
+  .input-group {
+    height: 46px;
+  }
+
+  .profile-buttons {
+    flex-direction: column;
+  }
+
+  .footer {
+    font-size: 10px;
+  }
+
+}
