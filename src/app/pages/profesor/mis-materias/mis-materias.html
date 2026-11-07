@@ -1,0 +1,489 @@
+
+<div class="dashboard-page">
+
+  <!-- BARRA SUPERIOR -->
+  <header class="topbar">
+
+    <div class="brand">
+      <img src="/logocolegio.png" alt="Logo del colegio">
+
+      <div class="brand-info">
+        <h2>Colegio José María Obando</h2>
+        <span>Plataforma institucional</span>
+      </div>
+    </div>
+
+    <div class="user-info">
+
+      <div class="user-avatar">
+        {{ nombreProfesor.charAt(0) }}
+      </div>
+
+      <div>
+        <strong>{{ nombreProfesor }}</strong>
+        <span>Profesor</span>
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <div class="dashboard-layout">
+
+    <!-- MENÚ LATERAL -->
+    <aside class="sidebar">
+
+      <div class="sidebar-heading">
+        MENÚ PRINCIPAL
+      </div>
+
+      <nav class="sidebar-menu">
+
+        <a
+          routerLink="/profesor/inicio"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }">
+          <span class="menu-icon">⌂</span>
+          <span>Inicio</span>
+        </a>
+
+        <a routerLink="/profesor/tareas" routerLinkActive="active">
+          <span class="menu-icon">▤</span>
+          <span>Tareas y actividades</span>
+        </a>
+
+        <a routerLink="/profesor/calificaciones" routerLinkActive="active">
+          <span class="menu-icon">▣</span>
+          <span>Calificaciones</span>
+        </a>
+
+        <div class="more-options">
+
+          <button
+            type="button"
+            class="more-button"
+            (click)="alternarOpciones()"
+            [attr.aria-expanded]="mostrarMasOpciones"
+            aria-label="Mostrar más opciones">
+            ⋯
+          </button>
+
+          <div
+            class="more-links"
+            [class.show]="mostrarMasOpciones">
+
+            <a
+              routerLink="/profesor/asistencia"
+              routerLinkActive="active"
+              (click)="mostrarMasOpciones = false">
+              <span class="menu-icon">✓</span>
+              <span>Asistencia</span>
+            </a>
+
+            <a
+              routerLink="/profesor/anuncios"
+              routerLinkActive="active"
+              (click)="mostrarMasOpciones = false">
+              <span class="menu-icon">▤</span>
+              <span>Anuncios</span>
+            </a>
+
+            <a
+              routerLink="/profesor/calendario"
+              routerLinkActive="active"
+              (click)="mostrarMasOpciones = false">
+              <span class="menu-icon">▦</span>
+              <span>Calendario</span>
+            </a>
+
+          </div>
+        </div>
+
+      </nav>
+
+      <div class="sidebar-bottom">
+
+        <a routerLink="/profesor/perfil" routerLinkActive="active">
+          <span class="menu-icon">⚙</span>
+          <span>Mi perfil</span>
+        </a>
+
+        <a routerLink="/" (click)="cerrarSesion()">
+          <span class="menu-icon">↪</span>
+          <span>Cerrar sesión</span>
+        </a>
+
+      </div>
+
+    </aside>
+
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-content">
+
+      <!-- BIENVENIDA -->
+      <section class="welcome-section">
+
+        <div class="welcome-content">
+
+          <span class="welcome-label">
+            PANEL DOCENTE
+          </span>
+
+          <h1>
+            ¡Bienvenido, {{ nombreProfesor }}!
+          </h1>
+
+          <p>
+            Administra tus materias, actividades,
+            calificaciones y estudiantes.
+          </p>
+
+        </div>
+
+        <!-- CUADROS DE GRADO Y MATERIAS -->
+        <div class="welcome-options">
+
+          <!-- GRADO -->
+          <div class="grade-card">
+
+            <span class="grade-icon">🎓</span>
+
+            <div class="grade-information">
+              <span>Grado asignado</span>
+
+              <strong>
+                {{ gradoSeleccionado || 'Sin seleccionar' }}
+              </strong>
+            </div>
+
+          </div>
+
+          <!-- MATERIAS -->
+          <div class="subject-selector">
+
+            <button
+              type="button"
+              class="selector-button"
+              (click)="alternarMaterias()"
+              [attr.aria-expanded]="mostrarMaterias">
+
+              <span class="selector-icon">📚</span>
+              <span>Mis materias</span>
+
+              <span
+                class="selector-arrow"
+                [class.rotated]="mostrarMaterias">
+                ▼
+              </span>
+
+            </button>
+
+            @if (mostrarMaterias) {
+
+              <div class="selector-dropdown">
+
+                @for (materia of materias; track materia.nombre) {
+
+                  <button
+                    type="button"
+                    (click)="seleccionarMateria(materia.nombre)">
+
+                    <span class="dropdown-icon">
+                      {{ materia.icono }}
+                    </span>
+
+                    {{ materia.nombre }}
+
+                  </button>
+
+                }
+
+              </div>
+
+            }
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- TARJETAS DE RESUMEN -->
+      <section class="summary-grid">
+
+        <article class="summary-card">
+          <div class="summary-icon green">📚</div>
+          <div>
+            <span>Materias asignadas</span>
+            <strong>{{ totalMaterias }}</strong>
+          </div>
+        </article>
+
+        <article class="summary-card">
+          <div class="summary-icon yellow">👨‍🎓</div>
+          <div>
+            <span>Estudiantes</span>
+            <strong>{{ totalEstudiantes }}</strong>
+          </div>
+        </article>
+
+        <article class="summary-card">
+          <div class="summary-icon blue">📝</div>
+          <div>
+            <span>Tareas publicadas</span>
+            <strong>{{ totalTareas }}</strong>
+          </div>
+        </article>
+
+        <article class="summary-card">
+          <div class="summary-icon orange">📋</div>
+          <div>
+            <span>Entregas por revisar</span>
+            <strong>{{ entregasPorRevisar }}</strong>
+          </div>
+        </article>
+
+      </section>
+
+
+      <!-- MATERIAS ASIGNADAS -->
+      <section class="content-card subjects-section">
+
+        <div class="section-header">
+
+          <div>
+            <h2>Mis materias</h2>
+            <p>
+              Asignaturas que tienes a cargo en {{ gradoSeleccionado }}.
+            </p>
+          </div>
+
+          <span class="section-badge">
+            {{ totalMaterias }} materias
+          </span>
+
+        </div>
+
+        <div class="subjects-grid">
+
+          @for (materia of materias; track materia.nombre) {
+
+            <article class="subject-card">
+
+              <div class="subject-top">
+
+                <div class="subject-icon">
+                  {{ materia.icono }}
+                </div>
+
+                <span class="subject-status">Activa</span>
+
+              </div>
+
+              <h3>{{ materia.nombre }}</h3>
+
+              <p>{{ materia.descripcion }}</p>
+
+              <div class="subject-details">
+
+                <div>
+                  <span>Estudiantes</span>
+                  <strong>{{ materia.estudiantes }}</strong>
+                </div>
+
+                <div>
+                  <span>Tareas</span>
+                  <strong>{{ materia.tareasPublicadas }}</strong>
+                </div>
+
+                <div>
+                  <span>Promedio</span>
+                  <strong>{{ materia.promedio | number:'1.1-1' }}</strong>
+                </div>
+
+              </div>
+
+            </article>
+
+          }
+
+        </div>
+
+      </section>
+
+
+      <!-- ANUNCIOS Y CALIFICACIONES -->
+      <div class="content-grid">
+
+        <section class="content-card">
+
+          <div class="section-header">
+
+            <div>
+              <h2>Últimos anuncios</h2>
+              <p>Actividades y novedades de tus materias.</p>
+            </div>
+
+            <a routerLink="/profesor/anuncios" class="view-all">
+              Ver todos
+            </a>
+
+          </div>
+
+          <div class="announcements-list">
+
+            @for (anuncio of anuncios; track anuncio.id) {
+
+              <article class="announcement-item">
+
+                <div class="announcement-icon">📢</div>
+
+                <div class="announcement-info">
+
+                  <h3>{{ anuncio.titulo }}</h3>
+                  <p>{{ anuncio.mensaje }}</p>
+
+                  <div class="announcement-meta">
+                    <span>{{ anuncio.asignatura }}</span>
+                    <span>{{ anuncio.fecha }}</span>
+                  </div>
+
+                </div>
+
+              </article>
+
+            }
+
+          </div>
+
+        </section>
+
+
+        <section class="content-card">
+
+          <div class="section-header">
+
+            <div>
+              <h2>Calificaciones recientes</h2>
+              <p>Últimas notas registradas.</p>
+            </div>
+
+            <a routerLink="/profesor/calificaciones" class="view-all">
+              Ver todas
+            </a>
+
+          </div>
+
+          <div class="grades-list">
+
+            @for (calificacion of calificacionesRecientes; track calificacion.id) {
+
+              <article class="grade-item">
+
+                <div class="student-avatar">
+                  {{ calificacion.estudiante.charAt(0) }}
+                </div>
+
+                <div class="grade-student">
+                  <strong>{{ calificacion.estudiante }}</strong>
+                  <span>{{ calificacion.asignatura }}</span>
+                </div>
+
+                <div class="grade-value">
+                  <strong>{{ calificacion.nota | number:'1.1-1' }}</strong>
+                  <span>Nota</span>
+                </div>
+
+              </article>
+
+            }
+
+          </div>
+
+        </section>
+
+      </div>
+
+
+      <!-- ESTUDIANTES -->
+      <section class="content-card students-section">
+
+        <div class="section-header">
+
+          <div>
+            <h2>Estudiantes del grado</h2>
+            <p>Listado de estudiantes de {{ gradoSeleccionado }}.</p>
+          </div>
+
+          <span class="section-badge">
+            {{ totalEstudiantes }} estudiantes
+          </span>
+
+        </div>
+
+        <div class="table-container">
+
+          <table class="students-table">
+
+            <thead>
+              <tr>
+                <th>Estudiante</th>
+                <th>Grado</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              @for (estudiante of estudiantes; track $index) {
+
+                <tr>
+
+                  <td>
+                    <div class="student-cell">
+
+                      <div class="student-avatar">
+                        {{ estudiante.nombre.charAt(0) }}
+                      </div>
+
+                      <strong>{{ estudiante.nombre }}</strong>
+
+                    </div>
+                  </td>
+
+                  <td>{{ estudiante.grado }}</td>
+
+                  <td>
+                    <span class="student-status">Activo</span>
+                  </td>
+
+                </tr>
+
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+
+      <!-- PIE DE PÁGINA -->
+      <footer class="footer">
+
+        <span>Colegio José María Obando</span>
+        <span>•</span>
+        <span>Comprometidos con la educación</span>
+
+      </footer>
+
+    </main>
+
+  </div>
+
+</div>

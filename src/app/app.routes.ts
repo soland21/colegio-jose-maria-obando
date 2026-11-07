@@ -1,19 +1,53 @@
+
 import { Routes } from '@angular/router';
+
 import { Login } from './pages/login/login';
 import { RecuperarPassword } from './pages/recuperar-password/recuperar-password';
 
+import { Dashboard } from './pages/estudiante/dashboard/dashboard';
+import { Dashboard as DashboardProfesor } from './pages/profesor/dashboard/dashboard';
 
-export const routes: Routes = [{
-path: '',
-component: Login
-},
-{
-    path:'recuperar-password',
+import { MisMaterias } from './pages/profesor/mis-materias/mis-materias';
+import { SeleccionarGrado } from './pages/profesor/seleccionar-grado/seleccionar-grado';
+
+
+export const routes: Routes = [
+
+  {
+    path: '',
+    component: Login
+  },
+
+  {
+    path: 'recuperar-password',
     component: RecuperarPassword
-},
-{
+  },
+
+  {
+    path: 'estudiante/inicio',
+    component: Dashboard
+  },
+
+  {
+    path: 'profesor/inicio',
+    component: DashboardProfesor
+  },
+
+  {
+    path: 'profesor/materias',
+    component: MisMaterias
+  },
+
+  // NUEVA RUTA: SELECCIÓN DE GRADO
+
+  {
+    path: 'profesor/seleccionar-grado',
+    component: SeleccionarGrado
+  },
+
+  {
     path: '**',
     redirectTo: ''
-}
+  }
 
 ];

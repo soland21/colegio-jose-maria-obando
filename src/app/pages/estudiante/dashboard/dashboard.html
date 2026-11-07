@@ -1,0 +1,489 @@
+
+<div class="dashboard-page">
+
+  <!-- ENCABEZADO -->
+  <header class="topbar">
+
+    <div class="brand">
+      <img src="/logocolegio.png" alt="Logo del colegio">
+
+      <div>
+        <h2>Colegio José María Obando</h2>
+        <span>Plataforma académica</span>
+      </div>
+    </div>
+
+    <div class="user-menu">
+
+      <button
+        class="notification-button"
+        type="button"
+        aria-label="Notificaciones">
+        🔔
+      </button>
+
+      <div class="user-info">
+        <div class="user-avatar">E</div>
+
+        <div>
+          <strong>{{ nombreEstudiante }}</strong>
+          <span>Estudiante · {{ grado }}</span>
+        </div>
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <!-- DISTRIBUCIÓN GENERAL -->
+  <div class="dashboard-layout">
+
+    <!-- MENÚ LATERAL -->
+    <aside class="sidebar">
+
+      <p class="menu-title">MENÚ PRINCIPAL</p>
+
+      <nav class="sidebar-menu">
+
+        <a
+          routerLink="/estudiante/inicio"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="menu-item">
+
+          <span>🏠</span>
+          Inicio
+
+        </a>
+
+        <a
+          routerLink="/estudiante/calificaciones"
+          routerLinkActive="active"
+          class="menu-item">
+
+          <span>📊</span>
+          Calificaciones
+
+        </a>
+
+
+        <!-- OPCIONES ADICIONALES -->
+        <div class="more-options">
+
+          <button
+            type="button"
+            class="more-button"
+            (click)="alternarOpciones()"
+            [attr.aria-expanded]="mostrarMasOpciones"
+            aria-label="Mostrar más opciones">
+
+            <span>⋯</span>
+
+          </button>
+
+          <div
+            class="more-links"
+            [class.show]="mostrarMasOpciones">
+
+
+            <a
+              routerLink="/estudiante/calendario"
+              routerLinkActive="active"
+              class="menu-item">
+
+              <span>📅</span>
+              Calendario
+
+            </a>
+
+          </div>
+
+        </div>
+
+      </nav>
+
+
+      <!-- OPCIONES INFERIORES -->
+      <div class="sidebar-bottom">
+
+        <a routerLink="/" class="menu-item logout">
+          <span>↪</span>
+          Cerrar sesión
+        </a>
+
+      </div>
+
+    </aside>
+
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-content">
+
+      <!-- BIENVENIDA -->
+      <section class="welcome-section">
+
+        <div>
+
+          <span class="welcome-label">
+            ESPACIO ESTUDIANTIL
+          </span>
+
+          <h1>
+            ¡Hola, {{ nombreEstudiante }}!
+          </h1>
+
+          <p>
+            Bienvenido a tu espacio académico.
+            Aquí podrás consultar tus actividades y mantenerte al día.
+          </p>
+
+        </div>
+
+        <div class="welcome-icon">
+          🎓
+        </div>
+
+      </section>
+
+
+      <!-- TARJETAS INFORMATIVAS -->
+      <section class="stats-grid">
+
+        <article class="stat-card">
+
+          <div class="stat-icon pending">
+            📚
+          </div>
+
+          <div>
+            <span>Tareas pendientes</span>
+            <strong>{{ tareasPendientes }}</strong>
+          </div>
+
+        </article>
+
+
+        <article class="stat-card">
+
+          <div class="stat-icon completed">
+            ✓
+          </div>
+
+          <div>
+            <span>Tareas entregadas</span>
+            <strong>{{ tareasEntregadas }}</strong>
+          </div>
+
+        </article>
+
+      </section>
+
+
+      <!-- TAREAS Y ANUNCIOS -->
+      <div class="content-grid">
+
+        <!-- PRÓXIMAS TAREAS -->
+        <section class="content-card tasks-section">
+
+          <div class="section-heading">
+
+            <div>
+              <h2>Próximas entregas</h2>
+              <p>Estas son tus actividades pendientes.</p>
+            </div>
+
+            <a routerLink="/estudiante/tareas">
+              Ver todas
+            </a>
+
+          </div>
+
+
+          <!-- LISTADO DE TAREAS -->
+          @for (tarea of tareas; track tarea.titulo) {
+
+            <article class="task-item">
+
+              <div class="task-icon">
+                📄
+              </div>
+
+              <!-- INFORMACIÓN DE LA TAREA -->
+              <div class="task-information">
+
+                <h3>{{ tarea.titulo }}</h3>
+
+                <span>{{ tarea.asignatura }}</span>
+
+                <small>
+                  Entrega: {{ tarea.fecha }}
+                </small>
+
+              </div>
+
+              <!-- ESTADO Y ACCIÓN -->
+              <div class="task-actions">
+
+                <span
+                  class="task-status"
+                  [class.delivered]="tarea.estado === 'Entregada'">
+
+                  {{ tarea.estado }}
+
+                </span>
+                
+                @if (tarea.estado === 'Pendiente') {
+
+                  <a
+                    href="#"
+                    class="deliver-link"
+                    (click)="$event.preventDefault(); entregarTarea(tarea)">
+
+                    Entregar
+
+                  </a>
+
+                }
+
+              </div>
+
+            </article>
+
+          }
+
+        </section>
+
+
+        <!-- ANUNCIOS -->
+        <section class="content-card announcements-section">
+
+          <div class="section-heading">
+
+            <div>
+              <h2>Anuncios recientes</h2>
+              <p>Información de tus profesores.</p>
+            </div>
+
+            <a routerLink="/estudiante/anuncios">
+              Ver todos
+            </a>
+
+          </div>
+
+
+          @for (anuncio of anuncios; track anuncio.titulo) {
+
+            <article class="announcement-item">
+
+              <div class="announcement-icon">
+                📢
+              </div>
+
+              <div>
+
+                <h3>{{ anuncio.titulo }}</h3>
+
+                <p>{{ anuncio.mensaje }}</p>
+
+                <small>{{ anuncio.fecha }}</small>
+
+              </div>
+
+            </article>
+
+          }
+
+        </section>
+
+      </div>
+
+
+      <!-- MENSAJE INSTITUCIONAL -->
+      <section class="institutional-message">
+
+        <span>🌱</span>
+
+        <p>
+          Aprender hoy, construir un mejor mañana.
+        </p>
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+  <!-- =====================================
+       VENTANA PARA ENTREGAR TAREA
+  ====================================== -->
+
+  @if (mostrarFormularioEntrega && tareaSeleccionada) {
+
+    <div class="modal-overlay">
+
+      <section
+        class="delivery-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="delivery-title">
+
+        <!-- ENCABEZADO DEL MODAL -->
+        <div class="modal-header">
+
+          <div class="modal-icon">
+            📄
+          </div>
+
+          <button
+            type="button"
+            class="modal-close"
+            (click)="cerrarFormularioEntrega()"
+            aria-label="Cerrar ventana">
+
+            ×
+
+          </button>
+
+        </div>
+
+
+        <!-- INFORMACIÓN -->
+        <div class="modal-content">
+
+          <span class="modal-label">
+            ENTREGA DE ACTIVIDAD
+          </span>
+
+          <h2 id="delivery-title">
+            Entregar tarea
+          </h2>
+
+          <p class="modal-description">
+            Selecciona el archivo PDF correspondiente a tu actividad.
+          </p>
+
+
+          <!-- DATOS DE LA TAREA -->
+          <div class="selected-task">
+
+            <strong>{{ tareaSeleccionada.titulo }}</strong>
+
+            <span>{{ tareaSeleccionada.asignatura }}</span>
+
+            <small>
+              Fecha de entrega: {{ tareaSeleccionada.fecha }}
+            </small>
+
+          </div>
+
+
+          <!-- SELECCIÓN DEL ARCHIVO -->
+          <div class="file-section">
+
+            <label class="file-label">
+              Documento de la actividad
+            </label>
+
+            <label
+              class="file-upload-area"
+              for="archivoTarea">
+
+              <span class="upload-icon">↑</span>
+
+              <strong>Seleccionar archivo PDF</strong>
+
+              <small>
+                Haz clic aquí para buscar el documento
+              </small>
+
+              <span class="file-format">
+                Formato permitido: PDF · Máximo 10 MB
+              </span>
+
+            </label>
+
+            <input
+              id="archivoTarea"
+              type="file"
+              accept=".pdf,application/pdf"
+              (change)="seleccionarArchivo($event)"
+              hidden
+            />
+
+
+            <!-- ARCHIVO SELECCIONADO -->
+            @if (archivoSeleccionado) {
+
+              <div class="selected-file">
+
+                <span class="pdf-icon">PDF</span>
+
+                <div class="file-information">
+                  <strong>{{ archivoSeleccionado.name }}</strong>
+
+                  <small>
+                    {{ obtenerTamanoArchivo(archivoSeleccionado.size) }}
+                  </small>
+                </div>
+
+                <button
+                  type="button"
+                  class="remove-file"
+                  (click)="quitarArchivo()"
+                  aria-label="Quitar archivo">
+
+                  ×
+
+                </button>
+
+              </div>
+
+            }
+
+            <!-- MENSAJE DE ERROR -->
+            @if (mensajeEntrega) {
+
+              <p class="delivery-error">
+                {{ mensajeEntrega }}
+              </p>
+
+            }
+
+          </div>
+
+
+          <!-- BOTONES -->
+          <div class="modal-actions">
+
+            <button
+              type="button"
+              class="cancel-button"
+              (click)="cerrarFormularioEntrega()">
+
+              Cancelar
+
+            </button>
+
+            <button
+              type="button"
+              class="confirm-button"
+              [disabled]="!archivoSeleccionado"
+              (click)="confirmarEntrega()">
+
+              Confirmar entrega
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  }
+
+</div>

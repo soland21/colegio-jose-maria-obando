@@ -1,0 +1,632 @@
+<div class="dashboard-page">
+
+  <!-- ==========================================
+       ENCABEZADO
+  =========================================== -->
+  <header class="topbar">
+
+    <div class="brand">
+      <img src="/logocolegio.png" alt="Logo del colegio">
+
+      <div class="brand-info">
+        <h2>Colegio José María Obando</h2>
+        <span>Plataforma académica</span>
+      </div>
+    </div>
+
+    <div class="user-info">
+      <div class="user-avatar">
+        {{ nombreProfesor.charAt(0).toUpperCase() }}
+      </div>
+
+      <div class="user-details">
+        <strong>{{ nombreProfesor }}</strong>
+        <span>Profesor</span>
+      </div>
+    </div>
+
+  </header>
+
+
+  <!-- ==========================================
+       DISTRIBUCIÓN GENERAL
+  =========================================== -->
+  <div class="dashboard-layout">
+
+    <!-- ==========================================
+         MENÚ LATERAL
+    =========================================== -->
+    <aside class="sidebar">
+
+      <div class="sidebar-heading">
+        MENÚ PRINCIPAL
+      </div>
+
+      <nav class="sidebar-menu">
+
+        <!-- OPCIONES PRINCIPALES -->
+
+        <a
+          routerLink="/profesor/inicio"
+          [queryParams]="materiaSeleccionada ? {materia: materiaSeleccionada} : {}"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }">
+
+          <span class="menu-icon">🏠</span>
+          <span>Inicio</span>
+        </a>
+
+        <a
+          routerLink="/profesor/tareas"
+          routerLinkActive="active">
+
+          <span class="menu-icon">📚</span>
+          <span>Tareas y actividades</span>
+        </a>
+
+        <a
+          routerLink="/profesor/calificaciones"
+          routerLinkActive="active">
+
+          <span class="menu-icon">📊</span>
+          <span>Calificaciones</span>
+        </a>
+
+
+        <!-- OPCIONES ADICIONALES -->
+
+        <div class="more-options">
+
+          <button
+            type="button"
+            class="more-button"
+            (click)="alternarOpciones()"
+            aria-label="Mostrar más opciones">
+
+            ⋮
+          </button>
+
+          <div
+            class="more-links"
+            [class.show]="mostrarMasOpciones">
+
+            <a
+              routerLink="/profesor/asistencia"
+              routerLinkActive="active">
+
+              <span class="menu-icon">📋</span>
+              <span>Asistencia</span>
+            </a>
+
+            <a
+              routerLink="/profesor/anuncios"
+              routerLinkActive="active">
+
+              <span class="menu-icon">📢</span>
+              <span>Anuncios</span>
+            </a>
+
+            <a
+              routerLink="/profesor/calendario"
+              routerLinkActive="active">
+
+              <span class="menu-icon">📅</span>
+              <span>Calendario</span>
+            </a>
+
+          </div>
+
+        </div>
+
+      </nav>
+
+
+      <!-- OPCIONES INFERIORES -->
+
+      <div class="sidebar-bottom">
+
+        <a routerLink="/profesor/perfil">
+          <span class="menu-icon">👤</span>
+          <span>Mi perfil</span>
+        </a>
+
+        <a
+          routerLink="/"
+          (click)="cerrarSesion()">
+
+          <span class="menu-icon">🚪</span>
+          <span>Cerrar sesión</span>
+        </a>
+
+      </div>
+
+    </aside>
+
+
+    <!-- ==========================================
+         CONTENIDO PRINCIPAL
+    =========================================== -->
+    <main class="main-content">
+
+
+      <!-- ==========================================
+           BIENVENIDA Y SELECTOR DE MATERIAS
+      =========================================== -->
+      <section class="welcome-section">
+
+        <div class="welcome-information">
+
+          <span class="welcome-label">
+            PANEL DEL DOCENTE
+          </span>
+
+          <h1>
+            ¡Bienvenido, {{ nombreProfesor }}!
+          </h1>
+
+          <p>
+            Desde aquí puedes administrar tus clases,
+            actividades y seguimiento académico.
+          </p>
+
+        </div>
+
+
+        <!-- SELECTOR DE MATERIAS -->
+
+        <div class="subject-selector">
+
+          <label class="selector-label">
+            MATERIA SELECCIONADA
+          </label>
+
+          <button
+            type="button"
+            class="subject-selector-button"
+            (click)="alternarMaterias()">
+
+            <span>
+              {{ materiaSeleccionada || 'Seleccionar materia' }}
+            </span>
+
+            <span
+              class="selector-arrow"
+              [class.rotated]="mostrarMaterias">
+
+              ⌄
+            </span>
+
+          </button>
+
+
+          @if (mostrarMaterias) {
+
+            <div class="subject-dropdown">
+
+              <div class="dropdown-heading">
+                Mis materias asignadas
+              </div>
+
+              @for (materia of materias; track materia) {
+
+                <button
+                  type="button"
+                  class="subject-option"
+                  [class.selected]="materiaSeleccionada === materia"
+                  (click)="seleccionarMateria(materia)">
+
+                  <span>{{ materia }}</span>
+
+                  @if (materiaSeleccionada === materia) {
+                    <span class="selected-check">✓</span>
+                  }
+
+                </button>
+
+              }
+
+            </div>
+
+          }
+
+        </div>
+
+      </section>
+
+
+      <!-- ==========================================
+           TARJETAS DE RESUMEN
+      =========================================== -->
+      <section class="summary-grid">
+
+        <article class="summary-card">
+
+          <div class="summary-icon green">
+            👨‍🎓
+          </div>
+
+          <div>
+            <span>Estudiantes</span>
+            <h2>{{ totalEstudiantes }}</h2>
+            <small>Estudiantes</small>
+          </div>
+
+        </article>
+
+
+        <article class="summary-card">
+
+          <div class="summary-icon yellow">
+            📚
+          </div>
+
+          <div>
+            <span>Tareas publicadas</span>
+            <h2>{{ tareasPublicadas }}</h2>
+            <small>Actividades asignadas</small>
+          </div>
+
+        </article>
+
+
+        <article class="summary-card">
+
+          <div class="summary-icon orange">
+            📩
+          </div>
+
+          <div>
+            <span>Entregas por revisar</span>
+            <h2>{{ entregasPorRevisar }}</h2>
+            <small>Trabajos pendientes de revisión</small>
+          </div>
+
+        </article>
+
+      </section>
+
+
+      <!-- ==========================================
+           TAREAS Y ANUNCIOS
+      =========================================== -->
+      <div class="content-grid">
+
+
+        <!-- ==========================================
+             TAREAS PUBLICADAS Y ENTREGAS RECIBIDAS
+        =========================================== -->
+        <section class="content-card tasks-section">
+
+          <div class="section-header">
+
+            <div>
+              <h2>Tareas publicadas</h2>
+              <p>Consulta las actividades de tus estudiantes</p>
+            </div>
+
+            <a
+              routerLink="/profesor/tareas"
+              class="view-all">
+
+              Ver todas
+            </a>
+
+          </div>
+
+
+          <!-- LISTA DE TAREAS -->
+
+          <div class="task-list">
+
+            @for (tarea of tareas; track tarea.id) {
+
+              <article class="task-item">
+
+                <div class="task-information">
+
+                  <h3>{{ tarea.titulo }}</h3>
+
+                  <span>{{ tarea.asignatura }}</span>
+
+                  <small>
+                    Fecha de entrega: {{ tarea.fecha }}
+                  </small>
+
+                </div>
+
+
+                <div class="task-status">
+
+                  <strong>{{ tarea.entregas }}</strong>
+
+                  <span>Entregas</span>
+
+                  <small>
+                    {{ tarea.pendientes }} pendientes
+                  </small>
+
+                </div>
+
+
+                <a
+                  routerLink="/profesor/tareas"
+                  class="review-link">
+
+                  Revisar
+                </a>
+
+              </article>
+
+            }
+
+            @if (tareas.length === 0) {
+
+              <div class="empty-deliveries">
+                <div class="empty-deliveries-icon">📚</div>
+                <h3>No hay tareas publicadas</h3>
+                <p>Cuando publiques actividades, aparecerán aquí.</p>
+              </div>
+
+            }
+
+          </div>
+
+
+          <!-- ==========================================
+               ENTREGAS RECIBIDAS DE LOS ESTUDIANTES
+          =========================================== -->
+          <div class="received-deliveries">
+
+            <div class="section-header">
+
+              <div>
+                <h2>Entregas recibidas</h2>
+                <p>Trabajos enviados por tus estudiantes</p>
+              </div>
+
+              <span class="delivery-counter">
+                {{ entregasRecibidas.length }}
+              </span>
+
+            </div>
+
+
+            <!-- LISTA DE ENTREGAS -->
+
+            @for (entrega of entregasRecibidas; track entrega.id) {
+
+              <article class="received-delivery-item">
+
+                <div class="delivery-student-info">
+
+                  <div class="student-avatar">
+                    {{ entrega.nombreEstudiante.charAt(0).toUpperCase() }}
+                  </div>
+
+                  <div class="delivery-details">
+
+                    <h3>{{ entrega.nombreEstudiante }}</h3>
+
+                    <span>
+                      {{ entrega.titulo }} · {{ entrega.asignatura }}
+                    </span>
+
+                    <small>
+                      Grado {{ entrega.grado }}
+                    </small>
+
+                    <small class="file-name">
+                      📄 {{ entrega.nombreArchivo }}
+                    </small>
+
+                  </div>
+
+                </div>
+
+
+                <div class="delivery-actions">
+
+                  <span
+                    class="delivery-status"
+                    [class.reviewed]="entrega.estado === 'Revisada'">
+
+                    {{ entrega.estado }}
+
+                  </span>
+
+                  <button
+                    type="button"
+                    class="open-file-button"
+                    (click)="abrirArchivo(entrega)">
+
+                    Abrir PDF
+                  </button>
+
+                  @if (entrega.estado === 'Pendiente de revisión') {
+
+                    <button
+                      type="button"
+                      class="mark-reviewed-button"
+                      (click)="marcarComoRevisada(entrega)">
+
+                      Marcar revisada
+
+                    </button>
+
+                  }
+
+                </div>
+
+              </article>
+
+            }
+
+
+            <!-- ESTADO VACÍO -->
+
+            @if (entregasRecibidas.length === 0) {
+
+              <div class="empty-deliveries">
+
+                <div class="empty-deliveries-icon">
+                  📂
+                </div>
+
+                <h3>No hay entregas todavía</h3>
+
+                <p>
+                  Cuando tus estudiantes envíen sus actividades,
+                  aparecerán aquí automáticamente.
+                </p>
+
+              </div>
+
+            }
+
+          </div>
+
+        </section>
+
+
+
+        <!-- ==========================================
+             ANUNCIOS
+        =========================================== -->
+        <section class="content-card announcements-section">
+
+          <div class="section-header">
+
+            <div>
+              <h2>Anuncios de clase</h2>
+              <p>Comunícate con tus estudiantes</p>
+            </div>
+
+          </div>
+
+
+          <!-- BOTÓN CREAR ANUNCIO -->
+
+          <button
+            type="button"
+            class="create-announcement-button"
+            (click)="abrirFormularioAnuncio()">
+
+            <span>＋</span>
+            Crear anuncio
+
+          </button>
+
+
+          <!-- FORMULARIO DE ANUNCIO -->
+
+          @if (mostrarFormularioAnuncio) {
+
+            <div class="announcement-form">
+
+              <h3>Nuevo anuncio</h3>
+
+              <label for="tituloAnuncio">
+                Título del anuncio
+              </label>
+
+              <input
+                type="text"
+                id="tituloAnuncio"
+                placeholder="Ej. Recordatorio de actividad"
+                #titulo>
+
+
+              <label for="mensajeAnuncio">
+                Mensaje
+              </label>
+
+              <textarea
+                id="mensajeAnuncio"
+                rows="4"
+                placeholder="Escribe el mensaje para tus estudiantes..."
+                #mensaje>
+              </textarea>
+
+
+              <div class="form-actions">
+
+                <button
+                  type="button"
+                  class="cancel-button"
+                  (click)="cancelarAnuncio()">
+
+                  Cancelar
+
+                </button>
+
+                <button
+                  type="button"
+                  class="publish-button"
+                  (click)="crearAnuncio(titulo.value, mensaje.value)">
+
+                  Publicar
+
+                </button>
+
+              </div>
+
+            </div>
+
+          }
+
+
+          <!-- LISTA DE ANUNCIOS -->
+
+          <div class="announcement-list">
+
+            @for (anuncio of anuncios; track anuncio.id) {
+
+              <article class="announcement-item">
+
+                <div class="announcement-dot"></div>
+
+                <div>
+
+                  <h3>{{ anuncio.titulo }}</h3>
+
+                  <p>{{ anuncio.mensaje }}</p>
+
+                  <small>{{ anuncio.fecha }}</small>
+
+                </div>
+
+              </article>
+
+            }
+
+
+            @if (anuncios.length === 0) {
+
+              <div class="empty-deliveries">
+
+                <div class="empty-deliveries-icon">
+                  📢
+                </div>
+
+                <h3>No hay anuncios publicados</h3>
+
+                <p>
+                  Los anuncios que publiques para tu clase
+                  aparecerán en esta sección.
+                </p>
+
+              </div>
+
+            }
+
+          </div>
+
+        </section>
+
+      </div>
+
+    </main>
+
+  </div>
+
+</div>

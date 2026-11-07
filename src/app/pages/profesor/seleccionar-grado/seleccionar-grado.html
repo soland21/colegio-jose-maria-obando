@@ -1,0 +1,211 @@
+
+<div class="dashboard-page">
+
+  <!-- BARRA SUPERIOR -->
+  <header class="topbar">
+
+    <div class="brand">
+      <img src="/logocolegio.png" alt="Logo del colegio">
+
+      <div class="brand-info">
+        <h2>Colegio José María Obando</h2>
+        <span>Plataforma institucional</span>
+      </div>
+    </div>
+
+    <div class="user-info">
+      <div class="user-avatar">CR</div>
+
+      <div>
+        <strong>{{ nombreProfesor }}</strong>
+        <span>Profesor</span>
+      </div>
+    </div>
+
+  </header>
+
+  <div class="dashboard-layout">
+
+    <!-- MENÚ LATERAL -->
+    <aside class="sidebar">
+
+      <div class="sidebar-heading">
+        MENÚ PRINCIPAL
+      </div>
+
+      <nav class="sidebar-menu">
+
+        <a routerLink="/profesor/inicio"
+           routerLinkActive="active"
+           [routerLinkActiveOptions]="{ exact: true }">
+          <span class="menu-icon">⌂</span>
+          <span>Inicio</span>
+        </a>
+
+        <a class="disabled-link"
+           aria-disabled="true"
+           tabindex="-1">
+          <span class="menu-icon">▤</span>
+          <span>Tareas y actividades</span>
+          <span class="lock-icon">🔒</span>
+        </a>
+
+        <a class="disabled-link"
+           aria-disabled="true"
+           tabindex="-1">
+          <span class="menu-icon">▣</span>
+          <span>Calificaciones</span>
+          <span class="lock-icon">🔒</span>
+        </a>
+
+        <a class="disabled-link"
+           aria-disabled="true"
+           tabindex="-1">
+          <span class="menu-icon">✓</span>
+          <span>Asistencia</span>
+          <span class="lock-icon">🔒</span>
+        </a>
+
+        <a class="disabled-link"
+           aria-disabled="true"
+           tabindex="-1">
+          <span class="menu-icon">▤</span>
+          <span>Anuncios</span>
+          <span class="lock-icon">🔒</span>
+        </a>
+
+        <a class="disabled-link"
+           aria-disabled="true"
+           tabindex="-1">
+          <span class="menu-icon">▦</span>
+          <span>Calendario</span>
+          <span class="lock-icon">🔒</span>
+        </a>
+
+      </nav>
+
+      <div class="sidebar-bottom">
+
+        <a class="disabled-link"
+           aria-disabled="true"
+           tabindex="-1">
+          <span class="menu-icon">⚙</span>
+          <span>Mi perfil</span>
+          <span class="lock-icon">🔒</span>
+        </a>
+
+        <a routerLink="/" (click)="cerrarSesion()">
+          <span class="menu-icon">↪</span>
+          <span>Cerrar sesión</span>
+        </a>
+
+      </div>
+
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-content">
+
+      <!-- BIENVENIDA -->
+      <section class="welcome-section">
+
+        <div>
+          <span class="welcome-label">
+            PLATAFORMA DOCENTE
+          </span>
+
+          <h1>
+            ¡Bienvenido, {{ nombreProfesor }}!
+          </h1>
+
+          <p>
+            Selecciona el grado con el que deseas trabajar
+            para acceder a tus herramientas académicas.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- INFORMACIÓN INSTITUCIONAL -->
+      <section class="institution-card">
+
+        <div class="institution-icon">
+          🎓
+        </div>
+
+        <div class="institution-info">
+          <h2>Colegio José María Obando</h2>
+
+          <p>
+            Un espacio para acompañar el aprendizaje,
+            fortalecer conocimientos y construir nuevas
+            oportunidades para nuestros estudiantes.
+          </p>
+
+          <span>
+            Aprender hoy, construir un mejor mañana
+          </span>
+        </div>
+
+      </section>
+
+      <!-- SELECCIÓN DE GRADO -->
+      <section class="grade-section">
+
+        <div class="section-heading">
+          <div>
+            <h2>Seleccionar grado</h2>
+
+            <p>
+              Elige el grado que deseas gestionar.
+            </p>
+          </div>
+
+          <span class="grade-count">
+            6 grados disponibles
+          </span>
+        </div>
+
+        <div class="grade-grid">
+
+          @for (grado of grados; track grado.numero) {
+
+            <button
+              type="button"
+              class="grade-card"
+              (click)="seleccionarGrado(grado)"
+              [attr.aria-label]="grado.descripcion">
+
+              <span class="grade-icon">
+                {{ grado.numero }}
+              </span>
+
+              <span class="grade-name">
+                {{ grado.nombre }}
+              </span>
+
+              <span class="grade-action">
+                Seleccionar grado
+                <span>→</span>
+              </span>
+
+            </button>
+
+          }
+
+        </div>
+
+      </section>
+
+      <!-- PIE DE PÁGINA -->
+      <footer class="footer">
+        Colegio José María Obando
+        <span>•</span>
+        Comprometidos con la educación
+      </footer>
+
+    </main>
+
+  </div>
+
+</div>

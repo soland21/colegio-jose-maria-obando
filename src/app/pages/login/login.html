@@ -43,6 +43,7 @@
         (ngSubmit)="iniciarSesion()"
       >
 
+        <!-- Documento -->
         <div class="input-group">
           <span>♟</span>
 
@@ -51,6 +52,7 @@
             formControlName="documento"
             placeholder="Documento de identidad"
             autocomplete="username"
+            (input)="identificarUsuario()"
           >
         </div>
 
@@ -61,6 +63,26 @@
           </small>
         }
 
+        <!-- Reconocimiento del usuario -->
+        @if (usuarioEncontrado) {
+          <div class="user-detected">
+
+            <span class="detected-icon">✓</span>
+
+            <div>
+              <small>Usuario identificado</small>
+
+              <strong>
+                {{ usuarioEncontrado.rol === 'profesor'
+                  ? 'Profesor'
+                  : 'Estudiante' }}
+              </strong>
+            </div>
+
+          </div>
+        }
+
+        <!-- Contraseña -->
         <div class="input-group">
           <span>🔒</span>
 
@@ -79,7 +101,15 @@
           </small>
         }
 
+        <!-- Mensaje de error -->
+        @if (mensajeError) {
+          <div class="error-message">
+            {{ mensajeError }}
+          </div>
+        }
+
         <div class="form-options">
+
           <label>
             <input type="checkbox">
             Recordar mi cuenta
@@ -88,27 +118,14 @@
           <a routerLink="/recuperar-password">
             ¿Olvidaste tu contraseña?
           </a>
+
         </div>
 
         <button class="login-button" type="submit">
-          Ingresar →
+          Ingresar
         </button>
 
       </form>
-
-      <div class="divider">
-        <span>o ingresa con tu perfil</span>
-      </div>
-
-      <div class="profile-buttons">
-        <button type="button">
-          🎓 Profesor
-        </button>
-
-        <button type="button">
-          👥 Estudiante
-        </button>
-      </div>
 
     </div>
 
