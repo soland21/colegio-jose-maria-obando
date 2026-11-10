@@ -14,6 +14,7 @@ export interface AsignacionDocente {
 
 export interface Entrega {
   id: string;
+  tareaId?: string;
   titulo: string;
   asignatura: string;
   fechaTarea: string;
@@ -27,7 +28,6 @@ export interface Entrega {
   retroalimentacion?: string;
 }
 
-// Nueva interfaz para tareas publicadas por los profesores.
 export interface TareaPublicada {
   id: string;
   titulo: string;
@@ -58,7 +58,6 @@ export class EntregaService {
   // ==========================================
 
   asignacionesDocentes: AsignacionDocente[] = [
-
     {
       grado: 'Sexto',
       asignatura: 'Matemáticas',
@@ -109,7 +108,6 @@ export class EntregaService {
       asignatura: 'Español',
       documentoProfesor: '1020304050'
     }
-
   ];
 
   // ==========================================
@@ -117,12 +115,10 @@ export class EntregaService {
   // ==========================================
 
   private archivos = new Map<string, File>();
-
-  // Archivos PDF adjuntos a las tareas.
   private archivosTareas = new Map<string, File>();
 
   // ==========================================
-  // 5. ENTREGAS COMPARTIDAS
+  // 5. OBSERVABLES DE ENTREGAS
   // ==========================================
 
   private entregasSubject = new BehaviorSubject<Entrega[]>(
@@ -132,7 +128,7 @@ export class EntregaService {
   entregas$ = this.entregasSubject.asObservable();
 
   // ==========================================
-  // 6. TAREAS PUBLICADAS COMPARTIDAS
+  // 6. OBSERVABLES DE TAREAS
   // ==========================================
 
   private tareasSubject = new BehaviorSubject<TareaPublicada[]>(
@@ -147,12 +143,11 @@ export class EntregaService {
 
   private normalizarTexto(texto: string): string {
 
-    return (texto || '')
+    return String(texto || '')
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
       .trim()
       .toLowerCase();
-
   }
 
   // ==========================================
@@ -164,17 +159,14 @@ export class EntregaService {
     asignatura: string
   ): string | null {
 
-    const gradoBuscado = this.normalizarTexto(grado);
-    const asignaturaBuscada = this.normalizarTexto(asignatura);
-
-    const asignacion = this.asignacionesDocentes.find(
-      a =>
-        this.normalizarTexto(a.grado) === gradoBuscado &&
-        this.normalizarTexto(a.asignatura) === asignaturaBuscada
+    const asignacion = this.asignacionesDocentes.find(a =>
+      this.normalizarTexto(a.grado) ===
+        this.normalizarTexto(grado) &&
+      this.normalizarTexto(a.asignatura) ===
+        this.normalizarTexto(asignatura)
     );
 
     return asignacion?.documentoProfesor || null;
-
   }
 
   // ==========================================
@@ -197,7 +189,6 @@ export class EntregaService {
       .map(a => a.grado);
 
     return [...new Set(grados)];
-
   }
 
   // ==========================================
@@ -209,15 +200,16 @@ export class EntregaService {
     archivo?: File | null
   ): TareaPublicada {
 
-    const documento = String(datos.profesorDocumento || '').trim();
+    const documento = String(
+      datos.profesorDocumento || ''
+    ).trim();
 
-    // Comprobar que el profesor tenga asignada esa materia y grado.
     const asignacionValida = this.asignacionesDocentes.some(a =>
       a.documentoProfesor.trim() === documento &&
       this.normalizarTexto(a.grado) ===
-      this.normalizarTexto(datos.grado) &&
+        this.normalizarTexto(datos.grado) &&
       this.normalizarTexto(a.asignatura) ===
-      this.normalizarTexto(datos.asignatura)
+        this.normalizarTexto(datos.asignatura)
     );
 
     if (!asignacionValida) {
@@ -235,34 +227,27 @@ export class EntregaService {
     }
 
     const nuevaTarea: TareaPublicada = {
-
       ...datos,
-
       id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-
       profesorDocumento: documento,
-
       nombreArchivo: archivo?.name || '',
-
       fechaPublicacion: new Date().toISOString()
-
     };
 
-    // Guardar el archivo en memoria.
     if (archivo) {
       this.archivosTareas.set(nuevaTarea.id, archivo);
     }
 
-    // Guardar la nueva tarea.
     const tareasActualizadas = [
       nuevaTarea,
-      ...this.tareasSubject.value
+      ...this.obtenerTareasGuardadas()
     ];
 
     this.guardarTareas(tareasActualizadas);
 
-    return nuevaTarea;
+    console.log('Tarea publicada correctamente:', nuevaTarea);
 
+    return nuevaTarea;
   }
 
   // ==========================================
@@ -276,23 +261,34 @@ export class EntregaService {
 
     const documento = String(documentoProfesor || '').trim();
 
-    return this.tareasSubject.value.filter(tarea => {
+    return this.obtenerTareasGuardadas().filter(tarea => {
 
       const perteneceProfesor =
-        tarea.profesorDocumento.trim() === documento;
+        String(tarea.profesorDocumento || '').trim() === documento;
 
       const perteneceMateria = !asignatura ||
         this.normalizarTexto(tarea.asignatura) ===
         this.normalizarTexto(asignatura);
 
       return perteneceProfesor && perteneceMateria;
-
     });
-
   }
 
   // ==========================================
-  // 12. OBTENER TAREAS DE UN ESTUDIANTE
+  // 12. SINCRONIZAR TAREAS DEL ALMACENAMIENTO
+  // ==========================================
+
+  sincronizarTareasDesdeStorage(): void {
+
+    const tareasGuardadas = this.obtenerTareasGuardadas();
+
+    this.tareasSubject.next(tareasGuardadas);
+
+    console.log('Tareas sincronizadas:', tareasGuardadas);
+  }
+
+  // ==========================================
+  // 13. OBTENER TAREAS DE UN ESTUDIANTE
   // ==========================================
 
   obtenerTareasEstudiante(
@@ -300,34 +296,39 @@ export class EntregaService {
     asignatura?: string
   ): TareaPublicada[] {
 
-    return this.tareasSubject.value.filter(tarea => {
+    const gradoEstudiante = this.normalizarTexto(grado);
+
+    const tareasGuardadas = this.obtenerTareasGuardadas();
+
+    const resultado = tareasGuardadas.filter(tarea => {
 
       const perteneceGrado =
-        this.normalizarTexto(tarea.grado) ===
-        this.normalizarTexto(grado);
+        this.normalizarTexto(tarea.grado) === gradoEstudiante;
 
       const perteneceMateria = !asignatura ||
         this.normalizarTexto(tarea.asignatura) ===
         this.normalizarTexto(asignatura);
 
       return perteneceGrado && perteneceMateria;
-
     });
 
+    console.log('Grado consultado:', grado);
+    console.log('Tareas encontradas:', resultado);
+
+    return resultado;
   }
 
   // ==========================================
-  // 13. OBTENER PDF DE UNA TAREA
+  // 14. OBTENER PDF ADJUNTO A UNA TAREA
   // ==========================================
 
   obtenerArchivoTarea(id: string): File | null {
 
     return this.archivosTareas.get(id) || null;
-
   }
 
   // ==========================================
-  // 14. GUARDAR TAREAS
+  // 15. GUARDAR TAREAS
   // ==========================================
 
   private guardarTareas(tareas: TareaPublicada[]): void {
@@ -338,11 +339,10 @@ export class EntregaService {
     );
 
     this.tareasSubject.next(tareas);
-
   }
 
   // ==========================================
-  // 15. RECUPERAR TAREAS
+  // 16. RECUPERAR TAREAS
   // ==========================================
 
   private obtenerTareasGuardadas(): TareaPublicada[] {
@@ -355,28 +355,30 @@ export class EntregaService {
 
     try {
 
-      return JSON.parse(datos) as TareaPublicada[];
+      const tareas = JSON.parse(datos);
+
+      return Array.isArray(tareas) ? tareas : [];
 
     } catch (error) {
 
       console.error('Error al recuperar las tareas:', error);
 
       return [];
-
     }
-
   }
 
   // ==========================================
-  // 16. REGISTRAR ENTREGA DEL ESTUDIANTE
+  // 17. REGISTRAR ENTREGA DEL ESTUDIANTE
   // ==========================================
 
   registrarEntrega(
-    titulo: string,
-    asignatura: string,
-    fechaTarea: string,
+    tarea: TareaPublicada,
     archivo: File
   ): void {
+
+    // ------------------------------------------
+    // VALIDAR SESIÓN
+    // ------------------------------------------
 
     const usuarioGuardado = localStorage.getItem('usuarioActual');
 
@@ -384,24 +386,141 @@ export class EntregaService {
       throw new Error('No se encontró la sesión del estudiante.');
     }
 
-    const usuario = JSON.parse(usuarioGuardado);
+    let usuario: any;
 
-    const grado = usuario.grado;
+    try {
 
-    if (!grado) {
-      throw new Error('El estudiante no tiene un grado asignado.');
+      usuario = JSON.parse(usuarioGuardado);
+
+    } catch {
+
+      throw new Error('La información del estudiante no es válida.');
     }
 
-    const profesorDocumento = this.obtenerProfesorAsignado(
-      grado,
-      asignatura
-    );
+    if (!usuario || typeof usuario !== 'object') {
+      throw new Error('Los datos del estudiante no son válidos.');
+    }
 
-    if (!profesorDocumento) {
+    // ------------------------------------------
+    // OBTENER DATOS DEL ESTUDIANTE
+    // Se admiten nombres alternativos de propiedades.
+    // ------------------------------------------
+
+    const gradoEstudiante = String(
+      usuario.grado ??
+      usuario.gradoEstudiante ??
+      usuario.curso ??
+      usuario.nivel ??
+      ''
+    ).trim();
+
+    const documentoEstudiante = String(
+      usuario.documento ??
+      usuario.documentoEstudiante ??
+      usuario.numeroDocumento ??
+      usuario.identificacion ??
+      ''
+    ).trim();
+
+    const nombreEstudiante = String(
+      usuario.nombre ??
+      usuario.nombreEstudiante ??
+      usuario.nombres ??
+      usuario.nombreCompleto ??
+      'Estudiante'
+    ).trim();
+
+    console.log('========== REGISTRO DE ENTREGA ==========');
+    console.log('Usuario guardado:', usuario);
+    console.log('Grado obtenido:', gradoEstudiante);
+    console.log('Documento obtenido:', documentoEstudiante);
+    console.log('Nombre obtenido:', nombreEstudiante);
+    console.log('Tarea seleccionada:', tarea);
+    console.log('Archivo seleccionado:', archivo);
+
+    // ------------------------------------------
+    // VALIDAR DATOS OBLIGATORIOS
+    // ------------------------------------------
+
+    if (!documentoEstudiante || !gradoEstudiante) {
+
+      console.error('No se pueden registrar los datos:', {
+        usuario,
+        gradoEstudiante,
+        documentoEstudiante,
+        propiedades: Object.keys(usuario)
+      });
+
       throw new Error(
-        `No hay un profesor asignado a ${asignatura} en ${grado}.`
+        'Faltan datos del estudiante. Verifica su documento y grado en la sesión.'
       );
     }
+
+    // ------------------------------------------
+    // VALIDAR GRADO
+    // ------------------------------------------
+
+    if (
+      this.normalizarTexto(gradoEstudiante) !==
+      this.normalizarTexto(tarea.grado)
+    ) {
+      throw new Error(
+        'Esta actividad no corresponde a tu grado.'
+      );
+    }
+
+    // ------------------------------------------
+    // VALIDAR QUE LA TAREA EXISTA
+    // ------------------------------------------
+
+    const tareasActuales = this.obtenerTareasGuardadas();
+
+    const tareaExiste = tareasActuales.some(
+      t => t.id === tarea.id
+    );
+
+    if (!tareaExiste) {
+      throw new Error('No se encontró la actividad seleccionada.');
+    }
+
+    // ------------------------------------------
+    // VALIDAR ARCHIVO
+    // ------------------------------------------
+
+    if (!archivo) {
+      throw new Error('Debes seleccionar un archivo PDF.');
+    }
+
+    if (
+      archivo.type !== 'application/pdf' &&
+      !archivo.name.toLowerCase().endsWith('.pdf')
+    ) {
+      throw new Error('El archivo debe ser un PDF.');
+    }
+
+    if (archivo.size > 10 * 1024 * 1024) {
+      throw new Error('El archivo supera el límite de 10 MB.');
+    }
+
+    // ------------------------------------------
+    // VALIDAR ENTREGA DUPLICADA
+    // ------------------------------------------
+
+    const entregasActuales = this.entregasSubject.value;
+
+    const entregaDuplicada = entregasActuales.some(
+      entrega =>
+        entrega.tareaId === tarea.id &&
+        entrega.documentoEstudiante === documentoEstudiante
+    );
+
+    if (entregaDuplicada) {
+      throw new Error('Ya has entregado esta actividad.');
+    }
+
+    // ------------------------------------------
+    // CREAR ENTREGA
+    // ------------------------------------------
 
     const id =
       `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
@@ -409,17 +528,22 @@ export class EntregaService {
     const nuevaEntrega: Entrega = {
 
       id,
-      titulo,
-      asignatura,
-      fechaTarea,
 
-      nombreEstudiante: usuario.nombre || 'Estudiante',
+      tareaId: tarea.id,
 
-      documentoEstudiante: String(usuario.documento || '').trim(),
+      titulo: tarea.titulo,
 
-      grado,
+      asignatura: tarea.asignatura,
 
-      profesorDocumento,
+      fechaTarea: tarea.fechaEntrega,
+
+      nombreEstudiante,
+
+      documentoEstudiante,
+
+      grado: tarea.grado,
+
+      profesorDocumento: tarea.profesorDocumento,
 
       nombreArchivo: archivo.name,
 
@@ -428,22 +552,24 @@ export class EntregaService {
       estado: 'Pendiente de revisión',
 
       retroalimentacion: ''
-
     };
+
+    // ------------------------------------------
+    // GUARDAR ARCHIVO Y REGISTRO
+    // ------------------------------------------
 
     this.archivos.set(id, archivo);
 
-    const entregasActualizadas = [
+    this.guardarEntregas([
       nuevaEntrega,
-      ...this.entregasSubject.value
-    ];
+      ...entregasActuales
+    ]);
 
-    this.guardarEntregas(entregasActualizadas);
-
+    console.log('Entrega registrada correctamente:', nuevaEntrega);
   }
 
   // ==========================================
-  // 17. OBTENER ENTREGAS DE UN PROFESOR
+  // 18. OBTENER ENTREGAS DE UN PROFESOR
   // ==========================================
 
   obtenerEntregasProfesor(
@@ -456,11 +582,10 @@ export class EntregaService {
       entrega =>
         String(entrega.profesorDocumento || '').trim() === documento
     );
-
   }
 
   // ==========================================
-  // 18. OBTENER ENTREGAS DE UN ESTUDIANTE
+  // 19. OBTENER ENTREGAS DE UN ESTUDIANTE
   // ==========================================
 
   obtenerEntregasEstudiante(
@@ -473,11 +598,10 @@ export class EntregaService {
       entrega =>
         String(entrega.documentoEstudiante || '').trim() === documento
     );
-
   }
 
   // ==========================================
-  // 19. OBTENER ENTREGAS DE UNA TAREA
+  // 20. OBTENER ENTREGAS DE UNA TAREA
   // ==========================================
 
   obtenerEntregasPorTarea(
@@ -491,23 +615,22 @@ export class EntregaService {
       entrega =>
         entrega.titulo === titulo &&
         entrega.asignatura === asignatura &&
-        entrega.grado === grado
+        this.normalizarTexto(entrega.grado) ===
+        this.normalizarTexto(grado)
     );
-
   }
 
   // ==========================================
-  // 20. OBTENER ARCHIVO DE ENTREGA
+  // 21. OBTENER ARCHIVO DE ENTREGA
   // ==========================================
 
   obtenerArchivo(id: string): File | null {
 
     return this.archivos.get(id) || null;
-
   }
 
   // ==========================================
-  // 21. MARCAR ENTREGA COMO REVISADA
+  // 22. MARCAR ENTREGA COMO REVISADA
   // ==========================================
 
   marcarRevisada(id: string): void {
@@ -523,11 +646,10 @@ export class EntregaService {
     );
 
     this.guardarEntregas(entregasActualizadas);
-
   }
 
   // ==========================================
-  // 22. GUARDAR RETROALIMENTACIÓN
+  // 23. GUARDAR RETROALIMENTACIÓN
   // ==========================================
 
   guardarRetroalimentacion(
@@ -535,11 +657,11 @@ export class EntregaService {
     comentario: string
   ): void {
 
-    const entregaExiste = this.entregasSubject.value.some(
+    const existe = this.entregasSubject.value.some(
       entrega => entrega.id === id
     );
 
-    if (!entregaExiste) {
+    if (!existe) {
       console.error('No se encontró la entrega:', id);
       return;
     }
@@ -555,11 +677,10 @@ export class EntregaService {
     );
 
     this.guardarEntregas(entregasActualizadas);
-
   }
 
   // ==========================================
-  // 23. OBTENER ENTREGA POR ID
+  // 24. OBTENER ENTREGA POR ID
   // ==========================================
 
   obtenerEntregaPorId(id: string): Entrega | undefined {
@@ -567,11 +688,10 @@ export class EntregaService {
     return this.entregasSubject.value.find(
       entrega => entrega.id === id
     );
-
   }
 
   // ==========================================
-  // 24. GUARDAR ENTREGAS
+  // 25. GUARDAR ENTREGAS
   // ==========================================
 
   private guardarEntregas(entregas: Entrega[]): void {
@@ -582,11 +702,10 @@ export class EntregaService {
     );
 
     this.entregasSubject.next(entregas);
-
   }
 
   // ==========================================
-  // 25. RECUPERAR ENTREGAS
+  // 26. RECUPERAR ENTREGAS
   // ==========================================
 
   private obtenerEntregasGuardadas(): Entrega[] {
@@ -599,7 +718,11 @@ export class EntregaService {
 
     try {
 
-      const entregas = JSON.parse(datos) as Entrega[];
+      const entregas = JSON.parse(datos);
+
+      if (!Array.isArray(entregas)) {
+        return [];
+      }
 
       return entregas.map(entrega => ({
         ...entrega,
@@ -611,9 +734,6 @@ export class EntregaService {
       console.error('Error al recuperar las entregas:', error);
 
       return [];
-
     }
-
   }
-
 }

@@ -1,15 +1,30 @@
 
-import { Component, inject, OnInit } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
-import { Entrega, EntregaService } from '../../services/entrega.service';
+import {
+  Component,
+  inject,
+  OnInit,
+  OnDestroy,
+  HostListener
+} from '@angular/core';
+
+import {
+  RouterLink,
+  RouterLinkActive
+} from '@angular/router';
+
+import { Subscription } from 'rxjs';
+
+import {
+  Entrega,
+  EntregaService,
+  TareaPublicada
+} from '../../services/entrega.service';
 
 // ==========================================
 // 1. INTERFACES
 // ==========================================
 
-interface Tarea {
-  titulo: string;
-  asignatura: string;
+interface Tarea extends TareaPublicada {
   fecha: string;
   estado: 'Pendiente' | 'Entregada';
 }
@@ -20,43 +35,46 @@ interface Anuncio {
   fecha: string;
 }
 
-
 // ==========================================
-// 2. CONFIGURACIÓN DEL COMPONENTE
+// 2. COMPONENTE
 // ==========================================
 
 @Component({
   selector: 'app-dashboard-estudiante',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive],
+  imports: [
+    RouterLink,
+    RouterLinkActive
+  ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })
 
-export class Dashboard implements OnInit {
+export class Dashboard implements OnInit, OnDestroy {
 
   // ==========================================
-  // 3. SERVICIO DE ENTREGAS
+  // 3. SERVICIO
   // ==========================================
 
   private entregaService = inject(EntregaService);
 
+  private suscripciones = new Subscription();
 
   // ==========================================
   // 4. INFORMACIÓN DEL ESTUDIANTE
   // ==========================================
 
-  nombreEstudiante = 'Nicolás';
-  grado = 'Noveno';
+  nombreEstudiante = 'Estudiante';
+  grado = '';
   documentoEstudiante = '';
 
+  // ==========================================
+  // 5. TAREAS Y ENTREGAS
+  // ==========================================
 
-  // ==========================================
-  // 5. ENTREGAS Y RETROALIMENTACIONES
-  // ==========================================
+  tareas: Tarea[] = [];
 
   entregasEstudiante: Entrega[] = [];
-
 
   // ==========================================
   // 6. INICIALIZACIÓN
@@ -66,20 +84,68 @@ export class Dashboard implements OnInit {
 
     this.cargarUsuario();
 
-    this.cargarEntregasEstudiante();
+    this.suscripciones.add(
+      this.entregaService.tareas$.subscribe(() => {
+        this.cargarTareasEstudiante();
+      })
+    );
 
+    this.suscripciones.add(
+      this.entregaService.entregas$.subscribe(() => {
+        this.cargarEntregasEstudiante();
+      })
+    );
+
+    this.cargarTareasEstudiante();
+    this.cargarEntregasEstudiante();
   }
 
+  // ==========================================
+  // 7. DETECTAR CAMBIOS EN OTRAS PESTAÑAS
+  // ==========================================
+
+  @HostListener('window:storage', ['$event'])
+  detectarCambiosStorage(event: StorageEvent): void {
+
+    if (
+      event.key === 'tareasColegio' ||
+      event.key === null
+    ) {
+      this.entregaService.sincronizarTareasDesdeStorage();
+    }
+
+    if (
+      event.key === 'entregasColegio' ||
+      event.key === null
+    ) {
+      this.cargarEntregasEstudiante();
+    }
+  }
 
   // ==========================================
-  // 7. CARGAR USUARIO ACTUAL
+  // 8. DESTRUIR SUSCRIPCIONES
+  // ==========================================
+
+  ngOnDestroy(): void {
+    this.suscripciones.unsubscribe();
+  }
+
+  // ==========================================
+  // 9. CARGAR USUARIO ACTUAL
   // ==========================================
 
   cargarUsuario(): void {
 
-    const usuarioGuardado = localStorage.getItem('usuarioActual');
+    const usuarioGuardado =
+      localStorage.getItem('usuarioActual');
 
     if (!usuarioGuardado) {
+
+      this.tareas = [];
+      this.entregasEstudiante = [];
+
+      console.warn('No se encontró usuarioActual.');
+
       return;
     }
 
@@ -88,151 +154,238 @@ export class Dashboard implements OnInit {
       const usuario = JSON.parse(usuarioGuardado);
 
       this.nombreEstudiante =
-        usuario.nombre || this.nombreEstudiante;
+        usuario.nombre || 'Estudiante';
 
       this.grado =
-        usuario.grado || this.grado;
+        String(usuario.grado || '').trim();
 
-      this.documentoEstudiante = String(
-        usuario.documento || ''
-      ).trim();
+      this.documentoEstudiante =
+        String(usuario.documento || '').trim();
+
+      console.log('Estudiante cargado:', this.nombreEstudiante);
+      console.log('Grado cargado:', this.grado);
+      console.log('Documento cargado:', this.documentoEstudiante);
 
     } catch (error) {
 
-      console.error(
-        'Error al cargar el usuario:',
-        error
-      );
+      console.error('Error al cargar el usuario:', error);
 
+      this.tareas = [];
+      this.entregasEstudiante = [];
     }
-
   }
 
+  // ==========================================
+  // 10. CARGAR TAREAS DEL ESTUDIANTE
+  // ==========================================
+
+  cargarTareasEstudiante(): void {
+
+    if (!this.grado) {
+      this.tareas = [];
+      return;
+    }
+
+    const tareasPublicadas =
+      this.entregaService.obtenerTareasEstudiante(
+        this.grado
+      );
+
+    this.tareas = tareasPublicadas.map(tarea => ({
+      ...tarea,
+      fecha: this.formatearFecha(tarea.fechaEntrega),
+      estado: 'Pendiente' as const
+    }));
+
+    this.actualizarEstadoTareas();
+
+    console.log('Tareas del estudiante:', this.tareas);
+    console.log('Tareas pendientes:', this.tareasPendientes);
+    console.log('Tareas entregadas:', this.tareasEntregadas);
+  }
 
   // ==========================================
-  // 8. CARGAR ENTREGAS DEL ESTUDIANTE
+  // 11. FORMATEAR FECHA
+  // ==========================================
+
+  formatearFecha(fecha: string): string {
+
+    if (!fecha) {
+      return 'Sin fecha definida';
+    }
+
+    const partes = fecha.substring(0, 10).split('-');
+
+    if (partes.length !== 3) {
+      return fecha;
+    }
+
+    const [anio, mes, dia] = partes;
+
+    return `${dia}/${mes}/${anio}`;
+  }
+
+  // ==========================================
+  // 12. FORMATEAR FECHA Y HORA DE ENTREGA
+  // ==========================================
+
+  formatearFechaHora(fecha: string): string {
+
+    if (!fecha) {
+      return 'Sin fecha registrada';
+    }
+
+    const fechaConvertida = new Date(fecha);
+
+    if (isNaN(fechaConvertida.getTime())) {
+      return fecha;
+    }
+
+    return fechaConvertida.toLocaleString('es-CO', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
+
+  // ==========================================
+  // 13. CARGAR ENTREGAS DEL ESTUDIANTE
   // ==========================================
 
   cargarEntregasEstudiante(): void {
 
     if (!this.documentoEstudiante) {
-
       this.entregasEstudiante = [];
-
+      this.actualizarEstadoTareas();
       return;
-
     }
 
-    // Consultar las entregas del estudiante actual.
-
-    const entregas =
+    this.entregasEstudiante =
       this.entregaService.obtenerEntregasEstudiante(
         this.documentoEstudiante
       );
 
-    // Guardar las entregas para mostrarlas
-    // en el recuadro de retroalimentaciones.
-
-    this.entregasEstudiante = entregas;
-
-
-    // Actualizar el estado y los comentarios
-    // de las tareas que aparecen en el dashboard.
-
-    this.tareas.forEach(tarea => {
-
-      const entregaEncontrada = entregas.find(entrega =>
-
-        entrega.titulo === tarea.titulo &&
-        entrega.asignatura === tarea.asignatura
-
-      );
-
-      if (entregaEncontrada) {
-
-        tarea.estado = 'Entregada';
-
-      }
-
-    });
-
+    this.actualizarEstadoTareas();
   }
 
+  // ==========================================
+  // 14. ACTUALIZAR ESTADOS DE LAS TAREAS
+  // ==========================================
+
+  actualizarEstadoTareas(): void {
+
+    this.tareas = this.tareas.map(tarea => {
+
+      const entregaEncontrada =
+        this.entregasEstudiante.find(entrega =>
+          entrega.tareaId === tarea.id
+        );
+
+      const entregaAnterior = !entregaEncontrada
+        ? this.entregasEstudiante.find(entrega =>
+            !entrega.tareaId &&
+            entrega.titulo === tarea.titulo &&
+            entrega.asignatura === tarea.asignatura &&
+            this.normalizarTexto(entrega.grado) ===
+            this.normalizarTexto(tarea.grado)
+          )
+        : undefined;
+
+      const entrega = entregaEncontrada || entregaAnterior;
+
+      return {
+        ...tarea,
+        estado: entrega ? 'Entregada' : 'Pendiente'
+      };
+    });
+  }
 
   // ==========================================
-  // 9. CONTROL DEL MENÚ DE OPCIONES
+  // 15. NORMALIZAR TEXTOS
+  // ==========================================
+
+  private normalizarTexto(texto: string): string {
+
+    return String(texto || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .trim()
+      .toLowerCase();
+  }
+
+  // ==========================================
+  // 16. LISTADO DE TAREAS PENDIENTES
+  // ==========================================
+
+  get tareasPendientesLista(): Tarea[] {
+
+    return this.tareas.filter(
+      tarea => tarea.estado === 'Pendiente'
+    );
+  }
+
+  // ==========================================
+  // 17. LISTADO DE TAREAS ENTREGADAS
+  // ==========================================
+
+  get tareasEntregadasLista(): Tarea[] {
+
+    return this.tareas.filter(
+      tarea => tarea.estado === 'Entregada'
+    );
+  }
+
+  // ==========================================
+  // 18. CONTADORES
+  // ==========================================
+
+  get tareasPendientes(): number {
+    return this.tareasPendientesLista.length;
+  }
+
+  get tareasEntregadas(): number {
+    return this.tareasEntregadasLista.length;
+  }
+
+  // ==========================================
+  // 19. VENTANA DE TAREAS ENTREGADAS
+  // ==========================================
+
+  mostrarModalEntregadas = false;
+
+  abrirModalEntregadas(): void {
+    this.mostrarModalEntregadas = true;
+  }
+
+  cerrarModalEntregadas(): void {
+    this.mostrarModalEntregadas = false;
+  }
+
+  // ==========================================
+  // 20. BUSCAR ENTREGA ASOCIADA A UNA TAREA
+  // ==========================================
+
+  obtenerEntregaDeTarea(tareaId: string): Entrega | undefined {
+
+    return this.entregasEstudiante.find(
+      entrega => entrega.tareaId === tareaId
+    );
+  }
+
+  // ==========================================
+  // 21. MENÚ DE OPCIONES
   // ==========================================
 
   mostrarMasOpciones = false;
 
   alternarOpciones(): void {
-
     this.mostrarMasOpciones = !this.mostrarMasOpciones;
-
   }
 
-
   // ==========================================
-  // 10. LISTA DE TAREAS
-  // ==========================================
-
-  tareas: Tarea[] = [
-
-    {
-      titulo: 'Taller de matemáticas',
-      asignatura: 'Matemáticas',
-      fecha: '15 de noviembre',
-      estado: 'Pendiente'
-    },
-
-    {
-      titulo: 'Actividad de lectura',
-      asignatura: 'Español',
-      fecha: '18 de noviembre',
-      estado: 'Pendiente'
-    },
-
-    {
-      titulo: 'Trabajo sobre los ecosistemas',
-      asignatura: 'Biología',
-      fecha: '20 de noviembre',
-      estado: 'Pendiente'
-    },
-
-    {
-      titulo: 'Ejercicios de estadística',
-      asignatura: 'Estadística',
-      fecha: '22 de noviembre',
-      estado: 'Entregada'
-    }
-
-  ];
-
-
-  // ==========================================
-  // 11. CONTADORES AUTOMÁTICOS
-  // ==========================================
-
-  get tareasPendientes(): number {
-
-    return this.tareas.filter(
-      tarea => tarea.estado === 'Pendiente'
-    ).length;
-
-  }
-
-
-  get tareasEntregadas(): number {
-
-    return this.tareas.filter(
-      tarea => tarea.estado === 'Entregada'
-    ).length;
-
-  }
-
-
-  // ==========================================
-  // 12. CONTROL DEL FORMULARIO DE ENTREGA
+  // 22. FORMULARIO DE ENTREGA
   // ==========================================
 
   mostrarFormularioEntrega = false;
@@ -243,9 +396,8 @@ export class Dashboard implements OnInit {
 
   mensajeEntrega = '';
 
-
   // ==========================================
-  // 13. ABRIR FORMULARIO DE ENTREGA
+  // 23. ABRIR FORMULARIO
   // ==========================================
 
   entregarTarea(tarea: Tarea): void {
@@ -255,24 +407,18 @@ export class Dashboard implements OnInit {
     }
 
     this.tareaSeleccionada = tarea;
-
     this.archivoSeleccionado = null;
-
     this.mensajeEntrega = '';
-
     this.mostrarFormularioEntrega = true;
-
   }
 
-
   // ==========================================
-  // 14. SELECCIONAR ARCHIVO PDF
+  // 24. SELECCIONAR ARCHIVO PDF
   // ==========================================
 
   seleccionarArchivo(event: Event): void {
 
     const input = event.target as HTMLInputElement;
-
     const archivo = input.files?.[0];
 
     this.mensajeEntrega = '';
@@ -281,26 +427,20 @@ export class Dashboard implements OnInit {
       return;
     }
 
-    // Validar extensión y tipo de archivo.
-
     const esPDF =
       archivo.type === 'application/pdf' ||
       archivo.name.toLowerCase().endsWith('.pdf');
 
-    if (!esPDF || !archivo.name.toLowerCase().endsWith('.pdf')) {
+    if (!esPDF) {
 
       this.mensajeEntrega =
         'Solo se permiten archivos en formato PDF.';
 
       this.archivoSeleccionado = null;
-
       input.value = '';
 
       return;
-
     }
-
-    // Validar tamaño máximo de 10 MB.
 
     const tamanoMaximo = 10 * 1024 * 1024;
 
@@ -310,20 +450,16 @@ export class Dashboard implements OnInit {
         'El archivo supera el tamaño máximo permitido de 10 MB.';
 
       this.archivoSeleccionado = null;
-
       input.value = '';
 
       return;
-
     }
 
     this.archivoSeleccionado = archivo;
-
   }
 
-
   // ==========================================
-  // 15. MOSTRAR TAMAÑO DEL ARCHIVO
+  // 25. TAMAÑO DEL ARCHIVO
   // ==========================================
 
   obtenerTamanoArchivo(tamano: number): string {
@@ -331,18 +467,15 @@ export class Dashboard implements OnInit {
     const tamanoEnMB = tamano / (1024 * 1024);
 
     return `${tamanoEnMB.toFixed(2)} MB`;
-
   }
 
-
   // ==========================================
-  // 16. QUITAR ARCHIVO SELECCIONADO
+  // 26. QUITAR ARCHIVO
   // ==========================================
 
   quitarArchivo(): void {
 
     this.archivoSeleccionado = null;
-
     this.mensajeEntrega = '';
 
     const input = document.getElementById(
@@ -352,12 +485,10 @@ export class Dashboard implements OnInit {
     if (input) {
       input.value = '';
     }
-
   }
 
-
   // ==========================================
-  // 17. CONFIRMAR ENTREGA DE TAREA
+  // 27. CONFIRMAR ENTREGA
   // ==========================================
 
   confirmarEntrega(): void {
@@ -372,39 +503,17 @@ export class Dashboard implements OnInit {
         'Debes seleccionar un archivo PDF para continuar.';
 
       return;
-
     }
 
     try {
 
-      // Registrar la entrega en el servicio compartido.
-
       this.entregaService.registrarEntrega(
-        this.tareaSeleccionada.titulo,
-        this.tareaSeleccionada.asignatura,
-        this.tareaSeleccionada.fecha,
+        this.tareaSeleccionada,
         this.archivoSeleccionado
       );
 
-      // Cambiar estado de la tarea.
-
-      this.tareaSeleccionada.estado = 'Entregada';
-
-      console.log(
-        'Tarea entregada:',
-        this.tareaSeleccionada.titulo
-      );
-
-      console.log(
-        'Archivo seleccionado:',
-        this.archivoSeleccionado.name
-      );
-
-      // Actualizar la información de entregas.
-
       this.cargarEntregasEstudiante();
-
-      // Cerrar formulario.
+      this.cargarTareasEstudiante();
 
       this.cerrarFormularioEntrega();
 
@@ -419,31 +528,23 @@ export class Dashboard implements OnInit {
         error instanceof Error
           ? error.message
           : 'Ocurrió un error al registrar la entrega.';
-
     }
-
   }
 
-
   // ==========================================
-  // 18. CERRAR FORMULARIO
+  // 28. CERRAR FORMULARIO
   // ==========================================
 
   cerrarFormularioEntrega(): void {
 
     this.mostrarFormularioEntrega = false;
-
     this.tareaSeleccionada = null;
-
     this.archivoSeleccionado = null;
-
     this.mensajeEntrega = '';
-
   }
 
-
   // ==========================================
-  // 19. LISTA DE ANUNCIOS
+  // 29. ANUNCIOS
   // ==========================================
 
   anuncios: Anuncio[] = [

@@ -1,19 +1,25 @@
 
 <div class="dashboard-page">
 
-  <!-- ENCABEZADO -->
+  <!-- ==========================================
+       ENCABEZADO
+  =========================================== -->
+
   <header class="topbar">
 
     <div class="brand">
+
       <img src="/logocolegio.png" alt="Logo del colegio">
 
       <div class="brand-info">
         <h2>Colegio José María Obando</h2>
         <span>Plataforma académica</span>
       </div>
+
     </div>
 
     <div class="user-info">
+
       <div class="user-avatar">
         {{ nombreProfesor.charAt(0).toUpperCase() }}
       </div>
@@ -22,14 +28,21 @@
         <strong>{{ nombreProfesor }}</strong>
         <span>Profesor</span>
       </div>
+
     </div>
 
   </header>
 
-  <!-- DISTRIBUCIÓN GENERAL -->
+  <!-- ==========================================
+       DISTRIBUCIÓN GENERAL
+  =========================================== -->
+
   <div class="dashboard-layout">
 
-    <!-- MENÚ LATERAL -->
+    <!-- ==========================================
+         MENÚ LATERAL
+    =========================================== -->
+
     <aside class="sidebar">
 
       <div class="sidebar-heading">
@@ -46,6 +59,7 @@
 
           <span class="menu-icon">🏠</span>
           <span>Inicio</span>
+
         </a>
 
         <a
@@ -54,6 +68,7 @@
 
           <span class="menu-icon">📚</span>
           <span>Tareas y actividades</span>
+
         </a>
 
         <a
@@ -62,9 +77,11 @@
 
           <span class="menu-icon">📊</span>
           <span>Calificaciones</span>
+
         </a>
 
         <!-- OPCIONES ADICIONALES -->
+
         <div class="more-options">
 
           <button
@@ -72,7 +89,9 @@
             class="more-button"
             (click)="alternarOpciones()"
             aria-label="Mostrar más opciones">
+
             ⋮
+
           </button>
 
           <div
@@ -85,6 +104,7 @@
 
               <span class="menu-icon">📋</span>
               <span>Asistencia</span>
+
             </a>
 
             <a
@@ -93,6 +113,7 @@
 
               <span class="menu-icon">📢</span>
               <span>Anuncios</span>
+
             </a>
 
             <a
@@ -101,34 +122,47 @@
 
               <span class="menu-icon">📅</span>
               <span>Calendario</span>
+
             </a>
 
           </div>
+
         </div>
 
       </nav>
 
       <!-- OPCIONES INFERIORES -->
+
       <div class="sidebar-bottom">
 
         <a routerLink="/profesor/perfil">
+
           <span class="menu-icon">👤</span>
           <span>Mi perfil</span>
+
         </a>
 
         <a routerLink="/" (click)="cerrarSesion()">
+
           <span class="menu-icon">🚪</span>
           <span>Cerrar sesión</span>
+
         </a>
 
       </div>
 
     </aside>
 
-    <!-- CONTENIDO PRINCIPAL -->
+    <!-- ==========================================
+         CONTENIDO PRINCIPAL
+    =========================================== -->
+
     <main class="main-content">
 
-      <!-- BIENVENIDA Y SELECTOR DE MATERIAS -->
+      <!-- ==========================================
+           BIENVENIDA Y SELECTOR DE MATERIAS
+      =========================================== -->
+
       <section class="welcome-section">
 
         <div class="welcome-information">
@@ -149,6 +183,7 @@
         </div>
 
         <!-- SELECTOR DE MATERIAS -->
+
         <div class="subject-selector">
 
           <label class="selector-label">
@@ -167,7 +202,9 @@
             <span
               class="selector-arrow"
               [class.rotated]="mostrarMaterias">
+
               ⌄
+
             </span>
 
           </button>
@@ -198,6 +235,14 @@
 
               }
 
+              @if (materias.length === 0) {
+
+                <p class="empty-subjects">
+                  No tienes materias asignadas.
+                </p>
+
+              }
+
             </div>
 
           }
@@ -206,8 +251,13 @@
 
       </section>
 
-      <!-- TARJETAS DE RESUMEN -->
+      <!-- ==========================================
+           TARJETAS DE RESUMEN
+      =========================================== -->
+
       <section class="summary-grid">
+
+        <!-- ESTUDIANTES -->
 
         <article class="summary-card">
 
@@ -223,6 +273,8 @@
 
         </article>
 
+        <!-- TAREAS PUBLICADAS -->
+
         <article class="summary-card">
 
           <div class="summary-icon yellow">
@@ -237,33 +289,57 @@
 
         </article>
 
-        <article class="summary-card">
+        <!-- ENTREGAS POR REVISAR -->
+
+        <button
+          type="button"
+          class="summary-card summary-card-button"
+          (click)="abrirModalEntregasPendientes()">
 
           <div class="summary-icon orange">
             📩
           </div>
 
-          <div>
+          <div class="summary-information">
+
             <span>Entregas por revisar</span>
+
             <h2>{{ entregasPorRevisar }}</h2>
-            <small>Trabajos pendientes de revisión</small>
+
+            <small>
+              Haz clic para consultar los trabajos
+            </small>
+
           </div>
 
-        </article>
+          <span class="summary-arrow">›</span>
+
+        </button>
 
       </section>
 
-      <!-- TAREAS Y ANUNCIOS -->
+      <!-- ==========================================
+           TAREAS Y ANUNCIOS
+      =========================================== -->
+
       <div class="content-grid">
 
-        <!-- TAREAS PUBLICADAS Y ENTREGAS -->
+        <!-- ==========================================
+             TAREAS PUBLICADAS
+        =========================================== -->
+
         <section class="content-card tasks-section">
 
           <div class="section-header tasks-section-header">
 
             <div>
+
               <h2>Tareas publicadas</h2>
-              <p>Consulta las actividades de tus estudiantes</p>
+
+              <p>
+                Consulta las actividades de tus estudiantes
+              </p>
+
             </div>
 
             <div class="task-header-actions">
@@ -281,17 +357,20 @@
               <a
                 routerLink="/profesor/tareas"
                 class="view-all">
+
                 Ver todas
+
               </a>
 
             </div>
 
           </div>
 
-          <!-- LISTA DE TAREAS -->
-          <div class="task-list">
+          <!-- LISTA CON SCROLL -->
 
-            @for (tarea of tareas; track tarea.id) {
+          <div class="task-list task-list-scroll">
+
+            @for (tarea of tareasVisibles; track tarea.id) {
 
               <article class="task-item">
 
@@ -301,7 +380,9 @@
 
                   <span>{{ tarea.asignatura }}</span>
 
-                  <small>Grado {{ tarea.grado }}</small>
+                  <small>
+                    Grado {{ tarea.grado }}
+                  </small>
 
                   <small>
                     Fecha de entrega: {{ tarea.fecha }}
@@ -324,164 +405,28 @@
                 <a
                   routerLink="/profesor/tareas"
                   class="review-link">
+
                   Revisar
+
                 </a>
 
               </article>
 
             }
 
-            @if (tareas.length === 0) {
+            @if (tareasVisibles.length === 0) {
 
               <div class="empty-deliveries">
 
-                <div class="empty-deliveries-icon">📚</div>
+                <div class="empty-deliveries-icon">
+                  📚
+                </div>
 
                 <h3>No hay tareas publicadas</h3>
 
                 <p>
-                  Cuando publiques actividades, aparecerán aquí.
-                </p>
-
-              </div>
-
-            }
-
-          </div>
-
-          <!-- ENTREGAS RECIBIDAS -->
-          <div class="received-deliveries">
-
-            <div class="section-header">
-
-              <div>
-                <h2>Entregas recibidas</h2>
-                <p>Trabajos enviados por tus estudiantes</p>
-              </div>
-
-              <span class="delivery-counter">
-                {{ entregasRecibidas.length }}
-              </span>
-
-            </div>
-
-            @for (entrega of entregasRecibidas; track entrega.id) {
-
-              <article class="received-delivery-item">
-
-                <!-- INFORMACIÓN DEL ESTUDIANTE -->
-                <div class="delivery-student-info">
-
-                  <div class="student-avatar">
-                    {{ entrega.nombreEstudiante.charAt(0).toUpperCase() }}
-                  </div>
-
-                  <div class="delivery-details">
-
-                    <h3>{{ entrega.nombreEstudiante }}</h3>
-
-                    <span>
-                      {{ entrega.titulo }} · {{ entrega.asignatura }}
-                    </span>
-
-                    <small>
-                      Grado {{ entrega.grado }}
-                    </small>
-
-                    <small class="file-name">
-                      📄 {{ entrega.nombreArchivo }}
-                    </small>
-
-                  </div>
-
-                </div>
-
-                <!-- ACCIONES -->
-                <div class="delivery-actions">
-
-                  <span
-                    class="delivery-status"
-                    [class.reviewed]="entrega.estado === 'Revisada'">
-
-                    {{ entrega.estado }}
-
-                  </span>
-
-                  <button
-                    type="button"
-                    class="open-file-button"
-                    (click)="abrirArchivo(entrega)">
-
-                    Abrir PDF
-
-                  </button>
-
-                  @if (entrega.estado === 'Pendiente de revisión') {
-
-                    <button
-                      type="button"
-                      class="mark-reviewed-button"
-                      (click)="marcarComoRevisada(entrega)">
-
-                      Marcar revisada
-
-                    </button>
-
-                  }
-
-                </div>
-
-                <!-- RETROALIMENTACIÓN -->
-                <div class="feedback-section">
-
-                  <div class="feedback-heading">
-
-                    <h4>Retroalimentación</h4>
-
-                    <p>
-                      Escribe observaciones sobre el trabajo del estudiante.
-                    </p>
-
-                  </div>
-
-                  <textarea
-                    #comentario
-                    class="feedback-textarea"
-                    placeholder="Escribe aquí tu retroalimentación..."
-                    [value]="entrega.retroalimentacion || ''"
-                    rows="4">
-                  </textarea>
-
-                  <div class="feedback-footer">
-
-                    <button
-                      type="button"
-                      class="save-feedback-button"
-                      (click)="guardarRetroalimentacion(entrega, comentario.value)">
-
-                      💾 Guardar retroalimentación
-
-                    </button>
-
-                  </div>
-
-                </div>
-
-              </article>
-
-            }
-
-            @if (entregasRecibidas.length === 0) {
-
-              <div class="empty-deliveries">
-
-                <div class="empty-deliveries-icon">📂</div>
-
-                <h3>No hay entregas todavía</h3>
-
-                <p>
-                  Cuando tus estudiantes envíen sus actividades,
-                  aparecerán aquí automáticamente.
+                  Cuando publiques actividades,
+                  aparecerán aquí.
                 </p>
 
               </div>
@@ -492,17 +437,27 @@
 
         </section>
 
-        <!-- ANUNCIOS -->
+        <!-- ==========================================
+             ANUNCIOS
+        =========================================== -->
+
         <section class="content-card announcements-section">
 
           <div class="section-header">
 
             <div>
+
               <h2>Anuncios de clase</h2>
-              <p>Comunícate con tus estudiantes</p>
+
+              <p>
+                Comunícate con tus estudiantes
+              </p>
+
             </div>
 
           </div>
+
+          <!-- BOTÓN CREAR ANUNCIO -->
 
           <button
             type="button"
@@ -513,6 +468,8 @@
             Crear anuncio
 
           </button>
+
+          <!-- FORMULARIO DE ANUNCIO -->
 
           @if (mostrarFormularioAnuncio) {
 
@@ -547,14 +504,18 @@
                   type="button"
                   class="cancel-button"
                   (click)="cancelarAnuncio()">
+
                   Cancelar
+
                 </button>
 
                 <button
                   type="button"
                   class="publish-button"
                   (click)="crearAnuncio(titulo.value, mensaje.value)">
+
                   Publicar
+
                 </button>
 
               </div>
@@ -562,6 +523,8 @@
             </div>
 
           }
+
+          <!-- LISTA DE ANUNCIOS -->
 
           <div class="announcement-list">
 
@@ -589,7 +552,9 @@
 
               <div class="empty-deliveries">
 
-                <div class="empty-deliveries-icon">📢</div>
+                <div class="empty-deliveries-icon">
+                  📢
+                </div>
 
                 <h3>No hay anuncios publicados</h3>
 
@@ -613,7 +578,230 @@
   </div>
 
   <!-- ==========================================
-       MODAL PARA PUBLICAR TAREA
+       MODAL: ENTREGAS POR REVISAR
+  =========================================== -->
+
+  @if (mostrarModalEntregasPendientes) {
+
+    <div
+      class="deliveries-modal-overlay"
+      (click)="cerrarModalEntregasPendientes()">
+
+      <section
+        class="deliveries-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="deliveries-modal-title"
+        (click)="$event.stopPropagation()">
+
+        <!-- CABECERA -->
+
+        <div class="deliveries-modal-header">
+
+          <div class="deliveries-modal-icon">
+            📩
+          </div>
+
+          <button
+            type="button"
+            class="deliveries-close-button"
+            (click)="cerrarModalEntregasPendientes()"
+            aria-label="Cerrar ventana">
+
+            ×
+
+          </button>
+
+        </div>
+
+        <!-- CONTENIDO -->
+
+        <div class="deliveries-modal-content">
+
+          <span class="deliveries-modal-label">
+            ACTIVIDADES RECIBIDAS
+          </span>
+
+          <h2 id="deliveries-modal-title">
+            Entregas por revisar
+          </h2>
+
+          <p class="deliveries-modal-description">
+
+            Aquí puedes consultar los trabajos que tus estudiantes
+            han enviado y que todavía no has revisado.
+
+          </p>
+
+          <!-- RESUMEN -->
+
+          <div class="deliveries-summary">
+
+            <span>Trabajos pendientes de revisión</span>
+
+            <strong>
+              {{ entregasPendientesRevision.length }}
+            </strong>
+
+          </div>
+
+          <!-- LISTA DE ENTREGAS -->
+
+          <div class="pending-deliveries-list">
+
+            @for (
+              entrega of entregasPendientesRevision;
+              track entrega.id
+            ) {
+
+              <article class="pending-delivery-item">
+
+                <!-- INFORMACIÓN DEL ESTUDIANTE -->
+
+                <div class="pending-delivery-student">
+
+                  <div class="pending-student-avatar">
+
+                    {{ entrega.nombreEstudiante.charAt(0).toUpperCase() }}
+
+                  </div>
+
+                  <div class="pending-delivery-information">
+
+                    <h3>
+                      {{ entrega.nombreEstudiante }}
+                    </h3>
+
+                    <span>
+                      {{ entrega.titulo }}
+                    </span>
+
+                    <small>
+                      {{ entrega.asignatura }} · Grado {{ entrega.grado }}
+                    </small>
+
+                    <small class="pending-file-name">
+                      📄 {{ entrega.nombreArchivo }}
+                    </small>
+
+                  </div>
+
+                </div>
+
+                <!-- ACCIONES -->
+
+                <div class="pending-delivery-actions">
+
+                  <span class="pending-review-status">
+                    Pendiente de revisión
+                  </span>
+
+                  <button
+                    type="button"
+                    class="pending-open-file-button"
+                    (click)="abrirArchivo(entrega)">
+
+                    Abrir PDF
+
+                  </button>
+
+                  <button
+                    type="button"
+                    class="pending-mark-reviewed-button"
+                    (click)="marcarComoRevisada(entrega)">
+
+                    ✓ Marcar revisada
+
+                  </button>
+
+                </div>
+
+                <!-- RETROALIMENTACIÓN -->
+
+                <div class="pending-feedback-section">
+
+                  <h4>Retroalimentación</h4>
+
+                  <p>
+                    Escribe observaciones sobre el trabajo del estudiante.
+                  </p>
+
+                  <textarea
+                    #comentario
+                    class="feedback-textarea"
+                    placeholder="Escribe aquí tu retroalimentación..."
+                    [value]="entrega.retroalimentacion || ''"
+                    rows="3">
+                  </textarea>
+
+                  <div class="feedback-footer">
+
+                    <button
+                      type="button"
+                      class="save-feedback-button"
+                      (click)="guardarRetroalimentacion(entrega, comentario.value)">
+
+                      💾 Guardar retroalimentación
+
+                    </button>
+
+                  </div>
+
+                </div>
+
+              </article>
+
+            }
+
+            <!-- ESTADO VACÍO -->
+
+            @if (entregasPendientesRevision.length === 0) {
+
+              <div class="empty-pending-deliveries">
+
+                <div class="empty-pending-icon">
+                  🎉
+                </div>
+
+                <h3>¡Todo está al día!</h3>
+
+                <p>
+                  No tienes trabajos pendientes de revisión.
+                  Cuando tus estudiantes envíen nuevas actividades,
+                  aparecerán aquí.
+                </p>
+
+              </div>
+
+            }
+
+          </div>
+
+          <!-- PIE DEL MODAL -->
+
+          <div class="deliveries-modal-footer">
+
+            <button
+              type="button"
+              class="deliveries-modal-close-action"
+              (click)="cerrarModalEntregasPendientes()">
+
+              Cerrar
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  }
+
+  <!-- ==========================================
+       MODAL: PUBLICAR TAREA
   =========================================== -->
 
   @if (mostrarModalTarea) {
@@ -624,16 +812,29 @@
 
       <div
         class="task-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="task-modal-title"
         (click)="$event.stopPropagation()">
+
+        <!-- CABECERA -->
 
         <div class="task-modal-header">
 
           <div>
-            <span class="task-modal-label">PANEL DEL DOCENTE</span>
-            <h2>Publicar nueva tarea</h2>
+
+            <span class="task-modal-label">
+              PANEL DEL DOCENTE
+            </span>
+
+            <h2 id="task-modal-title">
+              Publicar nueva tarea
+            </h2>
+
             <p>
               Comparte una actividad con los estudiantes de tu clase.
             </p>
+
           </div>
 
           <button
@@ -641,12 +842,18 @@
             class="close-modal-button"
             (click)="cerrarModalTarea()"
             aria-label="Cerrar ventana">
+
             ×
+
           </button>
 
         </div>
 
+        <!-- CUERPO DEL MODAL -->
+
         <div class="task-modal-body">
+
+          <!-- TÍTULO -->
 
           <div class="task-form-group">
 
@@ -663,6 +870,8 @@
 
           </div>
 
+          <!-- CONTENIDO -->
+
           <div class="task-form-group">
 
             <label for="contenidoTarea">
@@ -672,10 +881,13 @@
             <textarea
               #contenidoTarea
               id="contenidoTarea"
-              placeholder="Escribe las instrucciones que deben seguir los estudiantes...">
+              placeholder="Escribe las instrucciones que deben seguir los estudiantes..."
+              rows="4">
             </textarea>
 
           </div>
+
+          <!-- MATERIA Y GRADO -->
 
           <div class="task-form-row">
 
@@ -689,10 +901,14 @@
                 #materiaTarea
                 id="materiaTarea"
                 [value]="materiaTareaSeleccionada"
-                (change)="actualizarGradosTarea(materiaTarea.value)">
+                (change)="materiaTareaSeleccionada = materiaTarea.value; actualizarGradosDisponibles()">
 
                 @for (materia of materias; track materia) {
-                  <option [value]="materia">{{ materia }}</option>
+
+                  <option [value]="materia">
+                    {{ materia }}
+                  </option>
+
                 }
 
               </select>
@@ -712,7 +928,11 @@
                 (change)="gradoTareaSeleccionado = gradoTarea.value">
 
                 @for (grado of gradosDisponibles; track grado) {
-                  <option [value]="grado">{{ grado }}</option>
+
+                  <option [value]="grado">
+                    {{ grado }}
+                  </option>
+
                 }
 
               </select>
@@ -720,6 +940,8 @@
             </div>
 
           </div>
+
+          <!-- FECHA DE ENTREGA -->
 
           <div class="task-form-group">
 
@@ -734,6 +956,8 @@
 
           </div>
 
+          <!-- ARCHIVO PDF -->
+
           <div class="task-form-group">
 
             <label for="archivoTarea">
@@ -747,15 +971,24 @@
                 type="file"
                 id="archivoTarea"
                 accept=".pdf,application/pdf"
-                (change)="seleccionarArchivoTarea($event)">
+                (change)="seleccionarArchivo($event)">
 
               <div class="file-upload-help">
 
-                <div class="file-upload-icon">📄</div>
+                <div class="file-upload-icon">
+                  📄
+                </div>
 
                 <div>
-                  <strong>Adjunta material de apoyo</strong>
-                  <small>Formato PDF · Máximo 10 MB</small>
+
+                  <strong>
+                    Adjunta material de apoyo
+                  </strong>
+
+                  <small>
+                    Formato PDF · Máximo 10 MB
+                  </small>
+
                 </div>
 
               </div>
@@ -775,8 +1008,10 @@
                 <button
                   type="button"
                   class="remove-file-button"
-                  (click)="quitarArchivoTarea(archivoTarea)">
+                  (click)="quitarArchivo()">
+
                   ×
+
                 </button>
 
               </div>
@@ -785,20 +1020,33 @@
 
           </div>
 
+          <!-- INFORMACIÓN DEL DESTINO -->
+
           <div class="task-target-information">
 
             <span>ℹ️</span>
 
             <p>
+
               Esta actividad será dirigida a los estudiantes de
-              <strong>{{ gradoTareaSeleccionado }}</strong>
+
+              <strong>
+                {{ gradoTareaSeleccionado || 'Selecciona un grado' }}
+              </strong>
+
               en la materia
-              <strong>{{ materiaTareaSeleccionada }}</strong>.
+
+              <strong>
+                {{ materiaTareaSeleccionada || 'Selecciona una materia' }}
+              </strong>.
+
             </p>
 
           </div>
 
         </div>
+
+        <!-- PIE DEL MODAL -->
 
         <div class="task-modal-footer">
 
@@ -806,7 +1054,9 @@
             type="button"
             class="task-cancel-button"
             (click)="cerrarModalTarea()">
+
             Cancelar
+
           </button>
 
           <button
@@ -815,8 +1065,6 @@
             (click)="publicarTarea(
               tituloTarea.value,
               contenidoTarea.value,
-              materiaTarea.value,
-              gradoTarea.value,
               fechaTarea.value
             )">
 

@@ -1268,3 +1268,398 @@
   }
 
 }
+
+/* ==========================================
+   TARJETA DE TAREAS ENTREGADAS CLICABLE
+========================================== */
+
+.stat-card-button {
+  width: 100%;
+  font-family: inherit;
+  text-align: left;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 9px 24px rgba(0, 0, 0, 0.14);
+}
+
+.stat-card-button:focus-visible {
+  outline: 3px solid #18804b;
+  outline-offset: 3px;
+}
+
+.stat-hint {
+  display: block;
+  color: #18804b;
+  font-size: 10px;
+  margin-top: 5px;
+}
+
+.stat-arrow {
+  margin-left: auto;
+  color: #18804b;
+  font-size: 27px;
+  font-weight: bold;
+}
+
+
+/* ==========================================
+   CONTADOR DE TAREAS PENDIENTES
+========================================== */
+
+.pending-count {
+  background: #fff4d6;
+  color: #9a7110;
+  border-radius: 20px;
+  padding: 7px 11px;
+  font-size: 10px;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+
+/* ==========================================
+   LISTADO DE PRÓXIMAS ENTREGAS
+========================================== */
+
+.tasks-scroll {
+  max-height: 510px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: #b8d5c0 #f1f5f1;
+}
+
+/* Barra de desplazamiento para Chrome y Edge */
+
+.tasks-scroll::-webkit-scrollbar {
+  width: 7px;
+}
+
+.tasks-scroll::-webkit-scrollbar-track {
+  background: #f1f5f1;
+  border-radius: 10px;
+}
+
+.tasks-scroll::-webkit-scrollbar-thumb {
+  background: #b8d5c0;
+  border-radius: 10px;
+}
+
+.tasks-scroll::-webkit-scrollbar-thumb:hover {
+  background: #18804b;
+}
+
+.tasks-scroll .task-item:first-child {
+  padding-top: 10px;
+}
+
+.task-description {
+  color: #66766b;
+  font-size: 11px;
+  line-height: 1.5;
+  margin: 7px 0 0;
+  overflow-wrap: anywhere;
+}
+
+.task-attachment {
+  color: #18804b !important;
+  overflow-wrap: anywhere;
+}
+
+
+/* ==========================================
+   MODAL DE TAREAS ENTREGADAS
+========================================== */
+
+.delivered-modal {
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 18px;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25);
+  animation: modalAppear 0.25s ease;
+}
+
+.delivered-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 25px 0;
+  flex-shrink: 0;
+}
+
+.delivered-modal-icon {
+  width: 45px;
+  height: 45px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: #e3f4e9;
+  color: #18804b;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.delivered-modal-content {
+  padding: 18px 25px 25px;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.delivered-modal-content h2 {
+  color: #18324b;
+  font-size: 22px;
+  margin: 8px 0;
+}
+
+.delivered-modal-description {
+  color: #77817b;
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 0 0 18px;
+}
+
+
+/* RESUMEN DE ENTREGAS */
+
+.delivered-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 16px;
+  margin-bottom: 15px;
+  background: #edf7ef;
+  border: 1px solid #dcecdf;
+  border-radius: 10px;
+}
+
+.delivered-summary span {
+  color: #345441;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.delivered-summary strong {
+  color: #18804b;
+  font-size: 21px;
+}
+
+
+/* LISTA DE ACTIVIDADES ENTREGADAS */
+
+.delivered-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 7px;
+  scrollbar-width: thin;
+  scrollbar-color: #b8d5c0 #f1f5f1;
+}
+
+.delivered-list::-webkit-scrollbar {
+  width: 7px;
+}
+
+.delivered-list::-webkit-scrollbar-track {
+  background: #f1f5f1;
+  border-radius: 10px;
+}
+
+.delivered-list::-webkit-scrollbar-thumb {
+  background: #b8d5c0;
+  border-radius: 10px;
+}
+
+.delivered-task-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  background: #ffffff;
+  border: 1px solid #e5ebe6;
+  border-radius: 11px;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.delivered-task-item:hover {
+  background: #f8fbf8;
+  border-color: #c9ddce;
+}
+
+.delivered-task-icon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: #edf5ef;
+  font-size: 20px;
+}
+
+.delivered-task-information {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.delivered-task-information h3 {
+  color: #34443b;
+  font-size: 12px;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.delivered-task-information > span:not(.delivered-review-status) {
+  color: #18804b;
+  font-size: 11px;
+}
+
+.delivered-task-information small {
+  color: #89938c;
+  font-size: 10px;
+  overflow-wrap: anywhere;
+}
+
+.delivered-check {
+  width: 27px;
+  height: 27px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #e3f4e9;
+  color: #18804b;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+
+/* ESTADO DE REVISIÓN */
+
+.delivered-review-status {
+  align-self: flex-start;
+  padding: 5px 9px;
+  margin-top: 3px;
+  border-radius: 20px;
+  background: #fff4d6;
+  color: #9a7110;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.delivered-review-status.reviewed {
+  background: #e3f4e9;
+  color: #18804b;
+}
+
+
+/* SIN TAREAS ENTREGADAS */
+
+.empty-delivered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 35px 15px;
+  gap: 9px;
+  background: #f8faf8;
+  border: 1px dashed #dce6de;
+  border-radius: 12px;
+}
+
+.empty-delivered > span {
+  font-size: 32px;
+}
+
+.empty-delivered h3 {
+  color: #345441;
+  font-size: 14px;
+  margin: 0;
+}
+
+.empty-delivered p {
+  color: #849087;
+  font-size: 11px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+
+/* BOTÓN DE CERRAR */
+
+.delivered-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 18px;
+  flex-shrink: 0;
+}
+
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 480px) {
+
+  .pending-count {
+    font-size: 9px;
+    padding: 6px 8px;
+  }
+
+  .tasks-scroll {
+    max-height: 460px;
+  }
+
+  .delivered-modal {
+    max-height: 94vh;
+    border-radius: 14px;
+  }
+
+  .delivered-modal-header {
+    padding: 18px 18px 0;
+  }
+
+  .delivered-modal-content {
+    padding: 15px 18px 20px;
+  }
+
+  .delivered-modal-content h2 {
+    font-size: 20px;
+  }
+
+  .delivered-list {
+    max-height: 55vh;
+  }
+
+  .delivered-task-item {
+    padding: 11px;
+    gap: 9px;
+  }
+
+  .delivered-task-information h3 {
+    font-size: 11px;
+  }
+
+  .stat-hint {
+    font-size: 9px;
+  }
+
+}

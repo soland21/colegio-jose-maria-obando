@@ -23,7 +23,9 @@
       </button>
 
       <div class="user-info">
-        <div class="user-avatar">E</div>
+        <div class="user-avatar">
+          {{ nombreEstudiante.charAt(0).toUpperCase() }}
+        </div>
 
         <div>
           <strong>{{ nombreEstudiante }}</strong>
@@ -34,7 +36,6 @@
     </div>
 
   </header>
-
 
   <!-- DISTRIBUCIÓN GENERAL -->
   <div class="dashboard-layout">
@@ -51,23 +52,18 @@
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
           class="menu-item">
-
           <span>🏠</span>
           Inicio
-
         </a>
 
         <a
           routerLink="/estudiante/calificaciones"
           routerLinkActive="active"
           class="menu-item">
-
           <span>📊</span>
           Calificaciones
-
         </a>
 
-        <!-- OPCIONES ADICIONALES -->
         <div class="more-options">
 
           <button
@@ -76,9 +72,7 @@
             (click)="alternarOpciones()"
             [attr.aria-expanded]="mostrarMasOpciones"
             aria-label="Mostrar más opciones">
-
             <span>⋯</span>
-
           </button>
 
           <div
@@ -89,10 +83,8 @@
               routerLink="/estudiante/calendario"
               routerLinkActive="active"
               class="menu-item">
-
               <span>📅</span>
               Calendario
-
             </a>
 
           </div>
@@ -101,8 +93,6 @@
 
       </nav>
 
-
-      <!-- OPCIONES INFERIORES -->
       <div class="sidebar-bottom">
 
         <a routerLink="/" class="menu-item logout">
@@ -113,7 +103,6 @@
       </div>
 
     </aside>
-
 
     <!-- CONTENIDO PRINCIPAL -->
     <main class="main-content">
@@ -144,10 +133,10 @@
 
       </section>
 
-
       <!-- TARJETAS INFORMATIVAS -->
       <section class="stats-grid">
 
+        <!-- TAREAS PENDIENTES -->
         <article class="stat-card">
 
           <div class="stat-icon pending">
@@ -161,8 +150,12 @@
 
         </article>
 
-
-        <article class="stat-card">
+        <!-- TAREAS ENTREGADAS: ABRE MODAL -->
+        <button
+          type="button"
+          class="stat-card stat-card-button"
+          (click)="abrirModalEntregadas()"
+          aria-label="Consultar tareas entregadas">
 
           <div class="stat-icon completed">
             ✓
@@ -171,12 +164,14 @@
           <div>
             <span>Tareas entregadas</span>
             <strong>{{ tareasEntregadas }}</strong>
+            <small class="stat-hint">Ver actividades entregadas</small>
           </div>
 
-        </article>
+          <span class="stat-arrow">›</span>
+
+        </button>
 
       </section>
-
 
       <!-- TAREAS Y ANUNCIOS -->
       <div class="content-grid">
@@ -188,90 +183,99 @@
 
             <div>
               <h2>Próximas entregas</h2>
-              <p>Estas son tus actividades pendientes.</p>
+              <p>
+                Estas son las actividades que tienes pendientes.
+              </p>
             </div>
 
-            <a routerLink="/estudiante/tareas">
-              Ver todas
-            </a>
+            <span class="pending-count">
+              {{ tareasPendientes }} pendientes
+            </span>
 
           </div>
 
+          <!-- LISTADO CON SCROLL -->
+          <div class="tasks-scroll">
 
-          <!-- LISTADO DE TAREAS -->
-          @for (tarea of tareas; track tarea.titulo) {
+            @for (tarea of tareasPendientesLista; track tarea.id) {
 
-            <article class="task-item">
+              <article class="task-item">
 
-              <div class="task-icon">
-                📄
-              </div>
+                <div class="task-icon">
+                  📄
+                </div>
 
-              <!-- INFORMACIÓN DE LA TAREA -->
-              <div class="task-information">
+                <div class="task-information">
 
-                <h3>{{ tarea.titulo }}</h3>
+                  <h3>{{ tarea.titulo }}</h3>
 
-                <span>{{ tarea.asignatura }}</span>
+                  <span>{{ tarea.asignatura }}</span>
 
-                <small>
-                  Entrega: {{ tarea.fecha }}
-                </small>
+                  <small>
+                    Grado: {{ tarea.grado }}
+                  </small>
 
-              </div>
+                  <small>
+                    Profesor: {{ tarea.nombreProfesor }}
+                  </small>
 
+                  <small>
+                    Entrega: {{ tarea.fecha }}
+                  </small>
 
-              <!-- ESTADO Y ACCIÓN -->
-              <div class="task-actions">
+                  @if (tarea.contenido) {
+                    <p class="task-description">
+                      {{ tarea.contenido }}
+                    </p>
+                  }
 
-                <span
-                  class="task-status"
-                  [class.delivered]="tarea.estado === 'Entregada'">
+                  @if (tarea.nombreArchivo) {
+                    <small class="task-attachment">
+                      📎 Material adjunto: {{ tarea.nombreArchivo }}
+                    </small>
+                  }
 
-                  {{ tarea.estado }}
+                </div>
 
-                </span>
+                <div class="task-actions">
 
-                @if (tarea.estado === 'Pendiente') {
+                  <span class="task-status">
+                    Pendiente
+                  </span>
 
                   <a
                     href="#"
                     class="deliver-link"
                     (click)="$event.preventDefault(); entregarTarea(tarea)">
-
                     Entregar
-
                   </a>
 
-                }
+                </div>
+
+              </article>
+
+            }
+
+            @if (tareasPendientesLista.length === 0) {
+
+              <div class="empty-tasks">
+
+                <span>🎉</span>
+
+                <h3>¡No tienes tareas pendientes!</h3>
+
+                <p>
+                  Has entregado todas las actividades asignadas
+                  hasta el momento.
+                </p>
 
               </div>
 
-            </article>
+            }
 
-          }
-
-
-          <!-- CUANDO NO HAY TAREAS -->
-          @if (tareas.length === 0) {
-
-            <div class="empty-tasks">
-
-              <span>📚</span>
-
-              <h3>No tienes tareas registradas</h3>
-
-              <p>
-                Cuando tus profesores publiquen actividades,
-                aparecerán aquí.
-              </p>
-
-            </div>
-
-          }
+          </div>
 
         </section>
-
 
         <!-- ANUNCIOS -->
         <section class="content-card announcements-section">
@@ -288,7 +292,6 @@
             </a>
 
           </div>
-
 
           @for (anuncio of anuncios; track anuncio.titulo) {
 
@@ -316,11 +319,7 @@
 
       </div>
 
-
-      <!-- =====================================
-           RETROALIMENTACIONES DE LOS PROFESORES
-      ====================================== -->
-
+      <!-- RETROALIMENTACIONES -->
       <section class="content-card feedback-section">
 
         <div class="section-heading">
@@ -335,13 +334,10 @@
 
         </div>
 
-
-        <!-- LISTADO DE RETROALIMENTACIONES -->
         @for (entrega of entregasEstudiante; track entrega.id) {
 
           <article class="student-feedback-card">
 
-            <!-- INFORMACIÓN DE LA TAREA -->
             <div class="student-feedback-header">
 
               <div class="feedback-task-icon">
@@ -355,7 +351,7 @@
                 <span>{{ entrega.asignatura }}</span>
 
                 <small>
-                  Entregada: {{ entrega.fechaEntrega }}
+                  Entregada: {{ formatearFechaHora(entrega.fechaEntrega) }}
                 </small>
 
               </div>
@@ -363,15 +359,11 @@
               <span
                 class="feedback-status"
                 [class.reviewed]="entrega.estado === 'Revisada'">
-
                 {{ entrega.estado }}
-
               </span>
 
             </div>
 
-
-            <!-- COMENTARIO DEL PROFESOR -->
             <div class="student-feedback-content">
 
               <h4>Comentario del profesor</h4>
@@ -398,18 +390,15 @@
 
         }
 
-
-        <!-- CUANDO NO HAY ENTREGAS -->
         @if (entregasEstudiante.length === 0) {
 
           <div class="empty-feedback">
 
             <span>📭</span>
 
-
             <p>
               Cuando entregues tus actividades, podrás consultar aquí
-              las observaciones realizadas tus profesores.
+              las observaciones realizadas por tus profesores.
             </p>
 
           </div>
@@ -417,7 +406,6 @@
         }
 
       </section>
-
 
       <!-- MENSAJE INSTITUCIONAL -->
       <section class="institutional-message">
@@ -434,10 +422,157 @@
 
   </div>
 
+  <!-- ======================================
+       MODAL DE TAREAS ENTREGADAS
+  ======================================= -->
 
-  <!-- =====================================
-       VENTANA PARA ENTREGAR TAREA
-  ====================================== -->
+  @if (mostrarModalEntregadas) {
+
+    <div
+      class="modal-overlay"
+      (click)="cerrarModalEntregadas()">
+
+      <section
+        class="delivered-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="delivered-title"
+        (click)="$event.stopPropagation()">
+
+        <div class="delivered-modal-header">
+
+          <div class="delivered-modal-icon">
+            ✓
+          </div>
+
+          <button
+            type="button"
+            class="modal-close"
+            (click)="cerrarModalEntregadas()"
+            aria-label="Cerrar ventana">
+            ×
+          </button>
+
+        </div>
+
+        <div class="delivered-modal-content">
+
+          <span class="modal-label">
+            MI HISTORIAL ACADÉMICO
+          </span>
+
+          <h2 id="delivered-title">
+            Tareas entregadas
+          </h2>
+
+          <p class="delivered-modal-description">
+            Aquí puedes consultar las actividades que ya has presentado.
+          </p>
+
+          <div class="delivered-summary">
+            <span>Actividades entregadas</span>
+            <strong>{{ tareasEntregadas }}</strong>
+          </div>
+
+          <!-- LISTA DE ENTREGADAS -->
+          <div class="delivered-list">
+
+            @for (
+              tarea of tareasEntregadasLista;
+              track tarea.id
+            ) {
+
+              <article class="delivered-task-item">
+
+                <div class="delivered-task-icon">
+                  📄
+                </div>
+
+                <div class="delivered-task-information">
+
+                  <h3>{{ tarea.titulo }}</h3>
+
+                  <span>{{ tarea.asignatura }}</span>
+
+                  <small>
+                    Grado: {{ tarea.grado }}
+                  </small>
+
+                  @if (obtenerEntregaDeTarea(tarea.id); as entrega) {
+
+                    <small>
+                      Archivo: {{ entrega.nombreArchivo }}
+                    </small>
+
+                    <small>
+                      Presentada:
+                      {{ formatearFechaHora(entrega.fechaEntrega) }}
+                    </small>
+
+                    <span
+                      class="delivered-review-status"
+                      [class.reviewed]="entrega.estado === 'Revisada'">
+                      {{ entrega.estado }}
+                    </span>
+
+                  } @else {
+
+                    <small>
+                      Estado: Entregada
+                    </small>
+
+                  }
+
+                </div>
+
+                <span class="delivered-check">
+                  ✓
+                </span>
+
+              </article>
+
+            }
+
+            @if (tareasEntregadasLista.length === 0) {
+
+              <div class="empty-delivered">
+
+                <span>📭</span>
+
+                <h3>Aún no has entregado tareas</h3>
+
+                <p>
+                  Cuando presentes una actividad, aparecerá aquí.
+                </p>
+
+              </div>
+
+            }
+
+          </div>
+
+          <div class="delivered-modal-actions">
+
+            <button
+              type="button"
+              class="confirm-button"
+              (click)="cerrarModalEntregadas()">
+              Cerrar
+            </button>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  }
+
+  <!-- ======================================
+       MODAL PARA ENTREGAR TAREA
+  ======================================= -->
 
   @if (mostrarFormularioEntrega && tareaSeleccionada) {
 
@@ -449,7 +584,6 @@
         aria-modal="true"
         aria-labelledby="delivery-title">
 
-        <!-- ENCABEZADO DEL MODAL -->
         <div class="modal-header">
 
           <div class="modal-icon">
@@ -461,15 +595,11 @@
             class="modal-close"
             (click)="cerrarFormularioEntrega()"
             aria-label="Cerrar ventana">
-
             ×
-
           </button>
 
         </div>
 
-
-        <!-- INFORMACIÓN -->
         <div class="modal-content">
 
           <span class="modal-label">
@@ -484,8 +614,6 @@
             Selecciona el archivo PDF correspondiente a tu actividad.
           </p>
 
-
-          <!-- DATOS DE LA TAREA -->
           <div class="selected-task">
 
             <strong>{{ tareaSeleccionada.titulo }}</strong>
@@ -493,13 +621,19 @@
             <span>{{ tareaSeleccionada.asignatura }}</span>
 
             <small>
+              Grado: {{ tareaSeleccionada.grado }}
+            </small>
+
+            <small>
+              Profesor: {{ tareaSeleccionada.nombreProfesor }}
+            </small>
+
+            <small>
               Fecha de entrega: {{ tareaSeleccionada.fecha }}
             </small>
 
           </div>
 
-
-          <!-- SELECCIÓN DEL ARCHIVO -->
           <div class="file-section">
 
             <label class="file-label">
@@ -532,8 +666,6 @@
               hidden
             />
 
-
-            <!-- ARCHIVO SELECCIONADO -->
             @if (archivoSeleccionado) {
 
               <div class="selected-file">
@@ -557,17 +689,13 @@
                   class="remove-file"
                   (click)="quitarArchivo()"
                   aria-label="Quitar archivo">
-
                   ×
-
                 </button>
 
               </div>
 
             }
 
-
-            <!-- MENSAJE DE ERROR -->
             @if (mensajeEntrega) {
 
               <p class="delivery-error">
@@ -578,17 +706,13 @@
 
           </div>
 
-
-          <!-- BOTONES -->
           <div class="modal-actions">
 
             <button
               type="button"
               class="cancel-button"
               (click)="cerrarFormularioEntrega()">
-
               Cancelar
-
             </button>
 
             <button
@@ -596,9 +720,7 @@
               class="confirm-button"
               [disabled]="!archivoSeleccionado"
               (click)="confirmarEntrega()">
-
               Confirmar entrega
-
             </button>
 
           </div>

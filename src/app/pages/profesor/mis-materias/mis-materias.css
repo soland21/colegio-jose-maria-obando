@@ -7,8 +7,20 @@
   box-sizing: border-box;
 }
 
+:host {
+  display: block;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+}
+
 .dashboard-page {
-  min-height: 100vh;
+  width: 100%;
+  height: 100dvh;
+  min-height: 0;
+
+  overflow: hidden;
+
   background:
     linear-gradient(
       rgba(8, 54, 34, 0.48),
@@ -22,6 +34,8 @@
 ========================================== */
 
 .topbar {
+  width: 100%;
+  height: 82px;
   min-height: 82px;
   padding: 12px 35px;
 
@@ -92,9 +106,17 @@
 
 .dashboard-layout {
   display: flex;
-  min-height: calc(100vh - 82px);
+
+  width: 100%;
+  height: calc(100dvh - 82px);
+
+  min-height: 0;
+
   padding: 25px;
   gap: 22px;
+
+  overflow: hidden;
+  align-items: stretch;
 }
 
 /* ==========================================
@@ -104,6 +126,8 @@
 .sidebar {
   width: 230px;
   flex-shrink: 0;
+  height: 100%;
+  min-height: 0;
 
   display: flex;
   flex-direction: column;
@@ -113,6 +137,9 @@
   background: rgba(255, 255, 255, 0.97);
   border-radius: 16px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .sidebar-heading {
@@ -197,6 +224,32 @@
 .main-content {
   flex: 1;
   min-width: 0;
+  min-height: 0;
+  height: 100%;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  scrollbar-width: thin;
+  scrollbar-color: #a8cbb5 transparent;
+}
+
+/* Barra de desplazamiento */
+
+.main-content::-webkit-scrollbar,
+.sidebar::-webkit-scrollbar {
+  width: 7px;
+}
+
+.main-content::-webkit-scrollbar-thumb,
+.sidebar::-webkit-scrollbar-thumb {
+  background: #a8cbb5;
+  border-radius: 10px;
+}
+
+.main-content::-webkit-scrollbar-track,
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 /* ==========================================
@@ -213,12 +266,13 @@
   gap: 25px;
 
   width: 100%;
+  max-width: 100%;
   min-height: 160px;
 
   padding: 30px 35px;
 
   border-radius: 20px;
-  overflow: visible;
+  overflow: hidden;
 
   color: white;
 
@@ -529,6 +583,7 @@
   align-items: center;
   gap: 14px;
 
+  min-width: 0;
   padding: 20px;
 
   background: white;
@@ -554,6 +609,7 @@
 
   border-radius: 12px;
   font-size: 21px;
+  flex-shrink: 0;
 }
 
 .summary-icon.green {
@@ -590,6 +646,7 @@
 ========================================== */
 
 .content-card {
+  min-width: 0;
   padding: 22px;
 
   background: white;
@@ -644,6 +701,7 @@
 }
 
 .subject-card {
+  min-width: 0;
   padding: 17px;
 
   border: 1px solid #e9eeea;
@@ -984,18 +1042,43 @@
 
 @media (max-width: 750px) {
 
+  :host {
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+
+  .dashboard-page {
+    width: 100%;
+    height: auto;
+    min-height: 100dvh;
+
+    overflow: visible;
+  }
+
   .topbar {
+    height: auto;
+    min-height: 82px;
     padding: 12px 18px;
   }
 
   .dashboard-layout {
     flex-direction: column;
+
+    width: 100%;
+    height: auto;
+    min-height: 0;
+
     padding: 15px;
+    overflow: visible;
   }
 
   .sidebar {
     width: 100%;
+    height: auto;
     padding: 15px;
+
+    overflow: visible;
   }
 
   .sidebar-menu {
@@ -1062,6 +1145,14 @@
 
     margin-top: 15px;
     padding-top: 12px;
+  }
+
+  .main-content {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+
+    overflow: visible;
   }
 
   .welcome-section {

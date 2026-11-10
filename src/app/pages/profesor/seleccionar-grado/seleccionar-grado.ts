@@ -1,11 +1,17 @@
 
-import { Component, inject } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive} from '@angular/router';
+import { Component, inject, OnInit } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
 interface Grado {
   nombre: string;
   numero: number;
   descripcion: string;
+}
+
+interface UsuarioActual {
+  documento: string;
+  nombre: string;
+  rol: 'profesor' | 'estudiante';
 }
 
 @Component({
@@ -15,11 +21,53 @@ interface Grado {
   templateUrl: './seleccionar-grado.html',
   styleUrl: './seleccionar-grado.css'
 })
-export class SeleccionarGrado {
+export class SeleccionarGrado implements OnInit {
 
   private router = inject(Router);
 
-  nombreProfesor = 'Carlos Ramírez';
+  nombreProfesor = '';
+  profesorDocumento = '';
+
+  ngOnInit(): void {
+    this.cargarProfesor();
+  }
+
+  // =====================================
+  // RECUPERAR EL PROFESOR AUTENTICADO
+  // =====================================
+
+  cargarProfesor(): void {
+
+    const usuarioGuardado = localStorage.getItem('usuarioActual');
+
+    if (!usuarioGuardado) {
+      this.router.navigate(['/']);
+      return;
+    }
+
+    try {
+
+      const usuario: UsuarioActual = JSON.parse(usuarioGuardado);
+
+      if (usuario.rol !== 'profesor') {
+        this.router.navigate(['/']);
+        return;
+      }
+
+      this.nombreProfesor = usuario.nombre;
+      this.profesorDocumento = String(usuario.documento);
+
+    } catch (error) {
+
+      console.error('Error al recuperar el usuario:', error);
+      this.router.navigate(['/']);
+
+    }
+  }
+
+  // =====================================
+  // GRADOS DISPONIBLES
+  // =====================================
 
   grados: Grado[] = [
     {
@@ -54,15 +102,20 @@ export class SeleccionarGrado {
     }
   ];
 
+  // =====================================
+  // SELECCIONAR GRADO
+  // =====================================
+
   seleccionarGrado(grado: Grado): void {
 
-    // Guardar el grado seleccionado
+    // Guardar únicamente el grado seleccionado.
+    // No modificar usuarioActual.
+
     localStorage.setItem(
       'gradoSeleccionado',
       JSON.stringify(grado)
     );
 
-    // Ir a Mis materias
     this.router.navigate(['/profesor/materias'], {
       queryParams: {
         grado: grado.numero
@@ -71,11 +124,17 @@ export class SeleccionarGrado {
 
   }
 
+  // =====================================
+  // CERRAR SESIÓN
+  // =====================================
+
   cerrarSesion(): void {
+
     localStorage.removeItem('usuarioActual');
     localStorage.removeItem('gradoSeleccionado');
 
     this.router.navigate(['/']);
+
   }
 
 }
