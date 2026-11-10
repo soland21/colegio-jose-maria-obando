@@ -1,7 +1,7 @@
 
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { EntregaService } from '../../services/entrega.service';
+import { Entrega, EntregaService } from '../../services/entrega.service';
 
 // ==========================================
 // 1. INTERFACES
@@ -13,6 +13,13 @@ interface Tarea {
   fecha: string;
   estado: 'Pendiente' | 'Entregada';
 }
+
+interface Anuncio {
+  titulo: string;
+  mensaje: string;
+  fecha: string;
+}
+
 
 // ==========================================
 // 2. CONFIGURACIÓN DEL COMPONENTE
@@ -26,7 +33,7 @@ interface Tarea {
   styleUrl: './dashboard.css'
 })
 
-export class Dashboard {
+export class Dashboard implements OnInit {
 
   // ==========================================
   // 3. SERVICIO DE ENTREGAS
@@ -39,12 +46,121 @@ export class Dashboard {
   // 4. INFORMACIÓN DEL ESTUDIANTE
   // ==========================================
 
-  nombreEstudiante = 'Nicolas';
+  nombreEstudiante = 'Nicolás';
   grado = 'Noveno';
+  documentoEstudiante = '';
 
 
   // ==========================================
-  // 5. CONTROL DEL MENÚ DE OPCIONES
+  // 5. ENTREGAS Y RETROALIMENTACIONES
+  // ==========================================
+
+  entregasEstudiante: Entrega[] = [];
+
+
+  // ==========================================
+  // 6. INICIALIZACIÓN
+  // ==========================================
+
+  ngOnInit(): void {
+
+    this.cargarUsuario();
+
+    this.cargarEntregasEstudiante();
+
+  }
+
+
+  // ==========================================
+  // 7. CARGAR USUARIO ACTUAL
+  // ==========================================
+
+  cargarUsuario(): void {
+
+    const usuarioGuardado = localStorage.getItem('usuarioActual');
+
+    if (!usuarioGuardado) {
+      return;
+    }
+
+    try {
+
+      const usuario = JSON.parse(usuarioGuardado);
+
+      this.nombreEstudiante =
+        usuario.nombre || this.nombreEstudiante;
+
+      this.grado =
+        usuario.grado || this.grado;
+
+      this.documentoEstudiante = String(
+        usuario.documento || ''
+      ).trim();
+
+    } catch (error) {
+
+      console.error(
+        'Error al cargar el usuario:',
+        error
+      );
+
+    }
+
+  }
+
+
+  // ==========================================
+  // 8. CARGAR ENTREGAS DEL ESTUDIANTE
+  // ==========================================
+
+  cargarEntregasEstudiante(): void {
+
+    if (!this.documentoEstudiante) {
+
+      this.entregasEstudiante = [];
+
+      return;
+
+    }
+
+    // Consultar las entregas del estudiante actual.
+
+    const entregas =
+      this.entregaService.obtenerEntregasEstudiante(
+        this.documentoEstudiante
+      );
+
+    // Guardar las entregas para mostrarlas
+    // en el recuadro de retroalimentaciones.
+
+    this.entregasEstudiante = entregas;
+
+
+    // Actualizar el estado y los comentarios
+    // de las tareas que aparecen en el dashboard.
+
+    this.tareas.forEach(tarea => {
+
+      const entregaEncontrada = entregas.find(entrega =>
+
+        entrega.titulo === tarea.titulo &&
+        entrega.asignatura === tarea.asignatura
+
+      );
+
+      if (entregaEncontrada) {
+
+        tarea.estado = 'Entregada';
+
+      }
+
+    });
+
+  }
+
+
+  // ==========================================
+  // 9. CONTROL DEL MENÚ DE OPCIONES
   // ==========================================
 
   mostrarMasOpciones = false;
@@ -57,7 +173,7 @@ export class Dashboard {
 
 
   // ==========================================
-  // 6. LISTA DE TAREAS
+  // 10. LISTA DE TAREAS
   // ==========================================
 
   tareas: Tarea[] = [
@@ -94,7 +210,7 @@ export class Dashboard {
 
 
   // ==========================================
-  // 7. CONTADORES AUTOMÁTICOS
+  // 11. CONTADORES AUTOMÁTICOS
   // ==========================================
 
   get tareasPendientes(): number {
@@ -104,6 +220,7 @@ export class Dashboard {
     ).length;
 
   }
+
 
   get tareasEntregadas(): number {
 
@@ -115,7 +232,7 @@ export class Dashboard {
 
 
   // ==========================================
-  // 8. CONTROL DEL FORMULARIO DE ENTREGA
+  // 12. CONTROL DEL FORMULARIO DE ENTREGA
   // ==========================================
 
   mostrarFormularioEntrega = false;
@@ -128,12 +245,10 @@ export class Dashboard {
 
 
   // ==========================================
-  // 9. ABRIR FORMULARIO DE ENTREGA
+  // 13. ABRIR FORMULARIO DE ENTREGA
   // ==========================================
 
   entregarTarea(tarea: Tarea): void {
-
-    // Evitar entregar una tarea dos veces.
 
     if (tarea.estado === 'Entregada') {
       return;
@@ -151,7 +266,7 @@ export class Dashboard {
 
 
   // ==========================================
-  // 10. SELECCIONAR ARCHIVO PDF
+  // 14. SELECCIONAR ARCHIVO PDF
   // ==========================================
 
   seleccionarArchivo(event: Event): void {
@@ -182,6 +297,7 @@ export class Dashboard {
       input.value = '';
 
       return;
+
     }
 
     // Validar tamaño máximo de 10 MB.
@@ -198,9 +314,8 @@ export class Dashboard {
       input.value = '';
 
       return;
-    }
 
-    // Guardar archivo seleccionado.
+    }
 
     this.archivoSeleccionado = archivo;
 
@@ -208,7 +323,7 @@ export class Dashboard {
 
 
   // ==========================================
-  // 11. MOSTRAR TAMAÑO DEL ARCHIVO
+  // 15. MOSTRAR TAMAÑO DEL ARCHIVO
   // ==========================================
 
   obtenerTamanoArchivo(tamano: number): string {
@@ -221,7 +336,7 @@ export class Dashboard {
 
 
   // ==========================================
-  // 12. QUITAR ARCHIVO SELECCIONADO
+  // 16. QUITAR ARCHIVO SELECCIONADO
   // ==========================================
 
   quitarArchivo(): void {
@@ -242,7 +357,7 @@ export class Dashboard {
 
 
   // ==========================================
-  // 13. CONFIRMAR ENTREGA DE TAREA
+  // 17. CONFIRMAR ENTREGA DE TAREA
   // ==========================================
 
   confirmarEntrega(): void {
@@ -257,6 +372,7 @@ export class Dashboard {
         'Debes seleccionar un archivo PDF para continuar.';
 
       return;
+
     }
 
     try {
@@ -284,26 +400,33 @@ export class Dashboard {
         this.archivoSeleccionado.name
       );
 
+      // Actualizar la información de entregas.
+
+      this.cargarEntregasEstudiante();
+
       // Cerrar formulario.
 
       this.cerrarFormularioEntrega();
 
     } catch (error) {
 
-  console.error('Error al registrar la entrega:', error);
+      console.error(
+        'Error al registrar la entrega:',
+        error
+      );
 
-  this.mensajeEntrega =
-    error instanceof Error
-      ? error.message
-      : 'Ocurrió un error al registrar la entrega.';
+      this.mensajeEntrega =
+        error instanceof Error
+          ? error.message
+          : 'Ocurrió un error al registrar la entrega.';
 
-}
+    }
 
   }
 
 
   // ==========================================
-  // 14. CERRAR FORMULARIO
+  // 18. CERRAR FORMULARIO
   // ==========================================
 
   cerrarFormularioEntrega(): void {
@@ -320,10 +443,10 @@ export class Dashboard {
 
 
   // ==========================================
-  // 15. LISTA DE ANUNCIOS
+  // 19. LISTA DE ANUNCIOS
   // ==========================================
 
-  anuncios = [
+  anuncios: Anuncio[] = [
 
     {
       titulo: 'Recordatorio de actividades',

@@ -63,24 +63,6 @@
           </small>
         }
 
-        <!-- Reconocimiento del usuario -->
-        @if (usuarioEncontrado) {
-          <div class="user-detected">
-
-            <span class="detected-icon">✓</span>
-
-            <div>
-              <small>Usuario identificado</small>
-
-              <strong>
-                {{ usuarioEncontrado.rol === 'profesor'
-                  ? 'Profesor'
-                  : 'Estudiante' }}
-              </strong>
-            </div>
-
-          </div>
-        }
 
         <!-- Contraseña -->
         <div class="input-group">

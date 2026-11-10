@@ -9,7 +9,8 @@ import {
 
 import {
   Entrega,
-  EntregaService
+  EntregaService,
+  TareaPublicada
 } from '../../services/entrega.service';
 
 // ==========================================
@@ -17,7 +18,7 @@ import {
 // ==========================================
 
 interface Tarea {
-  id: number;
+  id: string;
   titulo: string;
   asignatura: string;
   grado: string;
@@ -63,7 +64,9 @@ export class Dashboard {
         const usuario = JSON.parse(usuarioGuardado);
 
         this.nombreProfesor = usuario.nombre || 'Profesor';
-        this.profesorDocumento = String(usuario.documento || '').trim();
+        this.profesorDocumento = String(
+          usuario.documento || ''
+        ).trim();
 
       } catch (error) {
         console.error('Error al recuperar el usuario:', error);
@@ -75,9 +78,7 @@ export class Dashboard {
     // ==========================================
 
     console.log('========== DATOS DEL PROFESOR ==========');
-
     console.log('Nombre:', this.nombreProfesor);
-
     console.log('Documento:', this.profesorDocumento);
 
     console.log(
@@ -88,7 +89,6 @@ export class Dashboard {
     );
 
     console.log('Materias asignadas:', this.materias);
-
     console.log('========================================');
 
     // ==========================================
@@ -113,9 +113,21 @@ export class Dashboard {
     // ESCUCHAR CAMBIOS EN LAS ENTREGAS
     // ==========================================
 
-    this.entregaService.entregas$.subscribe(() => {
+    this.entregaService.entregas$.subscribe(entregas => {
 
-      console.log('Se actualizaron las entregas del profesor.');
+      console.log('Entregas actualizadas:', entregas);
+
+    });
+
+    // ==========================================
+    // ESCUCHAR CAMBIOS EN LAS TAREAS PUBLICADAS
+    // ==========================================
+
+    this.entregaService.tareas$.subscribe(tareas => {
+
+      this.tareasCambio = tareas;
+
+      console.log('Tareas publicadas actualizadas:', tareas);
 
     });
 
@@ -220,62 +232,10 @@ export class Dashboard {
   totalEstudiantes = 28;
 
   // ==========================================
-  // 8. TAREAS DE PRUEBA
+  // 8. TAREAS PUBLICADAS
   // ==========================================
 
-  private tareasTodas: Tarea[] = [
-
-    {
-      id: 1,
-      titulo: 'Taller de matemáticas',
-      asignatura: 'Matemáticas',
-      grado: 'Noveno',
-      fecha: '15 de noviembre',
-      pendientes: 28,
-      entregas: 0
-    },
-
-    {
-      id: 2,
-      titulo: 'Trabajo sobre los ecosistemas',
-      asignatura: 'Biología',
-      grado: 'Octavo',
-      fecha: '20 de noviembre',
-      pendientes: 28,
-      entregas: 0
-    },
-
-    {
-      id: 3,
-      titulo: 'Actividad de lectura',
-      asignatura: 'Español',
-      grado: 'Sexto',
-      fecha: '18 de noviembre',
-      pendientes: 28,
-      entregas: 0
-    },
-
-    {
-      id: 4,
-      titulo: 'Ejercicios de matemáticas',
-      asignatura: 'Matemáticas',
-      grado: 'Séptimo',
-      fecha: '22 de noviembre',
-      pendientes: 28,
-      entregas: 0
-    },
-
-    {
-      id: 5,
-      titulo: 'Comprensión lectora',
-      asignatura: 'Español',
-      grado: 'Noveno',
-      fecha: '25 de noviembre',
-      pendientes: 28,
-      entregas: 0
-    }
-
-  ];
+  tareasCambio: TareaPublicada[] = [];
 
   // ==========================================
   // 9. FILTRAR TAREAS DEL PROFESOR
@@ -283,23 +243,16 @@ export class Dashboard {
 
   get tareas(): Tarea[] {
 
-    return this.tareasTodas
+    return this.tareasCambio
 
-      // Comprobar profesor asignado al grado y materia.
+      // Mostrar únicamente tareas del profesor actual.
 
-      .filter(tarea => {
+      .filter(tarea =>
+        tarea.profesorDocumento.trim() ===
+        this.profesorDocumento
+      )
 
-        const profesorAsignado =
-          this.entregaService.obtenerProfesorAsignado(
-            tarea.grado,
-            tarea.asignatura
-          );
-
-        return profesorAsignado === this.profesorDocumento;
-
-      })
-
-      // Filtrar materia seleccionada.
+      // Filtrar por materia seleccionada.
 
       .filter(tarea => {
 
@@ -316,10 +269,22 @@ export class Dashboard {
 
       .map(tarea => {
 
-        const entregasTarea = this.obtenerEntregasDeTarea(tarea);
+        const entregasTarea = this.obtenerEntregasDeTarea({
+          id: tarea.id,
+          titulo: tarea.titulo,
+          asignatura: tarea.asignatura,
+          grado: tarea.grado,
+          fecha: tarea.fechaEntrega,
+          pendientes: 0,
+          entregas: 0
+        });
 
         return {
-          ...tarea,
+          id: tarea.id,
+          titulo: tarea.titulo,
+          asignatura: tarea.asignatura,
+          grado: tarea.grado,
+          fecha: tarea.fechaEntrega,
           entregas: entregasTarea.length,
           pendientes: Math.max(
             0,
@@ -424,6 +389,12 @@ export class Dashboard {
 
     window.open(url, '_blank');
 
+    // Liberar la URL después de un tiempo.
+
+    setTimeout(() => {
+      URL.revokeObjectURL(url);
+    }, 60000);
+
   }
 
   // ==========================================
@@ -437,7 +408,35 @@ export class Dashboard {
   }
 
   // ==========================================
-  // 15. CONTROL DE INTERFAZ
+  // 15. GUARDAR RETROALIMENTACIÓN
+  // ==========================================
+
+  guardarRetroalimentacion(
+    entrega: Entrega,
+    comentario: string
+  ): void {
+
+    const comentarioLimpio = comentario.trim();
+
+    if (!comentarioLimpio) {
+
+      alert('Escribe una retroalimentación antes de guardarla.');
+
+      return;
+
+    }
+
+    this.entregaService.guardarRetroalimentacion(
+      entrega.id,
+      comentarioLimpio
+    );
+
+    alert('La retroalimentación se guardó correctamente.');
+
+  }
+
+  // ==========================================
+  // 16. CONTROL DE INTERFAZ
   // ==========================================
 
   mostrarFormularioAnuncio = false;
@@ -451,7 +450,232 @@ export class Dashboard {
   }
 
   // ==========================================
-  // 16. ANUNCIOS
+  // 17. PUBLICAR TAREAS
+  // ==========================================
+
+  mostrarModalTarea = false;
+
+  materiaTareaSeleccionada = '';
+
+  gradoTareaSeleccionado = '';
+
+  gradosDisponibles: string[] = [];
+
+  archivoTareaSeleccionado: File | null = null;
+
+  // Abrir modal.
+
+  abrirModalTarea(): void {
+
+    if (this.materias.length === 0) {
+
+      alert('No tienes materias asignadas para publicar tareas.');
+
+      return;
+
+    }
+
+    this.materiaTareaSeleccionada =
+      this.materiaSeleccionada || this.materias[0];
+
+    this.actualizarGradosTarea(this.materiaTareaSeleccionada);
+
+    this.archivoTareaSeleccionado = null;
+
+    this.mostrarModalTarea = true;
+
+  }
+
+  // Cerrar modal.
+
+  cerrarModalTarea(): void {
+
+    this.mostrarModalTarea = false;
+
+    this.archivoTareaSeleccionado = null;
+
+  }
+
+  // Actualizar grados según la materia.
+
+  actualizarGradosTarea(asignatura: string): void {
+
+    this.materiaTareaSeleccionada = asignatura;
+
+    this.gradosDisponibles =
+      this.entregaService.obtenerGradosProfesor(
+        this.profesorDocumento,
+        asignatura
+      );
+
+    this.gradoTareaSeleccionado =
+      this.gradosDisponibles[0] || '';
+
+  }
+
+  // Seleccionar archivo PDF.
+
+  seleccionarArchivoTarea(event: Event): void {
+
+    const input = event.target as HTMLInputElement;
+
+    const archivo = input.files?.[0];
+
+    if (!archivo) {
+
+      this.archivoTareaSeleccionado = null;
+
+      return;
+
+    }
+
+    if (
+      archivo.type !== 'application/pdf' &&
+      !archivo.name.toLowerCase().endsWith('.pdf')
+    ) {
+
+      alert('Solo puedes adjuntar archivos PDF.');
+
+      input.value = '';
+
+      this.archivoTareaSeleccionado = null;
+
+      return;
+
+    }
+
+    if (archivo.size > 10 * 1024 * 1024) {
+
+      alert('El archivo no puede superar los 10 MB.');
+
+      input.value = '';
+
+      this.archivoTareaSeleccionado = null;
+
+      return;
+
+    }
+
+    this.archivoTareaSeleccionado = archivo;
+
+  }
+
+  // Quitar archivo seleccionado.
+
+  quitarArchivoTarea(input: HTMLInputElement): void {
+
+    this.archivoTareaSeleccionado = null;
+
+    input.value = '';
+
+  }
+
+  // ==========================================
+  // 18. GUARDAR Y PUBLICAR TAREA
+  // ==========================================
+
+  publicarTarea(
+    titulo: string,
+    contenido: string,
+    asignatura: string,
+    grado: string,
+    fechaEntrega: string
+  ): void {
+
+    const tituloLimpio = titulo.trim();
+
+    const contenidoLimpio = contenido.trim();
+
+    // Validar campos obligatorios.
+
+    if (
+      !tituloLimpio ||
+      !contenidoLimpio ||
+      !asignatura ||
+      !grado ||
+      !fechaEntrega
+    ) {
+
+      alert('Completa todos los campos obligatorios.');
+
+      return;
+
+    }
+
+    // Comprobar que la materia está asignada al profesor.
+
+    const materiaPermitida = this.materias.some(
+      materia =>
+        this.normalizarTexto(materia) ===
+        this.normalizarTexto(asignatura)
+    );
+
+    if (!materiaPermitida) {
+
+      alert('No tienes asignada esta materia.');
+
+      return;
+
+    }
+
+    // Comprobar que el grado corresponde a esa materia.
+
+    const gradosPermitidos =
+      this.entregaService.obtenerGradosProfesor(
+        this.profesorDocumento,
+        asignatura
+      );
+
+    if (!gradosPermitidos.includes(grado)) {
+
+      alert('El grado seleccionado no está asignado a esta materia.');
+
+      return;
+
+    }
+
+    // Publicar tarea.
+
+    try {
+
+      this.entregaService.publicarTarea({
+
+        titulo: tituloLimpio,
+
+        contenido: contenidoLimpio,
+
+        asignatura,
+
+        grado,
+
+        fechaEntrega,
+
+        profesorDocumento: this.profesorDocumento,
+
+        nombreProfesor: this.nombreProfesor
+
+      }, this.archivoTareaSeleccionado);
+
+      this.cerrarModalTarea();
+
+      alert('¡La tarea se publicó correctamente!');
+
+    } catch (error) {
+
+      console.error('Error al publicar tarea:', error);
+
+      alert(
+        error instanceof Error
+          ? error.message
+          : 'No fue posible publicar la tarea.'
+      );
+
+    }
+
+  }
+
+  // ==========================================
+  // 19. ANUNCIOS
   // ==========================================
 
   anuncios: Anuncio[] = [
@@ -485,7 +709,7 @@ export class Dashboard {
   }
 
   // ==========================================
-  // 17. CREAR ANUNCIO
+  // 20. CREAR ANUNCIO
   // ==========================================
 
   crearAnuncio(titulo: string, mensaje: string): void {
@@ -517,7 +741,7 @@ export class Dashboard {
   }
 
   // ==========================================
-  // 18. GENERAR ID DE ANUNCIO
+  // 21. GENERAR ID DE ANUNCIO
   // ==========================================
 
   private generarIdAnuncio(): number {
@@ -535,7 +759,7 @@ export class Dashboard {
   }
 
   // ==========================================
-  // 19. CERRAR SESIÓN
+  // 22. CERRAR SESIÓN
   // ==========================================
 
   cerrarSesion(): void {

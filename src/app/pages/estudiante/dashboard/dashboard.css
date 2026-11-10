@@ -1,7 +1,7 @@
 
-/* =========================================
+/* ==========================================
    CONFIGURACIÓN GENERAL
-========================================= */
+========================================== */
 
 * {
   box-sizing: border-box;
@@ -10,7 +10,6 @@
 .dashboard-page {
   min-height: 100vh;
   position: relative;
-
   background:
     linear-gradient(
       rgba(8, 54, 34, 0.48),
@@ -20,22 +19,18 @@
 }
 
 
-/* =========================================
+/* ==========================================
    ENCABEZADO
-========================================= */
+========================================== */
 
 .topbar {
   min-height: 82px;
   background: rgba(255, 255, 255, 0.96);
-
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   padding: 12px 35px;
-
   box-shadow: 0 3px 15px rgba(0, 0, 0, 0.10);
-
   position: relative;
   z-index: 2;
 }
@@ -72,10 +67,8 @@
 .notification-button {
   border: none;
   background: #f0f5f1;
-
   width: 40px;
   height: 40px;
-
   border-radius: 50%;
   cursor: pointer;
   font-size: 17px;
@@ -90,14 +83,11 @@
 .user-avatar {
   width: 42px;
   height: 42px;
-
   border-radius: 50%;
   background: #18804b;
   color: white;
-
   display: grid;
   place-items: center;
-
   font-weight: bold;
 }
 
@@ -113,35 +103,30 @@
 }
 
 
-/* =========================================
+/* ==========================================
    DISTRIBUCIÓN GENERAL
-========================================= */
+========================================== */
 
 .dashboard-layout {
   display: flex;
   min-height: calc(100vh - 82px);
-
   padding: 25px;
   gap: 22px;
 }
 
 
-/* =========================================
+/* ==========================================
    MENÚ LATERAL
-========================================= */
+========================================== */
 
 .sidebar {
   width: 230px;
   flex-shrink: 0;
-
   background: rgba(255, 255, 255, 0.96);
-
   border-radius: 16px;
   padding: 25px 15px;
-
   display: flex;
   flex-direction: column;
-
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
 }
 
@@ -150,7 +135,6 @@
   font-size: 10px;
   font-weight: bold;
   letter-spacing: 1px;
-
   padding-left: 12px;
   margin-bottom: 20px;
 }
@@ -165,15 +149,11 @@
   display: flex;
   align-items: center;
   gap: 12px;
-
   padding: 13px 12px;
-
   border-radius: 9px;
-
   text-decoration: none;
   color: #52615a;
   font-size: 13px;
-
   transition: 0.2s;
 }
 
@@ -198,7 +178,6 @@
 .sidebar-bottom {
   margin-top: auto;
   padding-top: 35px;
-
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -209,9 +188,9 @@
 }
 
 
-/* =========================================
+/* ==========================================
    OPCIONES ADICIONALES DEL MENÚ
-========================================= */
+========================================== */
 
 .more-options {
   display: contents;
@@ -226,9 +205,9 @@
 }
 
 
-/* =========================================
+/* ==========================================
    CONTENIDO PRINCIPAL
-========================================= */
+========================================== */
 
 .main-content {
   flex: 1;
@@ -237,16 +216,12 @@
 
 .welcome-section {
   background: linear-gradient(110deg, #105c37, #18804b);
-
   border-radius: 16px;
   padding: 28px 32px;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   color: white;
-
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
@@ -275,38 +250,32 @@
 }
 
 
-/* =========================================
+/* ==========================================
    TARJETAS INFORMATIVAS
-========================================= */
+========================================== */
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
   margin: 22px 0;
 }
 
 .stat-card {
   background: white;
-
   border-radius: 13px;
   padding: 20px;
-
   display: flex;
   align-items: center;
   gap: 15px;
-
   box-shadow: 0 5px 18px rgba(0, 0, 0, 0.10);
 }
 
 .stat-icon {
   width: 48px;
   height: 48px;
-
   display: grid;
   place-items: center;
-
   border-radius: 12px;
   font-size: 22px;
 }
@@ -318,7 +287,6 @@
 .completed {
   background: #e3f4e9;
   color: #18804b;
-
   font-size: 25px;
   font-weight: bold;
 }
@@ -340,9 +308,9 @@
 }
 
 
-/* =========================================
+/* ==========================================
    TAREAS Y ANUNCIOS
-========================================= */
+========================================== */
 
 .content-grid {
   display: grid;
@@ -352,10 +320,8 @@
 
 .content-card {
   background: white;
-
   border-radius: 14px;
   padding: 22px;
-
   box-shadow: 0 5px 18px rgba(0, 0, 0, 0.10);
 }
 
@@ -363,7 +329,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   gap: 10px;
   margin-bottom: 18px;
 }
@@ -378,6 +343,7 @@
   color: #89938c;
   font-size: 11px;
   margin: 0;
+  line-height: 1.5;
 }
 
 .section-heading a {
@@ -388,17 +354,15 @@
 }
 
 
-/* =========================================
+/* ==========================================
    LISTA DE TAREAS
-========================================= */
+========================================== */
 
 .task-item {
   display: flex;
   align-items: center;
   gap: 12px;
-
   padding: 14px 0;
-
   border-bottom: 1px solid #edf0ed;
 }
 
@@ -410,12 +374,9 @@
 .announcement-icon {
   width: 38px;
   height: 38px;
-
   flex-shrink: 0;
-
   background: #edf5ef;
   border-radius: 10px;
-
   display: grid;
   place-items: center;
 }
@@ -440,53 +401,38 @@
 }
 
 
-/* =========================================
+/* ==========================================
    ESTADOS Y ENLACE DE LAS TAREAS
-========================================= */
-
-/* Estado Pendiente y Entregada */
+========================================== */
 
 .task-status {
   display: inline-block;
-
   background: #fff4d6;
   color: #9a7110;
-
   border-radius: 20px;
   padding: 6px 9px;
-
   font-size: 9px;
   font-weight: normal;
   line-height: normal;
   white-space: nowrap;
 }
 
-/* Ambos estados tienen la misma apariencia */
-
 .task-status.delivered {
-  background: #fff4d6;
-  color: #9a7110;
+  background: #e3f4e9;
+  color: #18804b;
 }
-
-
-/* Enlace Entregar: mismo tamaño que el estado */
 
 .deliver-link {
   display: inline-block;
-
   background: #fff4d6;
   color: #9a7110;
-
   border-radius: 20px;
   padding: 6px 9px;
-
   font-size: 9px;
   font-weight: normal;
   line-height: normal;
-
   text-decoration: none;
   white-space: nowrap;
-
   cursor: pointer;
   transition: background 0.2s;
 }
@@ -498,9 +444,9 @@
 }
 
 
-/* =========================================
+/* ==========================================
    ACCIONES DE LAS TAREAS
-========================================= */
+========================================== */
 
 .task-actions {
   display: flex;
@@ -510,16 +456,14 @@
 }
 
 
-/* =========================================
+/* ==========================================
    ANUNCIOS
-========================================= */
+========================================== */
 
 .announcement-item {
   display: flex;
   gap: 12px;
-
   padding: 14px 0;
-
   border-bottom: 1px solid #edf0ed;
 }
 
@@ -546,43 +490,221 @@
 }
 
 
-/* =========================================
+/* ==========================================
+   ESTADO VACÍO DE TAREAS
+========================================== */
+
+.empty-tasks {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  padding: 30px 15px;
+  text-align: center;
+}
+
+.empty-tasks > span {
+  font-size: 30px;
+}
+
+.empty-tasks h3 {
+  margin: 0;
+  color: #345441;
+  font-size: 14px;
+}
+
+.empty-tasks p {
+  margin: 0;
+  color: #849087;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+
+/* ==========================================
+   RETROALIMENTACIONES DEL ESTUDIANTE
+========================================== */
+
+.feedback-section {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+  margin-top: 22px;
+}
+
+/* Tarjeta individual */
+
+.student-feedback-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #e5ebe6;
+  border-radius: 13px;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.student-feedback-card:hover {
+  border-color: #c9ddce;
+  box-shadow: 0 5px 16px rgba(28, 75, 48, 0.06);
+}
+
+/* Encabezado */
+
+.student-feedback-header {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  width: 100%;
+}
+
+.feedback-task-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 43px;
+  height: 43px;
+  border-radius: 11px;
+  background: #edf5ef;
+  font-size: 20px;
+}
+
+/* Información de la actividad */
+
+.feedback-task-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.feedback-task-info h3 {
+  margin: 0 0 5px;
+  color: #244333;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.feedback-task-info span,
+.feedback-task-info small {
+  display: block;
+  margin-top: 4px;
+  color: #78847c;
+  font-size: 11px;
+}
+
+/* Estado de revisión */
+
+.feedback-status {
+  flex-shrink: 0;
+  padding: 6px 10px;
+  border-radius: 20px;
+  background: #fff5df;
+  color: #986b16;
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.feedback-status.reviewed {
+  background: #e7f5eb;
+  color: #17633c;
+}
+
+/* Comentario */
+
+.student-feedback-content {
+  padding: 16px;
+  background: #f5f8f5;
+  border: 1px solid #e4ece5;
+  border-radius: 10px;
+}
+
+.student-feedback-content h4 {
+  margin: 0 0 9px;
+  color: #245338;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.student-feedback-content p {
+  margin: 0;
+  color: #53645a;
+  font-size: 13px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+.student-feedback-content .feedback-waiting {
+  color: #8a928c;
+  font-style: italic;
+}
+
+/* Sin entregas */
+
+.empty-feedback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 35px 20px;
+  text-align: center;
+  background: #f8faf8;
+  border: 1px dashed #dce6de;
+  border-radius: 12px;
+}
+
+.empty-feedback > span {
+  font-size: 30px;
+}
+
+.empty-feedback h3 {
+  margin: 0;
+  color: #345441;
+  font-size: 15px;
+}
+
+.empty-feedback p {
+  max-width: 400px;
+  margin: 0;
+  color: #849087;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+
+/* ==========================================
    MENSAJE INSTITUCIONAL
-========================================= */
+========================================== */
 
 .institutional-message {
   display: flex;
   align-items: center;
   justify-content: center;
-
   gap: 10px;
-
   color: white;
   margin-top: 25px;
-
   font-size: 13px;
   font-style: italic;
 }
 
 
-/* =========================================
+/* ==========================================
    MODAL DE ENTREGA DE TAREAS
-========================================= */
+========================================== */
 
 .modal-overlay {
   position: fixed;
   inset: 0;
-
   z-index: 2000;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   padding: 20px;
-
   background: rgba(0, 0, 0, 0.58);
-
   backdrop-filter: blur(3px);
   -webkit-backdrop-filter: blur(3px);
 }
@@ -590,15 +712,11 @@
 .delivery-modal {
   width: 100%;
   max-width: 490px;
-
   max-height: 90vh;
   overflow-y: auto;
-
   background: white;
   border-radius: 18px;
-
   box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25);
-
   animation: modalAppear 0.25s ease;
 }
 
@@ -621,19 +739,15 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   padding: 22px 25px 0;
 }
 
 .modal-icon {
   width: 45px;
   height: 45px;
-
   display: grid;
   place-items: center;
-
   border-radius: 12px;
-
   background: #e9f4ed;
   font-size: 22px;
 }
@@ -641,16 +755,12 @@
 .modal-close {
   width: 32px;
   height: 32px;
-
   border: none;
   border-radius: 50%;
-
   background: #f2f4f2;
   color: #66716a;
-
   font-size: 23px;
   line-height: 1;
-
   cursor: pointer;
   transition: background 0.2s;
 }
@@ -668,7 +778,6 @@
 
 .modal-label {
   color: #18804b;
-
   font-size: 10px;
   font-weight: bold;
   letter-spacing: 1.2px;
@@ -684,7 +793,6 @@
   color: #77817b;
   font-size: 12px;
   line-height: 1.5;
-
   margin: 0 0 20px;
 }
 
@@ -695,14 +803,10 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-
   padding: 14px;
-
   background: #f4f8f5;
   border: 1px solid #e3eee6;
-
   border-radius: 10px;
-
   margin-bottom: 22px;
 }
 
@@ -730,11 +834,9 @@
 
 .file-label {
   display: block;
-
   color: #34443b;
   font-size: 12px;
   font-weight: 600;
-
   margin-bottom: 10px;
 }
 
@@ -743,14 +845,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
   padding: 24px 15px;
-
   border: 2px dashed #b9d7c2;
   border-radius: 12px;
-
   background: #f8fbf8;
-
   cursor: pointer;
   transition: background 0.2s, border-color 0.2s;
 }
@@ -763,18 +861,13 @@
 .upload-icon {
   width: 40px;
   height: 40px;
-
   display: grid;
   place-items: center;
-
   background: #e2f1e6;
   color: #18804b;
-
   border-radius: 50%;
-
   font-size: 23px;
   font-weight: bold;
-
   margin-bottom: 10px;
 }
 
@@ -802,32 +895,23 @@
   display: flex;
   align-items: center;
   gap: 10px;
-
   padding: 12px;
-
   margin-top: 12px;
-
   background: #f4f8f5;
   border: 1px solid #e3eee6;
-
   border-radius: 9px;
 }
 
 .pdf-icon {
   width: 36px;
   height: 36px;
-
   display: grid;
   place-items: center;
-
   border-radius: 8px;
-
   background: #fde9e7;
   color: #c7473b;
-
   font-size: 10px;
   font-weight: bold;
-
   flex-shrink: 0;
 }
 
@@ -838,35 +922,27 @@
 
 .file-information strong {
   display: block;
-
   color: #34443b;
   font-size: 11px;
-
   overflow-wrap: anywhere;
 }
 
 .file-information small {
   display: block;
-
   color: #89938c;
   font-size: 10px;
-
   margin-top: 4px;
 }
 
 .remove-file {
   width: 28px;
   height: 28px;
-
   border: none;
   border-radius: 50%;
-
   background: #fce9e7;
   color: #b9443b;
-
   font-size: 19px;
   cursor: pointer;
-
   flex-shrink: 0;
 }
 
@@ -880,14 +956,10 @@
 .delivery-error {
   color: #b9443b;
   background: #fff0ee;
-
   border-radius: 8px;
-
   padding: 10px;
-
   font-size: 11px;
   line-height: 1.5;
-
   margin: 12px 0 0;
 }
 
@@ -903,15 +975,11 @@
 .cancel-button,
 .confirm-button {
   padding: 11px 16px;
-
   border-radius: 8px;
-
   font-size: 11px;
   font-weight: 600;
-
   cursor: pointer;
   transition: background 0.2s;
-
   border: none;
 }
 
@@ -940,9 +1008,9 @@
 }
 
 
-/* =========================================
+/* ==========================================
    RESPONSIVE - TABLETS
-========================================= */
+========================================== */
 
 @media (max-width: 1050px) {
 
@@ -951,15 +1019,15 @@
   }
 
   .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
 }
 
 
-/* =========================================
+/* ==========================================
    RESPONSIVE - TABLETS Y CELULARES
-========================================= */
+========================================== */
 
 @media (max-width: 750px) {
 
@@ -992,28 +1060,21 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-
     overflow: visible;
     gap: 5px;
     width: 100%;
   }
 
-  /* Enlaces principales */
-
   .sidebar-menu > .menu-item {
     display: flex;
     flex: 1;
     min-width: 0;
-
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
     text-align: center;
     gap: 5px;
-
     padding: 10px 3px;
-
     font-size: 10px;
     white-space: normal;
   }
@@ -1034,16 +1095,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-
     width: 42px;
     height: 42px;
-
     border: none;
     border-radius: 9px;
-
     background: #e9f4ed;
     color: #105c37;
-
     font-size: 26px;
     cursor: pointer;
   }
@@ -1056,20 +1113,14 @@
 
   .more-links {
     display: none !important;
-
     position: absolute;
     top: calc(100% + 8px);
     right: 0;
-
     width: 210px;
     padding: 9px;
-
     background: white;
-
     border-radius: 12px;
-
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18);
-
     z-index: 1000;
   }
 
@@ -1083,13 +1134,10 @@
     display: flex;
     align-items: center;
     gap: 10px;
-
     width: 100%;
     padding: 12px;
-
     border-radius: 8px;
     font-size: 12px;
-
     white-space: nowrap;
   }
 
@@ -1108,9 +1156,9 @@
 }
 
 
-/* =========================================
+/* ==========================================
    RESPONSIVE - CELULARES PEQUEÑOS
-========================================= */
+========================================== */
 
 @media (max-width: 480px) {
 
@@ -1157,12 +1205,34 @@
     justify-content: flex-end;
   }
 
+  /* Retroalimentaciones */
+
+  .feedback-section {
+    margin-top: 16px;
+  }
+
+  .student-feedback-card {
+    padding: 15px;
+  }
+
+  .student-feedback-header {
+    flex-wrap: wrap;
+  }
+
+  .feedback-status {
+    margin-left: 56px;
+  }
+
+  .student-feedback-content {
+    padding: 13px;
+  }
+
 }
 
 
-/* =========================================
+/* ==========================================
    RESPONSIVE - MODAL EN CELULARES
-========================================= */
+========================================== */
 
 @media (max-width: 480px) {
 

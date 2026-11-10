@@ -301,7 +301,8 @@ export class MisMaterias {
       mensaje: 'Resolver los ejercicios sobre medidas de tendencia central.',
       asignatura: 'Estadística',
       fecha: 'Hace 3 días'
-    }
+    },
+    
   ];
 
   // ==========================================

@@ -67,7 +67,6 @@
 
         </a>
 
-
         <!-- OPCIONES ADICIONALES -->
         <div class="more-options">
 
@@ -85,7 +84,6 @@
           <div
             class="more-links"
             [class.show]="mostrarMasOpciones">
-
 
             <a
               routerLink="/estudiante/calendario"
@@ -222,6 +220,7 @@
 
               </div>
 
+
               <!-- ESTADO Y ACCIÓN -->
               <div class="task-actions">
 
@@ -232,7 +231,7 @@
                   {{ tarea.estado }}
 
                 </span>
-                
+
                 @if (tarea.estado === 'Pendiente') {
 
                   <a
@@ -249,6 +248,25 @@
               </div>
 
             </article>
+
+          }
+
+
+          <!-- CUANDO NO HAY TAREAS -->
+          @if (tareas.length === 0) {
+
+            <div class="empty-tasks">
+
+              <span>📚</span>
+
+              <h3>No tienes tareas registradas</h3>
+
+              <p>
+                Cuando tus profesores publiquen actividades,
+                aparecerán aquí.
+              </p>
+
+            </div>
 
           }
 
@@ -297,6 +315,108 @@
         </section>
 
       </div>
+
+
+      <!-- =====================================
+           RETROALIMENTACIONES DE LOS PROFESORES
+      ====================================== -->
+
+      <section class="content-card feedback-section">
+
+        <div class="section-heading">
+
+          <div>
+            <h2>Retroalimentaciones de mis profesores</h2>
+
+            <p>
+              Consulta las observaciones sobre tus actividades entregadas.
+            </p>
+          </div>
+
+        </div>
+
+
+        <!-- LISTADO DE RETROALIMENTACIONES -->
+        @for (entrega of entregasEstudiante; track entrega.id) {
+
+          <article class="student-feedback-card">
+
+            <!-- INFORMACIÓN DE LA TAREA -->
+            <div class="student-feedback-header">
+
+              <div class="feedback-task-icon">
+                💬
+              </div>
+
+              <div class="feedback-task-info">
+
+                <h3>{{ entrega.titulo }}</h3>
+
+                <span>{{ entrega.asignatura }}</span>
+
+                <small>
+                  Entregada: {{ entrega.fechaEntrega }}
+                </small>
+
+              </div>
+
+              <span
+                class="feedback-status"
+                [class.reviewed]="entrega.estado === 'Revisada'">
+
+                {{ entrega.estado }}
+
+              </span>
+
+            </div>
+
+
+            <!-- COMENTARIO DEL PROFESOR -->
+            <div class="student-feedback-content">
+
+              <h4>Comentario del profesor</h4>
+
+              @if (entrega.retroalimentacion) {
+
+                <p>
+                  {{ entrega.retroalimentacion }}
+                </p>
+
+              } @else {
+
+                <p class="feedback-waiting">
+                  Tu profesor todavía no ha dejado observaciones
+                  sobre esta actividad. Cuando revise tu trabajo,
+                  podrás consultar aquí sus comentarios.
+                </p>
+
+              }
+
+            </div>
+
+          </article>
+
+        }
+
+
+        <!-- CUANDO NO HAY ENTREGAS -->
+        @if (entregasEstudiante.length === 0) {
+
+          <div class="empty-feedback">
+
+            <span>📭</span>
+
+
+            <p>
+              Cuando entregues tus actividades, podrás consultar aquí
+              las observaciones realizadas tus profesores.
+            </p>
+
+          </div>
+
+        }
+
+      </section>
 
 
       <!-- MENSAJE INSTITUCIONAL -->
@@ -421,11 +541,15 @@
                 <span class="pdf-icon">PDF</span>
 
                 <div class="file-information">
-                  <strong>{{ archivoSeleccionado.name }}</strong>
+
+                  <strong>
+                    {{ archivoSeleccionado.name }}
+                  </strong>
 
                   <small>
                     {{ obtenerTamanoArchivo(archivoSeleccionado.size) }}
                   </small>
+
                 </div>
 
                 <button
@@ -441,6 +565,7 @@
               </div>
 
             }
+
 
             <!-- MENSAJE DE ERROR -->
             @if (mensajeEntrega) {

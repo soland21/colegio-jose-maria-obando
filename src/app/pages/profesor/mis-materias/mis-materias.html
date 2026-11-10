@@ -14,7 +14,6 @@
     </div>
 
     <div class="user-info">
-
       <div class="user-avatar">
         {{ nombreProfesor.charAt(0) }}
       </div>
@@ -23,11 +22,9 @@
         <strong>{{ nombreProfesor }}</strong>
         <span>Profesor</span>
       </div>
-
     </div>
 
   </header>
-
 
   <div class="dashboard-layout">
 
@@ -118,7 +115,6 @@
 
     </aside>
 
-
     <!-- CONTENIDO PRINCIPAL -->
     <main class="main-content">
 
@@ -142,7 +138,7 @@
 
         </div>
 
-        <!-- CUADROS DE GRADO Y MATERIAS -->
+        <!-- GRADO Y MATERIAS -->
         <div class="welcome-options">
 
           <!-- GRADO -->
@@ -160,7 +156,7 @@
 
           </div>
 
-          <!-- MATERIAS -->
+          <!-- SELECTOR DE MATERIAS -->
           <div class="subject-selector">
 
             <button
@@ -170,6 +166,7 @@
               [attr.aria-expanded]="mostrarMaterias">
 
               <span class="selector-icon">📚</span>
+
               <span>Mis materias</span>
 
               <span
@@ -188,16 +185,29 @@
 
                   <button
                     type="button"
+                    [class.selected]="materiaSeleccionada === materia.nombre"
                     (click)="seleccionarMateria(materia.nombre)">
 
                     <span class="dropdown-icon">
                       {{ materia.icono }}
                     </span>
 
-                    {{ materia.nombre }}
+                    <span class="dropdown-name">
+                      {{ materia.nombre }}
+                    </span>
+
+                    @if (materiaSeleccionada === materia.nombre) {
+                      <span class="dropdown-check">✓</span>
+                    }
 
                   </button>
 
+                }
+
+                @if (materias.length === 0) {
+                  <p class="empty-subjects">
+                    No tienes materias asignadas.
+                  </p>
                 }
 
               </div>
@@ -209,7 +219,6 @@
         </div>
 
       </section>
-
 
       <!-- TARJETAS DE RESUMEN -->
       <section class="summary-grid">
@@ -247,7 +256,6 @@
         </article>
 
       </section>
-
 
       <!-- MATERIAS ASIGNADAS -->
       <section class="content-card subjects-section">
@@ -310,10 +318,17 @@
 
           }
 
+          @if (materias.length === 0) {
+            <div class="empty-state">
+              <span>📚</span>
+              <h3>No tienes materias asignadas</h3>
+              <p>Cuando se registren tus asignaciones aparecerán aquí.</p>
+            </div>
+          }
+
         </div>
 
       </section>
-
 
       <!-- ANUNCIOS Y CALIFICACIONES -->
       <div class="content-grid">
@@ -361,7 +376,6 @@
 
         </section>
 
-
         <section class="content-card">
 
           <div class="section-header">
@@ -406,7 +420,6 @@
         </section>
 
       </div>
-
 
       <!-- ESTUDIANTES -->
       <section class="content-card students-section">
@@ -472,7 +485,6 @@
 
       </section>
 
-
       <!-- PIE DE PÁGINA -->
       <footer class="footer">
 
@@ -487,3 +499,4 @@
   </div>
 
 </div>
+ 
