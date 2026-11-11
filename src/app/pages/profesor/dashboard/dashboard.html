@@ -103,7 +103,9 @@
 
     </aside>
 
-    <!-- CONTENIDO PRINCIPAL -->
+    <!-- ==========================================
+         CONTENIDO PRINCIPAL
+    =========================================== -->
 
     <main class="main-content">
 
@@ -191,23 +193,33 @@
 
       </section>
 
-      <!-- TARJETAS DE RESUMEN -->
+      <!-- ==========================================
+           TARJETAS DE RESUMEN
+      =========================================== -->
 
       <section class="summary-grid">
 
-        <article class="summary-card">
+        <!-- ESTUDIANTES -->
+
+        <button
+          type="button"
+          class="summary-card summary-card-button"
+          (click)="irAEstudiantes()">
 
           <div class="summary-icon green">
             👨‍🎓
           </div>
 
-          <div>
+          <div class="summary-information">
             <span>Estudiantes</span>
             <h2>{{ totalEstudiantes }}</h2>
-            <small>Estudiantes</small>
+    
           </div>
 
-        </article>
+          
+        </button>
+
+        <!-- TAREAS PUBLICADAS -->
 
         <article class="summary-card">
 
@@ -222,6 +234,8 @@
           </div>
 
         </article>
+
+        <!-- ENTREGAS POR REVISAR -->
 
         <button
           type="button"
@@ -247,7 +261,9 @@
 
       </section>
 
-      <!-- TAREAS Y ANUNCIOS -->
+      <!-- ==========================================
+           TAREAS Y ANUNCIOS
+      =========================================== -->
 
       <div class="content-grid">
 
@@ -261,7 +277,7 @@
               <h2>Tareas publicadas</h2>
 
               <p>
-                Consulta las actividades de tus estudiantes
+                Consulta y administra las actividades de tus estudiantes
               </p>
             </div>
 
@@ -312,6 +328,15 @@
                   <small>
                     {{ tarea.pendientes }} pendientes
                   </small>
+
+                  <button
+                    type="button"
+                    class="edit-task-button"
+                    (click)="editarTarea(tarea)">
+
+                    ✏️ Editar
+
+                  </button>
 
                 </div>
 
@@ -626,7 +651,7 @@
   }
 
   <!-- ==========================================
-       MODAL: PUBLICAR TAREA
+       MODAL: PUBLICAR / EDITAR TAREA
   =========================================== -->
 
   @if (mostrarModalTarea) {
@@ -653,11 +678,15 @@
             </span>
 
             <h2 id="task-modal-title">
-              Publicar nueva tarea
+              {{ tareaEditandoId ? 'Editar tarea publicada' : 'Publicar nueva tarea' }}
             </h2>
 
             <p>
-              Comparte una actividad con los estudiantes de tu clase.
+              {{
+                tareaEditandoId
+                  ? 'Modifica la información de la actividad publicada.'
+                  : 'Comparte una actividad con los estudiantes de tu clase.'
+              }}
             </p>
 
           </div>
@@ -686,6 +715,7 @@
               #tituloTarea
               type="text"
               id="tituloTarea"
+              [value]="tituloTareaModal"
               placeholder="Ej. Taller de operaciones matemáticas"
               maxlength="120">
 
@@ -700,6 +730,7 @@
             <textarea
               #contenidoTarea
               id="contenidoTarea"
+              [value]="contenidoTareaModal"
               placeholder="Escribe las instrucciones que deben seguir los estudiantes..."
               rows="4">
             </textarea>
@@ -797,7 +828,8 @@
             <input
               #fechaTarea
               type="date"
-              id="fechaEntregaTarea">
+              id="fechaEntregaTarea"
+              [value]="fechaEntregaTareaModal">
 
           </div>
 
@@ -861,6 +893,14 @@
 
             }
 
+            @if (tareaEditandoId && !archivoTareaSeleccionado) {
+
+              <small class="existing-task-file">
+                Si no adjuntas un nuevo PDF, se conservará el archivo actual.
+              </small>
+
+            }
+
           </div>
 
           <!-- INFORMACIÓN DEL DESTINO -->
@@ -913,7 +953,11 @@
               fechaTarea.value
             )">
 
-            📚 Publicar tarea
+            @if (tareaEditandoId) {
+              💾 Guardar cambios
+            } @else {
+              📚 Publicar tarea
+            }
 
           </button>
 

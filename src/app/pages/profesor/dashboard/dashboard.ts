@@ -234,10 +234,14 @@ export class Dashboard {
 
     return this.tareasCambio
 
+      // Mostrar únicamente las tareas del profesor actual.
+
       .filter(tarea =>
         String(tarea.profesorDocumento).trim() ===
         String(this.profesorDocumento).trim()
       )
+
+      // Filtrar por materia seleccionada.
 
       .filter(tarea => {
 
@@ -250,11 +254,15 @@ export class Dashboard {
 
       })
 
-      .filter(tarea =>
-        this.obtenerEntregasDeTarea(tarea).length === 0
-      )
+      // IMPORTANTE:
+      // No se excluyen tareas que ya tienen entregas.
+      // Así también se pueden editar las actividades
+      // que los estudiantes ya enviaron.
 
       .map(tarea => {
+
+        const entregasTarea =
+          this.obtenerEntregasDeTarea(tarea);
 
         return {
 
@@ -268,9 +276,12 @@ export class Dashboard {
 
           fecha: tarea.fechaEntrega,
 
-          entregas: 0,
+          entregas: entregasTarea.length,
 
-          pendientes: this.totalEstudiantes
+          pendientes: Math.max(
+            this.totalEstudiantes - entregasTarea.length,
+            0
+          )
 
         };
 
@@ -538,10 +549,23 @@ export class Dashboard {
   }
 
   // ==========================================
-  // 18. MODAL PUBLICAR TAREA
+  // 18. MODAL PUBLICAR / EDITAR TAREA
   // ==========================================
 
   mostrarModalTarea = false;
+
+  // ID de la tarea que se está editando.
+  // Si es null, se está creando una tarea nueva.
+
+  tareaEditandoId: string | null = null;
+
+  // Datos del formulario.
+
+  tituloTareaModal = '';
+
+  contenidoTareaModal = '';
+
+  fechaEntregaTareaModal = '';
 
   materiaTareaSeleccionada = '';
 
@@ -555,9 +579,21 @@ export class Dashboard {
 
   periodoTareaSeleccionado: PeriodoAcademico = 'Primer periodo';
 
+  // ==========================================
+  // 19. ABRIR MODAL PARA PUBLICAR TAREA
+  // ==========================================
+
   abrirModalTarea(): void {
 
-    this.mostrarModalTarea = true;
+    this.limpiarFormularioTarea();
+
+    this.tareaEditandoId = null;
+
+    this.tituloTareaModal = '';
+
+    this.contenidoTareaModal = '';
+
+    this.fechaEntregaTareaModal = '';
 
     this.periodoTareaSeleccionado = 'Primer periodo';
 
@@ -566,18 +602,124 @@ export class Dashboard {
 
     this.actualizarGradosDisponibles();
 
+    this.mostrarModalTarea = true;
+
   }
+
+  // ==========================================
+  // 20. ABRIR MODAL PARA EDITAR TAREA
+  // ==========================================
+
+  editarTarea(tareaResumen: Tarea): void {
+
+    // Buscar la tarea original en el servicio.
+
+    const tarea = this.tareasCambio.find(
+      item => item.id === tareaResumen.id
+    );
+
+    if (!tarea) {
+
+      alert('No se encontró la tarea que deseas editar.');
+
+      return;
+
+    }
+
+    // Comprobar que la tarea pertenezca al profesor actual.
+
+    if (
+      String(tarea.profesorDocumento).trim() !==
+      String(this.profesorDocumento).trim()
+    ) {
+
+      alert('No tienes permiso para editar esta tarea.');
+
+      return;
+
+    }
+
+    // Limpiar los datos de una edición anterior.
+
+    this.limpiarFormularioTarea();
+
+    // Guardar el ID original.
+    // Esto permite actualizar el registro y no crear otro.
+
+    this.tareaEditandoId = tarea.id;
+
+    // Precargar información.
+
+    this.tituloTareaModal = tarea.titulo || '';
+
+    this.contenidoTareaModal = tarea.contenido || '';
+
+    this.fechaEntregaTareaModal =
+      String(tarea.fechaEntrega || '').substring(0, 10);
+
+    this.materiaTareaSeleccionada = tarea.asignatura;
+
+    // Cargar los grados disponibles para esa materia.
+
+    this.actualizarGradosDisponibles();
+
+    // Mantener el grado original si continúa asignado.
+
+    if (
+      this.gradosDisponibles.includes(tarea.grado)
+    ) {
+
+      this.gradoTareaSeleccionado = tarea.grado;
+
+    }
+
+    // Recuperar el periodo original.
+
+    this.periodoTareaSeleccionado =
+      tarea.periodo || 'Primer periodo';
+
+    // Abrir el modal.
+
+    this.mostrarModalTarea = true;
+
+  }
+
+  // ==========================================
+  // 21. LIMPIAR FORMULARIO DE TAREA
+  // ==========================================
+
+  private limpiarFormularioTarea(): void {
+
+    this.archivoTareaSeleccionado = null;
+
+    this.tituloTareaModal = '';
+
+    this.contenidoTareaModal = '';
+
+    this.fechaEntregaTareaModal = '';
+
+    this.gradoTareaSeleccionado = '';
+
+    this.gradosDisponibles = [];
+
+  }
+
+  // ==========================================
+  // 22. CERRAR MODAL DE TAREA
+  // ==========================================
 
   cerrarModalTarea(): void {
 
     this.mostrarModalTarea = false;
 
-    this.archivoTareaSeleccionado = null;
+    this.tareaEditandoId = null;
+
+    this.limpiarFormularioTarea();
 
   }
 
   // ==========================================
-  // 19. ACTUALIZAR GRADOS DISPONIBLES
+  // 23. ACTUALIZAR GRADOS DISPONIBLES
   // ==========================================
 
   actualizarGradosDisponibles(): void {
@@ -604,7 +746,7 @@ export class Dashboard {
   }
 
   // ==========================================
-  // 20. SELECCIONAR ARCHIVO PDF
+  // 24. SELECCIONAR ARCHIVO PDF
   // ==========================================
 
   seleccionarArchivo(event: Event): void {
@@ -659,7 +801,7 @@ export class Dashboard {
   }
 
   // ==========================================
-  // 21. PUBLICAR TAREA
+  // 25. PUBLICAR O ACTUALIZAR TAREA
   // ==========================================
 
   publicarTarea(
@@ -667,6 +809,10 @@ export class Dashboard {
     contenido: string,
     fechaEntrega: string
   ): void {
+
+    // ==========================================
+    // VALIDACIONES
+    // ==========================================
 
     if (!titulo.trim()) {
 
@@ -716,9 +862,21 @@ export class Dashboard {
 
     }
 
+    if (!this.profesorDocumento) {
+
+      alert('No se pudo identificar al profesor.');
+
+      return;
+
+    }
+
     try {
 
-      this.entregaService.publicarTarea({
+      // ==========================================
+      // DATOS DE LA TAREA
+      // ==========================================
+
+      const datosTarea = {
 
         titulo: titulo.trim(),
 
@@ -736,22 +894,67 @@ export class Dashboard {
 
         periodo: this.periodoTareaSeleccionado
 
-      }, this.archivoTareaSeleccionado);
+      };
 
-      this.entregaService.sincronizarTareasDesdeStorage();
+      // ==========================================
+      // SI EXISTE ID, ACTUALIZAR TAREA
+      // ==========================================
 
-      alert('Tarea publicada correctamente.');
+      if (this.tareaEditandoId) {
+
+        this.entregaService.actualizarTarea(
+
+          this.tareaEditandoId,
+
+          datosTarea,
+
+          this.archivoTareaSeleccionado || undefined
+
+        );
+
+        this.entregaService.sincronizarTareasDesdeStorage();
+
+        alert('La tarea se actualizó correctamente.');
+
+      }
+
+      // ==========================================
+      // SI NO EXISTE ID, PUBLICAR TAREA NUEVA
+      // ==========================================
+
+      else {
+
+        this.entregaService.publicarTarea(
+
+          datosTarea,
+
+          this.archivoTareaSeleccionado || undefined
+
+        );
+
+        this.entregaService.sincronizarTareasDesdeStorage();
+
+        alert('Tarea publicada correctamente.');
+
+      }
+
+      // ==========================================
+      // CERRAR MODAL
+      // ==========================================
 
       this.cerrarModalTarea();
 
     } catch (error) {
 
-      console.error('Error al publicar la tarea:', error);
+      console.error(
+        'Error al guardar la tarea:',
+        error
+      );
 
       alert(
         error instanceof Error
           ? error.message
-          : 'No se pudo publicar la tarea.'
+          : 'No se pudo guardar la tarea.'
       );
 
     }
@@ -759,7 +962,7 @@ export class Dashboard {
   }
 
   // ==========================================
-  // 22. ANUNCIOS
+  // 26. ANUNCIOS
   // ==========================================
 
   anuncios: Anuncio[] = [];
@@ -767,7 +970,7 @@ export class Dashboard {
   gradoAnuncioSeleccionado = '';
 
   // ==========================================
-  // 23. GRADOS DISPONIBLES PARA ANUNCIOS
+  // 27. GRADOS DISPONIBLES PARA ANUNCIOS
   // ==========================================
 
   get gradosAnuncioDisponibles(): string[] {
@@ -793,7 +996,7 @@ export class Dashboard {
   }
 
   // ==========================================
-  // 24. CARGAR ANUNCIOS
+  // 28. CARGAR ANUNCIOS
   // ==========================================
 
   cargarAnuncios(): void {
@@ -842,7 +1045,7 @@ export class Dashboard {
   }
 
   // ==========================================
-  // 25. SINCRONIZAR ANUNCIOS ENTRE PESTAÑAS
+  // 29. SINCRONIZAR ANUNCIOS ENTRE PESTAÑAS
   // ==========================================
 
   @HostListener('window:storage', ['$event'])
@@ -860,7 +1063,7 @@ export class Dashboard {
   }
 
   // ==========================================
-  // 26. ABRIR MODAL DE ANUNCIO
+  // 30. ABRIR MODAL DE ANUNCIO
   // ==========================================
 
   abrirModalAnuncio(): void {
@@ -889,7 +1092,7 @@ export class Dashboard {
   }
 
   // ==========================================
-  // 27. CERRAR MODAL DE ANUNCIO
+  // 31. CERRAR MODAL DE ANUNCIO
   // ==========================================
 
   cerrarModalAnuncio(): void {
@@ -899,7 +1102,7 @@ export class Dashboard {
   }
 
   // ==========================================
-  // 28. CREAR ANUNCIO
+  // 32. CREAR ANUNCIO
   // ==========================================
 
   crearAnuncio(
@@ -1021,7 +1224,7 @@ export class Dashboard {
   }
 
   // ==========================================
-  // 29. GENERAR ID DEL ANUNCIO
+  // 33. GENERAR ID DEL ANUNCIO
   // ==========================================
 
   generarIdAnuncio(): number {
@@ -1031,7 +1234,17 @@ export class Dashboard {
   }
 
   // ==========================================
-  // 30. CERRAR SESIÓN
+// 34. NAVEGAR A LA VISTA DE ESTUDIANTES
+// ==========================================
+
+irAEstudiantes(): void {
+
+  this.router.navigate(['/profesor/estudiantes']);
+
+}
+
+  // ==========================================
+  // 35. CERRAR SESIÓN
   // ==========================================
 
   cerrarSesion(): void {
@@ -1041,5 +1254,6 @@ export class Dashboard {
     this.router.navigate(['/']);
 
   }
+  
 
 }

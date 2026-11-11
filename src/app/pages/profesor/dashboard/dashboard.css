@@ -2210,3 +2210,40 @@
   cursor: pointer;
   white-space: nowrap;
 }
+
+/* ==========================================
+   BOTÓN EDITAR TAREA
+========================================== */
+
+.edit-task-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 7px 13px;
+  border: 1px solid #c9dfd0;
+  border-radius: 8px;
+  background: #f0f8f2;
+  color: #267443;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.edit-task-button:hover {
+  background: #267443;
+  color: #ffffff;
+  border-color: #267443;
+  transform: translateY(-1px);
+}
+
+/* INFORMACIÓN DEL PDF EXISTENTE */
+
+.existing-task-file {
+  display: block;
+  margin-top: 8px;
+  color: #64748b;
+  font-size: 12px;
+}
