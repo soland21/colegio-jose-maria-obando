@@ -45,10 +45,6 @@
           <span>Inicio</span>
         </a>
 
-        <a routerLink="/profesor/tareas" routerLinkActive="active">
-          <span class="menu-icon">▤</span>
-          <span>Tareas y actividades</span>
-        </a>
 
         <a routerLink="/profesor/calificaciones" routerLinkActive="active">
           <span class="menu-icon">▣</span>
@@ -70,21 +66,7 @@
             class="more-links"
             [class.show]="mostrarMasOpciones">
 
-            <a
-              routerLink="/profesor/asistencia"
-              routerLinkActive="active"
-              (click)="mostrarMasOpciones = false">
-              <span class="menu-icon">✓</span>
-              <span>Asistencia</span>
-            </a>
 
-            <a
-              routerLink="/profesor/anuncios"
-              routerLinkActive="active"
-              (click)="mostrarMasOpciones = false">
-              <span class="menu-icon">▤</span>
-              <span>Anuncios</span>
-            </a>
 
             <a
               routerLink="/profesor/calendario"
@@ -101,10 +83,6 @@
 
       <div class="sidebar-bottom">
 
-        <a routerLink="/profesor/perfil" routerLinkActive="active">
-          <span class="menu-icon">⚙</span>
-          <span>Mi perfil</span>
-        </a>
 
         <a routerLink="/" (click)="cerrarSesion()">
           <span class="menu-icon">↪</span>

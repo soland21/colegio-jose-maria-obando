@@ -1,0 +1,249 @@
+
+<div class="dashboard-page">
+
+  <header class="topbar">
+    <div class="brand">
+      <img src="/logocolegio.png" alt="Logo del colegio">
+
+      <div class="brand-info">
+        <h2>Colegio José María Obando</h2>
+        <span>Plataforma académica</span>
+      </div>
+    </div>
+
+    <div class="user-info">
+      <div class="user-avatar">
+        {{ nombreProfesor.charAt(0).toUpperCase() }}
+      </div>
+
+      <div class="user-details">
+        <strong>{{ nombreProfesor }}</strong>
+        <span>Docente</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="dashboard-layout">
+
+    <aside class="sidebar">
+
+      <div class="sidebar-heading">
+        MENÚ PRINCIPAL
+      </div>
+
+      <nav class="sidebar-menu">
+
+        <a routerLink="/profesor/inicio"
+           routerLinkActive="active">
+          <span class="menu-icon">🏠</span>
+          <span>Inicio</span>
+        </a>
+
+        <a routerLink="/profesor/calificaciones"
+           routerLinkActive="active">
+          <span class="menu-icon">📊</span>
+          <span>Calificaciones</span>
+        </a>
+
+        <a routerLink="/profesor/calendario"
+           routerLinkActive="active">
+          <span class="menu-icon">📅</span>
+          <span>Calendario</span>
+        </a>
+
+      </nav>
+
+      <div class="sidebar-bottom">
+        <a (click)="cerrarSesion()">
+          <span class="menu-icon">⇥</span>
+          <span>Cerrar sesión</span>
+        </a>
+      </div>
+
+    </aside>
+
+    <main class="main-content">
+
+      <section class="calendar-welcome">
+        <div>
+          <span class="welcome-label">ORGANIZACIÓN ACADÉMICA</span>
+          <h1>Mi calendario</h1>
+          <p>
+            Consulta las fechas de entrega de tus tareas y las publicaciones
+            realizadas a tus estudiantes.
+          </p>
+        </div>
+
+        <div class="calendar-welcome-icon">📅</div>
+      </section>
+
+      <section class="calendar-card">
+
+        <div class="calendar-toolbar">
+
+          <div class="calendar-title">
+            <span class="calendar-title-icon">📆</span>
+
+            <div>
+              <h2>{{ nombreMes }}</h2>
+              <p>Agenda de actividades académicas</p>
+            </div>
+          </div>
+
+          <div class="calendar-navigation">
+            <button type="button"
+                    class="today-button"
+                    (click)="irAHoy()">
+              Hoy
+            </button>
+
+            <button type="button"
+                    class="month-button"
+                    aria-label="Mes anterior"
+                    (click)="cambiarMes(-1)">
+              ‹
+            </button>
+
+            <button type="button"
+                    class="month-button"
+                    aria-label="Mes siguiente"
+                    (click)="cambiarMes(1)">
+              ›
+            </button>
+          </div>
+
+        </div>
+
+        <div class="calendar-legend">
+
+          <label class="legend-option">
+            <input type="checkbox"
+                   [checked]="mostrarTareas"
+                   (change)="cambiarFiltro('tarea')">
+            <span class="legend-dot task-dot"></span>
+            <span>Entregas de tareas</span>
+          </label>
+
+          <label class="legend-option">
+            <input type="checkbox"
+                   [checked]="mostrarAnuncios"
+                   (change)="cambiarFiltro('anuncio')">
+            <span class="legend-dot announcement-dot"></span>
+            <span>Anuncios publicados</span>
+          </label>
+
+        </div>
+
+        <div class="calendar-grid">
+
+          <div class="calendar-weekday"
+               *ngFor="let dia of nombresDias">
+            {{ dia }}
+          </div>
+
+          <button
+            type="button"
+            class="calendar-day"
+            *ngFor="let dia of diasCalendario"
+            [class.other-month]="!dia.esMesActual"
+            [class.today]="dia.esHoy"
+            [class.selected]="dia.seleccionado"
+            (click)="seleccionarDia(dia)">
+
+            <span class="day-number">
+              {{ dia.numero }}
+            </span>
+
+            <div class="day-events">
+
+              <span
+                *ngFor="let evento of dia.eventos.slice(0, 3)"
+                class="day-event"
+                [class.task-event]="evento.tipo === 'tarea'"
+                [class.announcement-event]="evento.tipo === 'anuncio'">
+
+                {{ evento.titulo }}
+
+              </span>
+
+              <span class="more-events"
+                    *ngIf="dia.eventos.length > 3">
+                +{{ dia.eventos.length - 3 }} más
+              </span>
+
+            </div>
+
+          </button>
+
+        </div>
+
+        <div class="calendar-note">
+          <span>💡</span>
+          Las fechas de entrega y los anuncios se agregan automáticamente
+          cuando publicas una tarea o un anuncio.
+        </div>
+
+      </section>
+
+      <section class="day-events-card">
+
+        <div class="day-events-header">
+          <div>
+            <span class="section-label">AGENDA DEL DÍA</span>
+            <h2>{{ nombreDiaSeleccionado() }}</h2>
+          </div>
+
+          <span class="day-event-count">
+            {{ eventosDelDiaFiltrados.length }}
+            {{ eventosDelDiaFiltrados.length === 1 ? 'actividad' : 'actividades' }}
+          </span>
+        </div>
+
+        <div *ngIf="eventosDelDiaFiltrados.length > 0"
+             class="selected-events-list">
+
+          <article
+            class="selected-event"
+            *ngFor="let evento of eventosDelDiaFiltrados">
+
+            <div class="selected-event-icon"
+                 [class.task-icon]="evento.tipo === 'tarea'"
+                 [class.announcement-icon]="evento.tipo === 'anuncio'">
+
+              {{ evento.tipo === 'tarea' ? '📝' : '📢' }}
+
+            </div>
+
+            <div class="selected-event-info">
+              <span class="event-type">
+                {{ evento.tipo === 'tarea' ? 'ENTREGA DE TAREA' : 'ANUNCIO PUBLICADO' }}
+              </span>
+
+              <h3>{{ evento.titulo }}</h3>
+
+              <p>{{ evento.descripcion }}</p>
+
+              <div class="event-metadata">
+                <span *ngIf="evento.grado">🎓 {{ evento.grado }}</span>
+                <span *ngIf="evento.asignatura">📚 {{ evento.asignatura }}</span>
+              </div>
+            </div>
+
+          </article>
+
+        </div>
+
+        <div class="empty-day" *ngIf="eventosDelDiaFiltrados.length === 0">
+          <div class="empty-day-icon">🗓️</div>
+          <h3>No hay actividades para este día</h3>
+          <p>
+            Cuando publiques tareas o anuncios, sus fechas aparecerán
+            automáticamente en tu calendario.
+          </p>
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+</div>

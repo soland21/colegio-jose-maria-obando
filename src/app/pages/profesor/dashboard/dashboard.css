@@ -1742,3 +1742,471 @@
   }
 
 }
+
+/* ==========================================
+   LISTA DE TAREAS PUBLICADAS
+   Muestra 3 tareas y permite desplazarse
+========================================== */
+
+.task-list-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  /* Altura aproximada para mostrar 3 tareas */
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  padding: 4px 10px 4px 0;
+
+  scrollbar-width: thin;
+  scrollbar-color: #18804b #edf3ef;
+}
+
+/* Personalización del scroll en Chrome y Edge */
+.task-list-scroll::-webkit-scrollbar {
+  width: 7px;
+}
+
+.task-list-scroll::-webkit-scrollbar-track {
+  background: #edf3ef;
+  border-radius: 10px;
+}
+
+.task-list-scroll::-webkit-scrollbar-thumb {
+  background: #18804b;
+  border-radius: 10px;
+}
+
+.task-list-scroll::-webkit-scrollbar-thumb:hover {
+  background: #105c37;
+}
+
+/* Cada tarea conserva su tamaño */
+.task-list-scroll .task-item {
+  flex-shrink: 0;
+}
+
+/* ==========================================
+   MODAL: ENTREGAS POR REVISAR
+========================================== */
+
+.deliveries-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: rgba(12, 25, 18, 0.65);
+  backdrop-filter: blur(5px);
+  overflow-y: auto;
+}
+
+.deliveries-modal {
+  position: relative;
+  width: 100%;
+  max-width: 850px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  animation: deliveriesModalAppear 0.25s ease;
+}
+
+@keyframes deliveriesModalAppear {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.deliveries-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 28px 10px;
+  flex-shrink: 0;
+}
+
+.deliveries-modal-content {
+  padding: 10px 28px 24px;
+  overflow-y: auto;
+}
+
+.deliveries-modal-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff1df;
+  border-radius: 14px;
+  font-size: 24px;
+}
+
+.deliveries-close-button {
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 50%;
+  background: #f1f4f2;
+  color: #555;
+  font-size: 27px;
+  cursor: pointer;
+}
+
+.deliveries-close-button:hover {
+  background: #ffe5e5;
+  color: #c62828;
+}
+
+.deliveries-modal-label {
+  color: #18804b;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+}
+
+.deliveries-modal-content h2 {
+  margin: 8px 0;
+  color: #183c2a;
+  font-size: 25px;
+}
+
+.deliveries-modal-description {
+  margin: 0 0 20px;
+  color: #718078;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.deliveries-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 18px;
+  margin-bottom: 18px;
+  background: #f0f8f3;
+  border: 1px solid #dceee2;
+  border-radius: 12px;
+  color: #315b42;
+  font-size: 14px;
+}
+
+.deliveries-summary strong {
+  color: #18804b;
+  font-size: 23px;
+}
+
+.pending-deliveries-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 48vh;
+  overflow-y: auto;
+  padding: 3px 8px 3px 0;
+}
+
+.pending-delivery-item {
+  padding: 18px;
+  border: 1px solid #e3ebe5;
+  border-radius: 14px;
+  background: #ffffff;
+}
+
+.pending-delivery-student {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+}
+
+.pending-student-avatar {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background: #e3f2e8;
+  color: #18804b;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.pending-delivery-information h3 {
+  margin: 0 0 5px;
+  color: #234632;
+  font-size: 16px;
+}
+
+.pending-delivery-information span,
+.pending-delivery-information small {
+  display: block;
+  margin-top: 5px;
+  color: #66756c;
+  font-size: 13px;
+}
+
+.pending-file-name {
+  overflow-wrap: anywhere;
+}
+
+.pending-delivery-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 15px;
+}
+
+.pending-review-status {
+  padding: 7px 10px;
+  border-radius: 20px;
+  background: #fff3df;
+  color: #a76608;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.pending-open-file-button,
+.pending-mark-reviewed-button,
+.save-feedback-button {
+  padding: 9px 13px;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.pending-open-file-button {
+  background: #eaf2ff;
+  color: #2459a6;
+}
+
+.pending-mark-reviewed-button,
+.save-feedback-button {
+  background: #18804b;
+  color: white;
+}
+
+.pending-open-file-button:hover {
+  background: #d9e7ff;
+}
+
+.pending-mark-reviewed-button:hover,
+.save-feedback-button:hover {
+  background: #116439;
+}
+
+.pending-feedback-section {
+  margin-top: 17px;
+  padding-top: 15px;
+  border-top: 1px solid #edf0ed;
+}
+
+.pending-feedback-section h4 {
+  margin: 0 0 5px;
+  color: #294936;
+  font-size: 14px;
+}
+
+.pending-feedback-section p {
+  margin: 0 0 10px;
+  color: #77827b;
+  font-size: 12px;
+}
+
+.feedback-textarea {
+  width: 100%;
+  min-height: 75px;
+  padding: 11px;
+  border: 1px solid #dce5df;
+  border-radius: 9px;
+  outline: none;
+  resize: vertical;
+  font-family: inherit;
+  font-size: 13px;
+  box-sizing: border-box;
+}
+
+.feedback-textarea:focus {
+  border-color: #18804b;
+  box-shadow: 0 0 0 3px rgba(24, 128, 75, 0.1);
+}
+
+.feedback-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 9px;
+}
+
+.empty-pending-deliveries {
+  padding: 35px 20px;
+  text-align: center;
+  background: #f7faf8;
+  border-radius: 14px;
+}
+
+.empty-pending-icon {
+  font-size: 38px;
+}
+
+.empty-pending-deliveries h3 {
+  color: #245438;
+}
+
+.empty-pending-deliveries p {
+  color: #758078;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.deliveries-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 20px;
+}
+
+.deliveries-modal-close-action {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 9px;
+  background: #eaf2ed;
+  color: #245438;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.deliveries-modal-close-action:hover {
+  background: #dcebe1;
+}
+
+@media (max-width: 600px) {
+  .deliveries-modal-overlay {
+    padding: 10px;
+  }
+
+  .deliveries-modal {
+    max-height: 95vh;
+    border-radius: 15px;
+  }
+
+  .deliveries-modal-header {
+    padding: 16px 17px 8px;
+  }
+
+  .deliveries-modal-content {
+    padding: 10px 17px 18px;
+  }
+
+  .deliveries-modal-content h2 {
+    font-size: 21px;
+  }
+
+  .pending-deliveries-list {
+    max-height: 50vh;
+  }
+
+  .pending-delivery-actions {
+    align-items: stretch;
+  }
+}
+
+.pending-feedback-section input {
+  width: 100%;
+  min-height: 42px;
+  margin: 8px 0 15px;
+  padding: 10px 12px;
+  border: 1px solid #dce5df;
+  border-radius: 9px;
+  outline: none;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.pending-feedback-section input:focus {
+  border-color: #18804b;
+  box-shadow: 0 0 0 3px rgba(24, 128, 75, 0.1);
+}
+
+.pending-feedback-section label {
+  display: block;
+  color: #294936;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.pending-feedback-section .feedback-footer {
+  margin-top: 12px;
+}
+
+.pending-feedback-section .save-feedback-button {
+  padding: 10px 17px;
+  border: none;
+  border-radius: 8px;
+  background: #18804b;
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.pending-feedback-section .save-feedback-button:hover {
+  background: #116439;
+}
+/* ==========================================
+   MODAL: CREAR ANUNCIO
+========================================== */
+
+.announcement-modal {
+  max-width: 550px;
+}
+
+.announcement-modal .task-modal-body {
+  padding-bottom: 10px;
+}
+
+.announcement-modal .task-form-group textarea {
+  min-height: 130px;
+}
+/* Encabezado de anuncios */
+.announcement-section .section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.create-announcement-button {
+  width: auto;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 7px 11px;
+  margin: 0;
+  border: none;
+  border-radius: 7px;
+  background: #18804b;
+  color: white;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}

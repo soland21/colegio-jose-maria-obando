@@ -8,18 +8,15 @@
   <header class="topbar">
 
     <div class="brand">
-
       <img src="/logocolegio.png" alt="Logo del colegio">
 
       <div class="brand-info">
         <h2>Colegio José María Obando</h2>
         <span>Plataforma académica</span>
       </div>
-
     </div>
 
     <div class="user-info">
-
       <div class="user-avatar">
         {{ nombreProfesor.charAt(0).toUpperCase() }}
       </div>
@@ -28,7 +25,6 @@
         <strong>{{ nombreProfesor }}</strong>
         <span>Profesor</span>
       </div>
-
     </div>
 
   </header>
@@ -39,9 +35,7 @@
 
   <div class="dashboard-layout">
 
-    <!-- ==========================================
-         MENÚ LATERAL
-    =========================================== -->
+    <!-- MENÚ LATERAL -->
 
     <aside class="sidebar">
 
@@ -59,16 +53,6 @@
 
           <span class="menu-icon">🏠</span>
           <span>Inicio</span>
-
-        </a>
-
-        <a
-          routerLink="/profesor/tareas"
-          routerLinkActive="active">
-
-          <span class="menu-icon">📚</span>
-          <span>Tareas y actividades</span>
-
         </a>
 
         <a
@@ -77,10 +61,7 @@
 
           <span class="menu-icon">📊</span>
           <span>Calificaciones</span>
-
         </a>
-
-        <!-- OPCIONES ADICIONALES -->
 
         <div class="more-options">
 
@@ -89,32 +70,12 @@
             class="more-button"
             (click)="alternarOpciones()"
             aria-label="Mostrar más opciones">
-
             ⋮
-
           </button>
 
           <div
             class="more-links"
             [class.show]="mostrarMasOpciones">
-
-            <a
-              routerLink="/profesor/asistencia"
-              routerLinkActive="active">
-
-              <span class="menu-icon">📋</span>
-              <span>Asistencia</span>
-
-            </a>
-
-            <a
-              routerLink="/profesor/anuncios"
-              routerLinkActive="active">
-
-              <span class="menu-icon">📢</span>
-              <span>Anuncios</span>
-
-            </a>
 
             <a
               routerLink="/profesor/calendario"
@@ -131,37 +92,22 @@
 
       </nav>
 
-      <!-- OPCIONES INFERIORES -->
-
       <div class="sidebar-bottom">
 
-        <a routerLink="/profesor/perfil">
-
-          <span class="menu-icon">👤</span>
-          <span>Mi perfil</span>
-
-        </a>
-
         <a routerLink="/" (click)="cerrarSesion()">
-
           <span class="menu-icon">🚪</span>
           <span>Cerrar sesión</span>
-
         </a>
 
       </div>
 
     </aside>
 
-    <!-- ==========================================
-         CONTENIDO PRINCIPAL
-    =========================================== -->
+    <!-- CONTENIDO PRINCIPAL -->
 
     <main class="main-content">
 
-      <!-- ==========================================
-           BIENVENIDA Y SELECTOR DE MATERIAS
-      =========================================== -->
+      <!-- BIENVENIDA Y SELECTOR DE MATERIAS -->
 
       <section class="welcome-section">
 
@@ -182,8 +128,6 @@
 
         </div>
 
-        <!-- SELECTOR DE MATERIAS -->
-
         <div class="subject-selector">
 
           <label class="selector-label">
@@ -202,9 +146,7 @@
             <span
               class="selector-arrow"
               [class.rotated]="mostrarMaterias">
-
               ⌄
-
             </span>
 
           </button>
@@ -236,11 +178,9 @@
               }
 
               @if (materias.length === 0) {
-
                 <p class="empty-subjects">
                   No tienes materias asignadas.
                 </p>
-
               }
 
             </div>
@@ -251,13 +191,9 @@
 
       </section>
 
-      <!-- ==========================================
-           TARJETAS DE RESUMEN
-      =========================================== -->
+      <!-- TARJETAS DE RESUMEN -->
 
       <section class="summary-grid">
-
-        <!-- ESTUDIANTES -->
 
         <article class="summary-card">
 
@@ -273,8 +209,6 @@
 
         </article>
 
-        <!-- TAREAS PUBLICADAS -->
-
         <article class="summary-card">
 
           <div class="summary-icon yellow">
@@ -289,8 +223,6 @@
 
         </article>
 
-        <!-- ENTREGAS POR REVISAR -->
-
         <button
           type="button"
           class="summary-card summary-card-button"
@@ -301,15 +233,12 @@
           </div>
 
           <div class="summary-information">
-
             <span>Entregas por revisar</span>
-
             <h2>{{ entregasPorRevisar }}</h2>
 
             <small>
               Haz clic para consultar los trabajos
             </small>
-
           </div>
 
           <span class="summary-arrow">›</span>
@@ -318,28 +247,22 @@
 
       </section>
 
-      <!-- ==========================================
-           TAREAS Y ANUNCIOS
-      =========================================== -->
+      <!-- TAREAS Y ANUNCIOS -->
 
       <div class="content-grid">
 
-        <!-- ==========================================
-             TAREAS PUBLICADAS
-        =========================================== -->
+        <!-- TAREAS PUBLICADAS -->
 
         <section class="content-card tasks-section">
 
           <div class="section-header tasks-section-header">
 
             <div>
-
               <h2>Tareas publicadas</h2>
 
               <p>
                 Consulta las actividades de tus estudiantes
               </p>
-
             </div>
 
             <div class="task-header-actions">
@@ -354,21 +277,13 @@
 
               </button>
 
-              <a
-                routerLink="/profesor/tareas"
-                class="view-all">
-
-                Ver todas
-
-              </a>
-
             </div>
 
           </div>
 
-          <!-- LISTA CON SCROLL -->
-
-          <div class="task-list task-list-scroll">
+          <div
+            class="task-list task-list-scroll"
+            [class.has-scroll]="tareasVisibles.length > 3">
 
             @for (tarea of tareasVisibles; track tarea.id) {
 
@@ -377,7 +292,6 @@
                 <div class="task-information">
 
                   <h3>{{ tarea.titulo }}</h3>
-
                   <span>{{ tarea.asignatura }}</span>
 
                   <small>
@@ -393,7 +307,6 @@
                 <div class="task-status">
 
                   <strong>{{ tarea.entregas }}</strong>
-
                   <span>Entregas</span>
 
                   <small>
@@ -401,14 +314,6 @@
                   </small>
 
                 </div>
-
-                <a
-                  routerLink="/profesor/tareas"
-                  class="review-link">
-
-                  Revisar
-
-                </a>
 
               </article>
 
@@ -437,94 +342,31 @@
 
         </section>
 
-        <!-- ==========================================
-             ANUNCIOS
-        =========================================== -->
+        <!-- ANUNCIOS -->
 
         <section class="content-card announcements-section">
 
           <div class="section-header">
 
             <div>
-
               <h2>Anuncios de clase</h2>
 
               <p>
                 Comunícate con tus estudiantes
               </p>
-
             </div>
+
+            <button
+              type="button"
+              class="create-announcement-button"
+              (click)="abrirModalAnuncio()">
+
+              <span>＋</span>
+              Crear anuncio
+
+            </button>
 
           </div>
-
-          <!-- BOTÓN CREAR ANUNCIO -->
-
-          <button
-            type="button"
-            class="create-announcement-button"
-            (click)="abrirFormularioAnuncio()">
-
-            <span>＋</span>
-            Crear anuncio
-
-          </button>
-
-          <!-- FORMULARIO DE ANUNCIO -->
-
-          @if (mostrarFormularioAnuncio) {
-
-            <div class="announcement-form">
-
-              <h3>Nuevo anuncio</h3>
-
-              <label for="tituloAnuncio">
-                Título del anuncio
-              </label>
-
-              <input
-                type="text"
-                id="tituloAnuncio"
-                placeholder="Ej. Recordatorio de actividad"
-                #titulo>
-
-              <label for="mensajeAnuncio">
-                Mensaje
-              </label>
-
-              <textarea
-                id="mensajeAnuncio"
-                rows="4"
-                placeholder="Escribe el mensaje para tus estudiantes..."
-                #mensaje>
-              </textarea>
-
-              <div class="form-actions">
-
-                <button
-                  type="button"
-                  class="cancel-button"
-                  (click)="cancelarAnuncio()">
-
-                  Cancelar
-
-                </button>
-
-                <button
-                  type="button"
-                  class="publish-button"
-                  (click)="crearAnuncio(titulo.value, mensaje.value)">
-
-                  Publicar
-
-                </button>
-
-              </div>
-
-            </div>
-
-          }
-
-          <!-- LISTA DE ANUNCIOS -->
 
           <div class="announcement-list">
 
@@ -535,13 +377,9 @@
                 <div class="announcement-dot"></div>
 
                 <div>
-
                   <h3>{{ anuncio.titulo }}</h3>
-
                   <p>{{ anuncio.mensaje }}</p>
-
                   <small>{{ anuncio.fecha }}</small>
-
                 </div>
 
               </article>
@@ -560,7 +398,7 @@
 
                 <p>
                   Los anuncios que publiques para tu clase
-                  aparecerán en esta sección.
+                  aparecerán aquí.
                 </p>
 
               </div>
@@ -594,8 +432,6 @@
         aria-labelledby="deliveries-modal-title"
         (click)="$event.stopPropagation()">
 
-        <!-- CABECERA -->
-
         <div class="deliveries-modal-header">
 
           <div class="deliveries-modal-icon">
@@ -607,14 +443,10 @@
             class="deliveries-close-button"
             (click)="cerrarModalEntregasPendientes()"
             aria-label="Cerrar ventana">
-
             ×
-
           </button>
 
         </div>
-
-        <!-- CONTENIDO -->
 
         <div class="deliveries-modal-content">
 
@@ -627,13 +459,9 @@
           </h2>
 
           <p class="deliveries-modal-description">
-
             Aquí puedes consultar los trabajos que tus estudiantes
             han enviado y que todavía no has revisado.
-
           </p>
-
-          <!-- RESUMEN -->
 
           <div class="deliveries-summary">
 
@@ -645,8 +473,6 @@
 
           </div>
 
-          <!-- LISTA DE ENTREGAS -->
-
           <div class="pending-deliveries-list">
 
             @for (
@@ -656,14 +482,10 @@
 
               <article class="pending-delivery-item">
 
-                <!-- INFORMACIÓN DEL ESTUDIANTE -->
-
                 <div class="pending-delivery-student">
 
                   <div class="pending-student-avatar">
-
                     {{ entrega.nombreEstudiante.charAt(0).toUpperCase() }}
-
                   </div>
 
                   <div class="pending-delivery-information">
@@ -688,8 +510,6 @@
 
                 </div>
 
-                <!-- ACCIONES -->
-
                 <div class="pending-delivery-actions">
 
                   <span class="pending-review-status">
@@ -700,34 +520,41 @@
                     type="button"
                     class="pending-open-file-button"
                     (click)="abrirArchivo(entrega)">
-
                     Abrir PDF
-
-                  </button>
-
-                  <button
-                    type="button"
-                    class="pending-mark-reviewed-button"
-                    (click)="marcarComoRevisada(entrega)">
-
-                    ✓ Marcar revisada
-
                   </button>
 
                 </div>
 
-                <!-- RETROALIMENTACIÓN -->
-
                 <div class="pending-feedback-section">
 
-                  <h4>Retroalimentación</h4>
+                  <h4>Calificar actividad</h4>
 
                   <p>
-                    Escribe observaciones sobre el trabajo del estudiante.
+                    Asigna una nota entre 1.0 y 5.0 y escribe
+                    una observación para el estudiante.
                   </p>
+
+                  <label [for]="'nota-' + entrega.id">
+                    Calificación
+                  </label>
+
+                  <input
+                    #nota
+                    [id]="'nota-' + entrega.id"
+                    type="number"
+                    min="1"
+                    max="5"
+                    step="0.1"
+                    placeholder="Ej. 4.5"
+                    [value]="entrega.calificacion ?? ''">
+
+                  <label [for]="'comentario-' + entrega.id">
+                    Retroalimentación
+                  </label>
 
                   <textarea
                     #comentario
+                    [id]="'comentario-' + entrega.id"
                     class="feedback-textarea"
                     placeholder="Escribe aquí tu retroalimentación..."
                     [value]="entrega.retroalimentacion || ''"
@@ -739,9 +566,13 @@
                     <button
                       type="button"
                       class="save-feedback-button"
-                      (click)="guardarRetroalimentacion(entrega, comentario.value)">
+                      (click)="guardarCalificacionEntrega(
+                        entrega,
+                        nota.value,
+                        comentario.value
+                      )">
 
-                      💾 Guardar retroalimentación
+                      💾 Guardar calificación
 
                     </button>
 
@@ -752,8 +583,6 @@
               </article>
 
             }
-
-            <!-- ESTADO VACÍO -->
 
             @if (entregasPendientesRevision.length === 0) {
 
@@ -777,17 +606,13 @@
 
           </div>
 
-          <!-- PIE DEL MODAL -->
-
           <div class="deliveries-modal-footer">
 
             <button
               type="button"
               class="deliveries-modal-close-action"
               (click)="cerrarModalEntregasPendientes()">
-
               Cerrar
-
             </button>
 
           </div>
@@ -842,9 +667,7 @@
             class="close-modal-button"
             (click)="cerrarModalTarea()"
             aria-label="Cerrar ventana">
-
             ×
-
           </button>
 
         </div>
@@ -852,8 +675,6 @@
         <!-- CUERPO DEL MODAL -->
 
         <div class="task-modal-body">
-
-          <!-- TÍTULO -->
 
           <div class="task-form-group">
 
@@ -869,8 +690,6 @@
               maxlength="120">
 
           </div>
-
-          <!-- CONTENIDO -->
 
           <div class="task-form-group">
 
@@ -938,6 +757,32 @@
               </select>
 
             </div>
+
+          </div>
+
+          <!-- PERIODO ACADÉMICO -->
+
+          <div class="task-form-group">
+
+            <label for="periodoTarea">
+              Periodo académico <span>*</span>
+            </label>
+
+            <select
+              #periodoTarea
+              id="periodoTarea"
+              [value]="periodoTareaSeleccionado"
+              (change)="periodoTareaSeleccionado = $any(periodoTarea.value)">
+
+              @for (periodo of periodosAcademicos; track periodo) {
+
+                <option [value]="periodo">
+                  {{ periodo }}
+                </option>
+
+              }
+
+            </select>
 
           </div>
 
@@ -1009,9 +854,7 @@
                   type="button"
                   class="remove-file-button"
                   (click)="quitarArchivo()">
-
                   ×
-
                 </button>
 
               </div>
@@ -1027,7 +870,6 @@
             <span>ℹ️</span>
 
             <p>
-
               Esta actividad será dirigida a los estudiantes de
 
               <strong>
@@ -1038,8 +880,13 @@
 
               <strong>
                 {{ materiaTareaSeleccionada || 'Selecciona una materia' }}
-              </strong>.
+              </strong>
 
+              y pertenecerá al
+
+              <strong>
+                {{ periodoTareaSeleccionado }}
+              </strong>.
             </p>
 
           </div>
@@ -1054,9 +901,7 @@
             type="button"
             class="task-cancel-button"
             (click)="cerrarModalTarea()">
-
             Cancelar
-
           </button>
 
           <button
@@ -1069,6 +914,172 @@
             )">
 
             📚 Publicar tarea
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+
+  <!-- ==========================================
+       MODAL: CREAR ANUNCIO
+  =========================================== -->
+
+  @if (mostrarModalAnuncio) {
+
+    <div
+      class="task-modal-overlay"
+      (click)="cerrarModalAnuncio()">
+
+      <div
+        class="task-modal announcement-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="announcement-modal-title"
+        (click)="$event.stopPropagation()">
+
+        <!-- CABECERA -->
+
+        <div class="task-modal-header">
+
+          <div>
+
+            <span class="task-modal-label">
+              COMUNICACIÓN CON ESTUDIANTES
+            </span>
+
+            <h2 id="announcement-modal-title">
+              Crear anuncio
+            </h2>
+
+            <p>
+              Comparte información importante con tus estudiantes.
+            </p>
+
+          </div>
+
+          <button
+            type="button"
+            class="close-modal-button"
+            (click)="cerrarModalAnuncio()"
+            aria-label="Cerrar ventana">
+            ×
+          </button>
+
+        </div>
+
+        <!-- CUERPO DEL MODAL -->
+
+        <div class="task-modal-body">
+
+          <!-- TÍTULO -->
+
+          <div class="task-form-group">
+
+            <label for="tituloAnuncio">
+              Título del anuncio <span>*</span>
+            </label>
+
+            <input
+              #tituloAnuncio
+              type="text"
+              id="tituloAnuncio"
+              placeholder="Ej. Recordatorio de actividad"
+              maxlength="120">
+
+          </div>
+
+          <!-- MENSAJE -->
+
+          <div class="task-form-group">
+
+            <label for="mensajeAnuncio">
+              Mensaje <span>*</span>
+            </label>
+
+            <textarea
+              #mensajeAnuncio
+              id="mensajeAnuncio"
+              rows="5"
+              placeholder="Escribe el mensaje para tus estudiantes...">
+            </textarea>
+
+          </div>
+
+          <!-- GRADO DESTINATARIO -->
+
+          <div class="task-form-group">
+
+            <label for="gradoAnuncio">
+              Publicar para el grado <span>*</span>
+            </label>
+
+            <select
+              #gradoAnuncio
+              id="gradoAnuncio"
+              [value]="gradoAnuncioSeleccionado"
+              (change)="gradoAnuncioSeleccionado = gradoAnuncio.value">
+
+              <option value="">
+                Selecciona un grado
+              </option>
+
+              @for (grado of gradosAnuncioDisponibles; track grado) {
+
+                <option [value]="grado">
+                  {{ grado }}
+                </option>
+
+              }
+
+            </select>
+
+          </div>
+
+          <!-- INFORMACIÓN DEL DESTINO -->
+
+          <div class="task-target-information">
+
+            <span>ℹ️</span>
+
+            <p>
+              Este anuncio solamente será visible para los estudiantes
+              del grado
+
+              <strong>
+                {{ gradoAnuncioSeleccionado || 'que selecciones' }}
+              </strong>.
+            </p>
+
+          </div>
+
+        </div>
+
+        <!-- PIE DEL MODAL -->
+
+        <div class="task-modal-footer">
+
+          <button
+            type="button"
+            class="task-cancel-button"
+            (click)="cerrarModalAnuncio()">
+            Cancelar
+          </button>
+
+          <button
+            type="button"
+            class="task-submit-button"
+            (click)="crearAnuncio(
+              tituloAnuncio.value,
+              mensajeAnuncio.value,
+              gradoAnuncio.value
+            )">
+
+            📢 Publicar anuncio
 
           </button>
 

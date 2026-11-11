@@ -1,0 +1,391 @@
+
+<div class="grades-page">
+
+  <!-- ==========================================
+       ENCABEZADO
+  =========================================== -->
+
+  <header class="grades-topbar">
+
+    <div class="grades-brand">
+
+      <img src="/logocolegio.png" alt="Logo del colegio">
+
+      <div>
+        <h2>Colegio José María Obando</h2>
+        <span>Plataforma académica</span>
+      </div>
+
+    </div>
+
+    <div class="grades-user">
+
+      <div class="grades-avatar">
+        {{ nombreProfesor.charAt(0).toUpperCase() }}
+      </div>
+
+      <div>
+        <strong>{{ nombreProfesor }}</strong>
+        <span>Profesor</span>
+      </div>
+
+    </div>
+
+  </header>
+
+  <!-- ==========================================
+       DISTRIBUCIÓN PRINCIPAL
+  =========================================== -->
+
+  <div class="grades-layout">
+
+    <!-- ==========================================
+         MENÚ LATERAL
+    =========================================== -->
+
+    <aside class="grades-sidebar">
+
+      <span class="grades-sidebar-heading">
+        MENÚ PRINCIPAL
+      </span>
+
+      <nav>
+
+        <a routerLink="/profesor/inicio">
+          <span>🏠</span>
+          <span>Inicio</span>
+        </a>
+
+        <a
+          routerLink="/profesor/calificaciones"
+          routerLinkActive="active">
+          <span>📊</span>
+          <span>Calificaciones</span>
+        </a>
+
+        <!-- OPCIONES ADICIONALES -->
+
+        <div class="more-options">
+
+          <!-- OPCIONES PARA PANTALLAS GRANDES -->
+
+          <div class="desktop-more-links">
+
+
+            <a
+              routerLink="/profesor/calendario"
+              routerLinkActive="active">
+
+              <span class="menu-icon">📅</span>
+              <span>Calendario</span>
+
+            </a>
+
+          </div>
+
+          <!-- OPCIONES PARA TABLET Y CELULAR -->
+
+          <div class="mobile-more-options">
+
+            <button
+              type="button"
+              class="more-button"
+              (click)="alternarOpciones()"
+              [attr.aria-expanded]="mostrarMasOpciones"
+              aria-label="Mostrar más opciones">
+
+              ⋮
+
+            </button>
+
+            <div
+              class="more-links"
+              [class.show]="mostrarMasOpciones">
+
+              <a
+                routerLink="/profesor/asistencia"
+                routerLinkActive="active">
+
+                <span class="menu-icon">📋</span>
+                <span>Asistencia</span>
+
+              </a>
+
+              <a
+                routerLink="/profesor/calendario"
+                routerLinkActive="active">
+
+                <span class="menu-icon">📅</span>
+                <span>Calendario</span>
+
+              </a>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </nav>
+
+      <!-- CERRAR SESIÓN -->
+
+      <div class="grades-sidebar-bottom">
+
+        <a routerLink="/" (click)="cerrarSesion()">
+          <span>🚪</span>
+          <span>Cerrar sesión</span>
+        </a>
+
+      </div>
+
+    </aside>
+
+    <!-- ==========================================
+         CONTENIDO PRINCIPAL
+    =========================================== -->
+
+    <main class="grades-main">
+
+      <!-- BIENVENIDA Y FILTRO -->
+
+      <section class="grades-welcome">
+
+        <div>
+
+          <span>PANEL DEL DOCENTE</span>
+
+          <h1>Calificaciones</h1>
+
+          <p>
+            Consulta las notas y los promedios de tus estudiantes
+            organizados por periodo académico.
+          </p>
+
+        </div>
+
+        <div class="grades-filter">
+
+          <label for="filtroMateria">
+            Materia
+          </label>
+
+          <select
+            id="filtroMateria"
+            [value]="materiaSeleccionada"
+            (change)="materiaSeleccionada = $any($event.target).value">
+
+            <option value="Todas">
+              Todas las materias
+            </option>
+
+            @for (materia of materias; track materia) {
+
+              <option [value]="materia">
+                {{ materia }}
+              </option>
+
+            }
+
+          </select>
+
+        </div>
+
+      </section>
+
+      <!-- ==========================================
+           RESUMEN
+      =========================================== -->
+
+      <section class="grades-summary">
+
+        <article>
+
+          <span>Estudiantes con notas</span>
+
+          <strong>{{ filas.length }}</strong>
+
+        </article>
+
+        <article>
+
+          <span>Materias asignadas</span>
+
+          <strong>{{ materias.length }}</strong>
+
+        </article>
+
+        <article>
+
+          <span>Periodos académicos</span>
+
+          <strong>4</strong>
+
+        </article>
+
+      </section>
+
+      <!-- ==========================================
+           TABLA DE CALIFICACIONES
+      =========================================== -->
+
+      <section class="grades-card">
+
+        <div class="grades-card-heading">
+
+          <div>
+
+            <h2>Registro académico</h2>
+
+            <p>
+              Cada estudiante se identifica por nombre, materia y grado.
+            </p>
+
+          </div>
+
+          <span class="grades-count">
+            {{ filas.length }} registros
+          </span>
+
+        </div>
+
+        @if (filas.length > 0) {
+
+          <div class="grades-table-wrapper">
+
+            <table class="grades-table">
+
+              <thead>
+
+                <tr>
+
+                  <th rowspan="2" class="student-column">
+                    Estudiante
+                  </th>
+
+                  <th rowspan="2">
+                    Materia
+                  </th>
+
+                  <th rowspan="2">
+                    Grado
+                  </th>
+
+                  @for (periodo of periodos; track periodo) {
+
+                    <th colspan="5" class="period-heading">
+                      {{ periodo }}
+                    </th>
+
+                  }
+
+                </tr>
+
+                <tr>
+
+                  @for (periodo of periodos; track periodo) {
+
+                    <th>Nota 1</th>
+                    <th>Nota 2</th>
+                    <th>Nota 3</th>
+                    <th>Nota 4</th>
+                    <th class="average-heading">Prom.</th>
+
+                  }
+
+                </tr>
+
+              </thead>
+
+              <tbody>
+
+                @for (
+                  fila of filas;
+                  track fila.documentoEstudiante + fila.asignatura + fila.grado
+                ) {
+
+                  <tr>
+
+                    <td class="student-name">
+
+                      <strong>
+                        {{ fila.nombreEstudiante }}
+                      </strong>
+
+                      <small>
+                        {{ fila.documentoEstudiante }}
+                      </small>
+
+                    </td>
+
+                    <td>
+                      {{ fila.asignatura }}
+                    </td>
+
+                    <td>
+                      {{ fila.grado }}
+                    </td>
+
+                    @for (periodo of periodos; track periodo) {
+
+                      @for (
+                        nota of fila.notas[periodo];
+                        track $index
+                      ) {
+
+                        <td [class.empty-grade]="nota === null">
+                          {{ formatoNota(nota) }}
+                        </td>
+
+                      }
+
+                      <td class="average-cell">
+
+                        @if (fila.promedios[periodo] !== null) {
+
+                          {{ formatoNota(fila.promedios[periodo]) }}
+
+                        } @else {
+
+                          —
+
+                        }
+
+                      </td>
+
+                    }
+
+                  </tr>
+
+                }
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        } @else {
+
+          <div class="grades-empty">
+
+            <div>📊</div>
+
+            <h3>Aún no hay calificaciones</h3>
+
+            <p>
+              Cuando revises y califiques las entregas de tus estudiantes,
+              las notas aparecerán aquí organizadas por periodo.
+            </p>
+
+          </div>
+
+        }
+
+      </section>
+
+    </main>
+
+  </div>
+
+</div>

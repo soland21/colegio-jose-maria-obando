@@ -1276,3 +1276,78 @@
   }
 
 }
+
+/* ==========================================
+   CORRECCIÓN DEL DESPLEGABLE DE MATERIAS
+========================================== */
+
+/* Permitir que el menú sobresalga del recuadro verde */
+.welcome-section {
+  overflow: visible !important;
+  position: relative;
+  z-index: 20;
+}
+
+/* Mantener los controles por encima del contenido */
+.welcome-options {
+  position: relative;
+  z-index: 30;
+  overflow: visible;
+}
+
+.subject-selector {
+  position: relative;
+  z-index: 40;
+}
+
+/* Menú desplegable de materias */
+.selector-dropdown {
+  position: absolute;
+
+  top: calc(100% + 10px);
+  right: 0;
+
+  width: 250px;
+  max-height: 280px;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  background: #ffffff;
+
+  border: 1px solid #e7eee9;
+  border-radius: 14px;
+
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.22);
+
+  z-index: 1000;
+}
+
+/* Evitar que las tarjetas posteriores tapen el menú */
+.summary-grid,
+.content-card {
+  position: relative;
+  z-index: 1;
+}
+
+/* Mantener visible el desplegable en celular */
+@media (max-width: 750px) {
+
+  .welcome-section {
+    overflow: visible !important;
+    z-index: 20;
+  }
+
+  .welcome-options {
+    overflow: visible;
+  }
+
+  .subject-selector {
+    z-index: 40;
+  }
+
+  .selector-dropdown {
+    z-index: 1000;
+  }
+
+}

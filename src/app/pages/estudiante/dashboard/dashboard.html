@@ -293,27 +293,51 @@
 
           </div>
 
-          @for (anuncio of anuncios; track anuncio.titulo) {
+          <div class="announcement-list">
 
-            <article class="announcement-item">
+            @for (anuncio of anuncios; track anuncio.id) {
 
-              <div class="announcement-icon">
-                📢
+              <article class="announcement-item">
+
+                <div class="announcement-icon">
+                  📢
+                </div>
+
+                <div>
+
+                  <h3>{{ anuncio.titulo }}</h3>
+
+                  <p>{{ anuncio.mensaje }}</p>
+
+                  <small>
+                    Publicado por: {{ anuncio.nombreProfesor }}
+                  </small>
+
+                  <small>
+                    {{ formatearFechaHora(anuncio.fecha) }}
+                  </small>
+
+                </div>
+
+              </article>
+
+            }
+
+            @if (anuncios.length === 0) {
+
+              <div class="empty-feedback">
+
+                <span>📭</span>
+
+                <p>
+                  No hay anuncios publicados para tu grado.
+                </p>
+
               </div>
 
-              <div>
+            }
 
-                <h3>{{ anuncio.titulo }}</h3>
-
-                <p>{{ anuncio.mensaje }}</p>
-
-                <small>{{ anuncio.fecha }}</small>
-
-              </div>
-
-            </article>
-
-          }
+          </div>
 
         </section>
 

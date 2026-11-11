@@ -10,6 +10,8 @@ import { Dashboard as DashboardProfesor } from './pages/profesor/dashboard/dashb
 import { MisMaterias } from './pages/profesor/mis-materias/mis-materias';
 import { SeleccionarGrado } from './pages/profesor/seleccionar-grado/seleccionar-grado';
 
+import { Calificaciones } from './pages/profesor/calificaciones/calificaciones';
+import { Calendario } from './pages/profesor/calendario/calendario';
 
 export const routes: Routes = [
 
@@ -43,6 +45,16 @@ export const routes: Routes = [
   {
     path: 'profesor/seleccionar-grado',
     component: SeleccionarGrado
+  },
+
+  {
+    path: 'profesor/calificaciones',
+    component: Calificaciones
+  },
+
+  {
+    path: 'profesor/calendario',
+    component: Calendario
   },
 
   {
