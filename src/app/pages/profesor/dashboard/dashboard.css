@@ -19,10 +19,6 @@
 }
 
 
-/* ==========================================
-   ENCABEZADO
-========================================== */
-
 .topbar {
   min-height: 82px;
   background: rgba(255, 255, 255, 0.96);
@@ -58,11 +54,6 @@
   font-size: 12px;
 }
 
-
-/* ==========================================
-   INFORMACIÓN DEL PROFESOR
-========================================== */
-
 .user-info {
   display: flex;
   align-items: center;
@@ -92,11 +83,6 @@
   font-size: 11px;
 }
 
-
-/* ==========================================
-   DISTRIBUCIÓN GENERAL
-========================================== */
-
 .dashboard-layout {
   display: flex;
   min-height: calc(100vh - 82px);
@@ -109,10 +95,6 @@
   min-width: 0;
 }
 
-
-/* ==========================================
-   MENÚ LATERAL
-========================================== */
 
 .sidebar {
   width: 230px;
@@ -188,11 +170,6 @@
   background: #fff0ef;
 }
 
-
-/* ==========================================
-   OPCIONES ADICIONALES
-========================================== */
-
 .more-options {
   display: contents;
 }
@@ -204,11 +181,6 @@
 .more-button {
   display: none;
 }
-
-
-/* ==========================================
-   BIENVENIDA
-========================================== */
 
 .welcome-section {
   background: linear-gradient(110deg, #105c37, #18804b);
@@ -247,11 +219,6 @@
   margin: 0;
   line-height: 1.6;
 }
-
-
-/* ==========================================
-   SELECTOR DE MATERIAS
-========================================== */
 
 .subject-selector {
   position: relative;
@@ -391,11 +358,6 @@
   }
 }
 
-
-/* ==========================================
-   TARJETAS DE RESUMEN
-========================================== */
-
 .summary-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -457,11 +419,6 @@
   font-size: 10px;
 }
 
-
-/* ==========================================
-   CONTENIDO: TAREAS Y ANUNCIOS
-========================================== */
-
 .content-grid {
   display: grid;
   grid-template-columns: 1.3fr 1fr;
@@ -510,11 +467,6 @@
   text-decoration: underline;
 }
 
-
-/* ==========================================
-   ENCABEZADO Y BOTÓN PUBLICAR TAREA
-========================================== */
-
 .tasks-section-header {
   display: flex;
   align-items: center;
@@ -558,11 +510,6 @@
   font-size: 14px;
   margin: 0;
 }
-
-
-/* ==========================================
-   LISTA DE TAREAS
-========================================== */
 
 .task-item {
   display: flex;
@@ -629,11 +576,6 @@
   white-space: nowrap;
 }
 
-
-/* ==========================================
-   ENTREGAS RECIBIDAS
-========================================== */
-
 .received-deliveries {
   display: flex;
   flex-direction: column;
@@ -676,10 +618,6 @@
   box-sizing: border-box;
 }
 
-
-/* ==========================================
-   INFORMACIÓN DEL ESTUDIANTE
-========================================== */
 
 .delivery-student-info {
   display: flex;
@@ -729,11 +667,6 @@
   font-weight: 600;
   overflow-wrap: anywhere;
 }
-
-
-/* ==========================================
-   ACCIONES DE LA ENTREGA
-========================================== */
 
 .delivery-actions {
   display: flex;
@@ -791,11 +724,6 @@
   background: #e5f4e9;
   color: #247544;
 }
-
-
-/* ==========================================
-   RETROALIMENTACIÓN
-========================================== */
 
 .feedback-section {
   display: flex;
@@ -893,11 +821,6 @@
   outline-offset: 3px;
 }
 
-
-/* ==========================================
-   ESTADOS VACÍOS
-========================================== */
-
 .empty-deliveries {
   padding: 30px 18px;
   text-align: center;
@@ -922,11 +845,6 @@
   line-height: 1.6;
 }
 
-
-/* ==========================================
-   ANUNCIOS
-========================================== */
-
 .create-announcement-button {
   width: 100%;
   border: none;
@@ -950,11 +868,6 @@
   font-size: 17px;
   margin-right: 6px;
 }
-
-
-/* ==========================================
-   FORMULARIO DE ANUNCIO
-========================================== */
 
 .announcement-form {
   background: #f5f8f5;
@@ -1030,11 +943,6 @@
   color: white;
 }
 
-
-/* ==========================================
-   LISTA DE ANUNCIOS
-========================================== */
-
 .announcement-item {
   display: flex;
   gap: 12px;
@@ -1074,10 +982,6 @@
   font-size: 10px;
 }
 
-
-/* ==========================================
-   MODAL: PUBLICAR TAREA
-========================================== */
 
 .task-modal-overlay {
   position: fixed;
@@ -1363,11 +1267,6 @@
   background: #105c37;
 }
 
-
-/* ==========================================
-   RESPONSIVE: TABLET
-========================================== */
-
 @media (max-width: 1050px) {
 
   .content-grid {
@@ -1380,10 +1279,6 @@
 
 }
 
-
-/* ==========================================
-   RESPONSIVE: TABLET Y MÓVIL
-========================================== */
 
 @media (max-width: 750px) {
 
@@ -1531,11 +1426,6 @@
   }
 
 }
-
-
-/* ==========================================
-   RESPONSIVE: CELULARES PEQUEÑOS
-========================================== */
 
 @media (max-width: 480px) {
 
@@ -1743,11 +1633,6 @@
 
 }
 
-/* ==========================================
-   LISTA DE TAREAS PUBLICADAS
-   Muestra 3 tareas y permite desplazarse
-========================================== */
-
 .task-list-scroll {
   display: flex;
   flex-direction: column;
@@ -1787,10 +1672,6 @@
 .task-list-scroll .task-item {
   flex-shrink: 0;
 }
-
-/* ==========================================
-   MODAL: ENTREGAS POR REVISAR
-========================================== */
 
 .deliveries-modal-overlay {
   position: fixed;
@@ -2168,9 +2049,6 @@
 .pending-feedback-section .save-feedback-button:hover {
   background: #116439;
 }
-/* ==========================================
-   MODAL: CREAR ANUNCIO
-========================================== */
 
 .announcement-modal {
   max-width: 550px;
@@ -2211,10 +2089,6 @@
   white-space: nowrap;
 }
 
-/* ==========================================
-   BOTÓN EDITAR TAREA
-========================================== */
-
 .edit-task-button {
   display: inline-flex;
   align-items: center;
@@ -2238,8 +2112,6 @@
   border-color: #267443;
   transform: translateY(-1px);
 }
-
-/* INFORMACIÓN DEL PDF EXISTENTE */
 
 .existing-task-file {
   display: block;

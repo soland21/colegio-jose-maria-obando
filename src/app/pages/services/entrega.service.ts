@@ -73,9 +73,7 @@ export class EntregaService {
   private readonly TAREAS_STORAGE_KEY = 'tareasColegio';
   private readonly ANUNCIOS_STORAGE_KEY = 'anunciosColegio';
 
-  // ==========================================
-  // ASIGNACIONES DE LOS PROFESORES
-  // ==========================================
+ 
 
   asignacionesDocentes: AsignacionDocente[] = [
     { grado: 'Sexto', asignatura: 'Matemáticas', documentoProfesor: '1234567890' },
@@ -93,9 +91,6 @@ export class EntregaService {
   private archivos = new Map<string, File>();
   private archivosTareas = new Map<string, File>();
 
-  // ==========================================
-  // OBSERVABLES
-  // ==========================================
 
   private entregasSubject = new BehaviorSubject<Entrega[]>(
     this.obtenerEntregasGuardadas()
@@ -115,9 +110,6 @@ export class EntregaService {
 
   anuncios$ = this.anunciosSubject.asObservable();
 
-  // ==========================================
-  // NORMALIZAR TEXTO
-  // ==========================================
 
   private normalizarTexto(texto: string): string {
     return String(texto || '')
@@ -133,10 +125,6 @@ export class EntregaService {
       : 'Primer periodo';
   }
 
-  // ==========================================
-  // CONSULTAR PROFESOR ASIGNADO
-  // ==========================================
-
   obtenerProfesorAsignado(grado: string, asignatura: string): string | null {
     const asignacion = this.asignacionesDocentes.find(a =>
       this.normalizarTexto(a.grado) === this.normalizarTexto(grado) &&
@@ -146,9 +134,6 @@ export class EntregaService {
     return asignacion?.documentoProfesor || null;
   }
 
-  // ==========================================
-  // OBTENER GRADOS POR ASIGNATURA
-  // ==========================================
 
   obtenerGradosProfesor(documentoProfesor: string, asignatura: string): string[] {
     const documento = String(documentoProfesor || '').trim();
@@ -163,9 +148,6 @@ export class EntregaService {
     return [...new Set(grados)];
   }
 
-  // ==========================================
-  // OBTENER TODOS LOS GRADOS DE UN PROFESOR
-  // ==========================================
 
   obtenerGradosAsignados(documentoProfesor: string): string[] {
     const documento = String(documentoProfesor || '').trim();
@@ -181,9 +163,6 @@ export class EntregaService {
     );
   }
 
-  // ==========================================
-  // PUBLICAR TAREA
-  // ==========================================
 
   publicarTarea(
     datos: Omit<TareaPublicada, 'id' | 'fechaPublicacion' | 'nombreArchivo'>,
@@ -225,9 +204,6 @@ export class EntregaService {
     return nuevaTarea;
   }
 
-  // ==========================================
-  // VALIDAR PDF
-  // ==========================================
 
   private validarArchivoTarea(archivo?: File | null): void {
     if (!archivo) return;
@@ -245,9 +221,6 @@ export class EntregaService {
     }
   }
 
-  // ==========================================
-  // ACTUALIZAR TAREA EXISTENTE
-  // ==========================================
 
   actualizarTarea(
     id: string,
@@ -325,9 +298,6 @@ export class EntregaService {
     return tareaActualizada;
   }
 
-  // ==========================================
-  // CONSULTAR TAREAS DEL PROFESOR
-  // ==========================================
 
   obtenerTareasProfesor(documentoProfesor: string, asignatura?: string): TareaPublicada[] {
     const documento = String(documentoProfesor || '').trim();
@@ -345,9 +315,6 @@ export class EntregaService {
     this.tareasSubject.next(this.obtenerTareasGuardadas());
   }
 
-  // ==========================================
-  // CONSULTAR TAREAS DEL ESTUDIANTE
-  // ==========================================
 
   obtenerTareasEstudiante(grado: string, asignatura?: string): TareaPublicada[] {
     return this.obtenerTareasGuardadas().filter(tarea =>
@@ -388,9 +355,6 @@ export class EntregaService {
     }
   }
 
-  // ==========================================
-  // ANUNCIOS
-  // ==========================================
 
   publicarAnuncio(datos: Omit<AnuncioPublicado, 'id' | 'fecha'>): AnuncioPublicado {
     const documento = String(datos.profesorDocumento || '').trim();
@@ -468,9 +432,6 @@ export class EntregaService {
     }
   }
 
-  // ==========================================
-  // REGISTRAR ENTREGA
-  // ==========================================
 
   registrarEntrega(tarea: TareaPublicada, archivo: File): void {
     const usuarioGuardado = localStorage.getItem('usuarioActual');
@@ -584,9 +545,7 @@ export class EntregaService {
     ]);
   }
 
-  // ==========================================
-  // CONSULTAR ENTREGAS
-  // ==========================================
+
 
   obtenerEntregasProfesor(documentoProfesor: string): Entrega[] {
     const documento = String(documentoProfesor || '').trim();
@@ -631,9 +590,6 @@ export class EntregaService {
     this.guardarEntregas(actualizadas);
   }
 
-  // ==========================================
-  // GUARDAR CALIFICACIÓN
-  // ==========================================
 
   guardarCalificacion(
     id: string,
@@ -707,9 +663,6 @@ export class EntregaService {
     this.guardarEntregas(actualizadas);
   }
 
-  // ==========================================
-  // GUARDAR RETROALIMENTACIÓN
-  // ==========================================
 
   guardarRetroalimentacion(id: string, comentario: string): void {
     const existe = this.entregasSubject.value.some(e => e.id === id);
@@ -739,18 +692,13 @@ export class EntregaService {
     );
   }
 
-  // ==========================================
-  // GUARDAR ENTREGAS
-  // ==========================================
 
   private guardarEntregas(entregas: Entrega[]): void {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(entregas));
     this.entregasSubject.next(entregas);
   }
 
-  // ==========================================
-  // RECUPERAR ENTREGAS
-  // ==========================================
+
 
   private obtenerEntregasGuardadas(): Entrega[] {
     const datos = localStorage.getItem(this.STORAGE_KEY);

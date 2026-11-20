@@ -16,9 +16,6 @@ import {
   PERIODOS_ACADEMICOS
 } from '../../services/entrega.service';
 
-// ==========================================
-// 1. INTERFACES
-// ==========================================
 
 interface Tarea {
   id: string;
@@ -40,9 +37,6 @@ interface Anuncio {
   fecha: string;
 }
 
-// ==========================================
-// 2. COMPONENTE
-// ==========================================
 
 @Component({
   selector: 'app-dashboard-profesor',
@@ -65,9 +59,6 @@ export class Dashboard {
     public entregaService: EntregaService
   ) {
 
-    // ==========================================
-    // RECUPERAR PROFESOR ACTUAL
-    // ==========================================
 
     const usuarioGuardado = localStorage.getItem('usuarioActual');
 
@@ -102,9 +93,7 @@ export class Dashboard {
     console.log('Profesor actual:', this.nombreProfesor);
     console.log('Documento:', this.profesorDocumento);
 
-    // ==========================================
-    // ESCUCHAR MATERIA SELECCIONADA
-    // ==========================================
+
 
     this.route.queryParamMap.subscribe(params => {
 
@@ -113,9 +102,7 @@ export class Dashboard {
 
     });
 
-    // ==========================================
-    // ESCUCHAR CAMBIOS EN LAS ENTREGAS
-    // ==========================================
+
 
     this.entregaService.entregas$.subscribe(entregas => {
 
@@ -125,9 +112,7 @@ export class Dashboard {
 
     });
 
-    // ==========================================
-    // ESCUCHAR CAMBIOS EN LAS TAREAS
-    // ==========================================
+
 
     this.entregaService.tareas$.subscribe(tareas => {
 
@@ -135,25 +120,19 @@ export class Dashboard {
 
     });
 
-    // ==========================================
-    // CARGAR ANUNCIOS GUARDADOS
-    // ==========================================
+
 
     this.cargarAnuncios();
 
   }
 
-  // ==========================================
-  // 3. DATOS DEL PROFESOR
-  // ==========================================
+
 
   nombreProfesor = 'Profesor';
 
   profesorDocumento = '';
 
-  // ==========================================
-  // 4. NORMALIZAR TEXTO
-  // ==========================================
+
 
   normalizarTexto(texto: string): string {
 
@@ -165,9 +144,6 @@ export class Dashboard {
 
   }
 
-  // ==========================================
-  // 5. MATERIAS ASIGNADAS AL PROFESOR
-  // ==========================================
 
   get materias(): string[] {
 
@@ -216,9 +192,7 @@ export class Dashboard {
 
   }
 
-  // ==========================================
-  // 6. INFORMACIÓN GENERAL
-  // ==========================================
+
 
   totalEstudiantes = 28;
 
@@ -226,9 +200,7 @@ export class Dashboard {
 
   entregasCambio: Entrega[] = [];
 
-  // ==========================================
-  // 7. TAREAS PUBLICADAS
-  // ==========================================
+
 
   get tareas(): Tarea[] {
 
@@ -289,9 +261,6 @@ export class Dashboard {
 
   }
 
-  // ==========================================
-  // 8. TAREAS VISIBLES
-  // ==========================================
 
   get tareasVisibles(): Tarea[] {
 
@@ -305,9 +274,6 @@ export class Dashboard {
 
   }
 
-  // ==========================================
-  // 9. ENTREGAS RECIBIDAS
-  // ==========================================
 
   get entregasRecibidas(): Entrega[] {
 
@@ -333,9 +299,6 @@ export class Dashboard {
 
   }
 
-  // ==========================================
-  // 10. ENTREGAS PENDIENTES DE REVISIÓN
-  // ==========================================
 
   get entregasPendientesRevision(): Entrega[] {
 
@@ -353,9 +316,6 @@ export class Dashboard {
 
   }
 
-  // ==========================================
-  // 11. MODAL DE ENTREGAS PENDIENTES
-  // ==========================================
 
   mostrarModalEntregasPendientes = false;
 
@@ -371,9 +331,6 @@ export class Dashboard {
 
   }
 
-  // ==========================================
-  // 12. OBTENER ENTREGAS DE UNA TAREA
-  // ==========================================
 
   obtenerEntregasDeTarea(tarea: TareaPublicada): Entrega[] {
 
@@ -411,9 +368,6 @@ export class Dashboard {
 
   }
 
-  // ==========================================
-  // 13. ABRIR ARCHIVO PDF
-  // ==========================================
 
   abrirArchivo(entrega: Entrega): void {
 
@@ -442,9 +396,6 @@ export class Dashboard {
 
   }
 
-  // ==========================================
-  // 14. GUARDAR CALIFICACIÓN
-  // ==========================================
 
   guardarCalificacionEntrega(
     entrega: Entrega,
@@ -496,9 +447,6 @@ export class Dashboard {
 
   }
 
-  // ==========================================
-  // 15. MARCAR ENTREGA COMO REVISADA
-  // ==========================================
 
   marcarComoRevisada(entrega: Entrega): void {
 
@@ -508,9 +456,6 @@ export class Dashboard {
 
   }
 
-  // ==========================================
-  // 16. GUARDAR RETROALIMENTACIÓN
-  // ==========================================
 
   guardarRetroalimentacion(
     entrega: Entrega,
@@ -534,9 +479,6 @@ export class Dashboard {
 
   }
 
-  // ==========================================
-  // 17. OPCIONES DEL DASHBOARD
-  // ==========================================
 
   mostrarModalAnuncio = false;
 
@@ -547,10 +489,6 @@ export class Dashboard {
     this.mostrarMasOpciones = !this.mostrarMasOpciones;
 
   }
-
-  // ==========================================
-  // 18. MODAL PUBLICAR / EDITAR TAREA
-  // ==========================================
 
   mostrarModalTarea = false;
 
@@ -579,9 +517,7 @@ export class Dashboard {
 
   periodoTareaSeleccionado: PeriodoAcademico = 'Primer periodo';
 
-  // ==========================================
-  // 19. ABRIR MODAL PARA PUBLICAR TAREA
-  // ==========================================
+
 
   abrirModalTarea(): void {
 
@@ -606,9 +542,6 @@ export class Dashboard {
 
   }
 
-  // ==========================================
-  // 20. ABRIR MODAL PARA EDITAR TAREA
-  // ==========================================
 
   editarTarea(tareaResumen: Tarea): void {
 
@@ -684,9 +617,6 @@ export class Dashboard {
 
   }
 
-  // ==========================================
-  // 21. LIMPIAR FORMULARIO DE TAREA
-  // ==========================================
 
   private limpiarFormularioTarea(): void {
 
@@ -704,9 +634,6 @@ export class Dashboard {
 
   }
 
-  // ==========================================
-  // 22. CERRAR MODAL DE TAREA
-  // ==========================================
 
   cerrarModalTarea(): void {
 
@@ -718,9 +645,6 @@ export class Dashboard {
 
   }
 
-  // ==========================================
-  // 23. ACTUALIZAR GRADOS DISPONIBLES
-  // ==========================================
 
   actualizarGradosDisponibles(): void {
 
@@ -744,10 +668,6 @@ export class Dashboard {
       this.gradosDisponibles[0] || '';
 
   }
-
-  // ==========================================
-  // 24. SELECCIONAR ARCHIVO PDF
-  // ==========================================
 
   seleccionarArchivo(event: Event): void {
 
@@ -800,9 +720,6 @@ export class Dashboard {
 
   }
 
-  // ==========================================
-  // 25. PUBLICAR O ACTUALIZAR TAREA
-  // ==========================================
 
   publicarTarea(
     titulo: string,
@@ -810,9 +727,6 @@ export class Dashboard {
     fechaEntrega: string
   ): void {
 
-    // ==========================================
-    // VALIDACIONES
-    // ==========================================
 
     if (!titulo.trim()) {
 
@@ -872,9 +786,6 @@ export class Dashboard {
 
     try {
 
-      // ==========================================
-      // DATOS DE LA TAREA
-      // ==========================================
 
       const datosTarea = {
 
@@ -896,9 +807,6 @@ export class Dashboard {
 
       };
 
-      // ==========================================
-      // SI EXISTE ID, ACTUALIZAR TAREA
-      // ==========================================
 
       if (this.tareaEditandoId) {
 
@@ -918,9 +826,6 @@ export class Dashboard {
 
       }
 
-      // ==========================================
-      // SI NO EXISTE ID, PUBLICAR TAREA NUEVA
-      // ==========================================
 
       else {
 
@@ -938,9 +843,6 @@ export class Dashboard {
 
       }
 
-      // ==========================================
-      // CERRAR MODAL
-      // ==========================================
 
       this.cerrarModalTarea();
 
@@ -961,17 +863,12 @@ export class Dashboard {
 
   }
 
-  // ==========================================
-  // 26. ANUNCIOS
-  // ==========================================
 
   anuncios: Anuncio[] = [];
 
   gradoAnuncioSeleccionado = '';
 
-  // ==========================================
-  // 27. GRADOS DISPONIBLES PARA ANUNCIOS
-  // ==========================================
+
 
   get gradosAnuncioDisponibles(): string[] {
 
@@ -995,9 +892,7 @@ export class Dashboard {
 
   }
 
-  // ==========================================
-  // 28. CARGAR ANUNCIOS
-  // ==========================================
+
 
   cargarAnuncios(): void {
 
@@ -1044,9 +939,6 @@ export class Dashboard {
 
   }
 
-  // ==========================================
-  // 29. SINCRONIZAR ANUNCIOS ENTRE PESTAÑAS
-  // ==========================================
 
   @HostListener('window:storage', ['$event'])
   detectarCambiosAnuncios(event: StorageEvent): void {
@@ -1062,9 +954,6 @@ export class Dashboard {
 
   }
 
-  // ==========================================
-  // 30. ABRIR MODAL DE ANUNCIO
-  // ==========================================
 
   abrirModalAnuncio(): void {
 
@@ -1091,19 +980,12 @@ export class Dashboard {
 
   }
 
-  // ==========================================
-  // 31. CERRAR MODAL DE ANUNCIO
-  // ==========================================
-
   cerrarModalAnuncio(): void {
 
     this.mostrarModalAnuncio = false;
 
   }
 
-  // ==========================================
-  // 32. CREAR ANUNCIO
-  // ==========================================
 
   crearAnuncio(
     titulo: string,
@@ -1223,9 +1105,6 @@ export class Dashboard {
 
   }
 
-  // ==========================================
-  // 33. GENERAR ID DEL ANUNCIO
-  // ==========================================
 
   generarIdAnuncio(): number {
 
@@ -1233,9 +1112,6 @@ export class Dashboard {
 
   }
 
-  // ==========================================
-// 34. NAVEGAR A LA VISTA DE ESTUDIANTES
-// ==========================================
 
 irAEstudiantes(): void {
 
@@ -1243,12 +1119,10 @@ irAEstudiantes(): void {
 
 }
 
-  // ==========================================
-  // 35. CERRAR SESIÓN
-  // ==========================================
 
   cerrarSesion(): void {
 
+    localStorage.removeItem('accessToken');
     localStorage.removeItem('usuarioActual');
 
     this.router.navigate(['/']);

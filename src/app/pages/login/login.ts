@@ -1,19 +1,13 @@
 
 import { Component, inject } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import {
   FormBuilder,
   Validators,
   ReactiveFormsModule
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-
-interface Usuario {
-  documento: string;
-  password: string;
-  nombre: string;
-  rol: 'profesor' | 'estudiante';
-  grado?:string;
-}
+import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
   standalone: true,
@@ -26,48 +20,7 @@ export class Login {
 
   private fb = inject(FormBuilder);
   private router = inject(Router);
-
-  // =====================================
-  // USUARIOS DE PRUEBA
-  // =====================================
-
-  usuarios: Usuario[] = [
-
-    // PROFESORES
-    {
-      documento: '1234567890',
-      password: '123456',
-      nombre: 'Carlos Ramírez',
-      rol: 'profesor'
-    },
-    {
-      documento: '1020304050',
-      password: '654321',
-      nombre: 'María Fernanda López',
-      rol: 'profesor'
-    },
-
-    // ESTUDIANTES
-    {
-      documento: '9876543210',
-      password: '123456',
-      nombre: 'Nicolás Gómez',
-      rol: 'estudiante',
-      grado: 'noveno'
-    },
-    {
-      documento: '5060708090',
-      password: '654321',
-      nombre: 'Laura Martínez',
-      rol: 'estudiante',
-      grado:'sexto'
-    }
-
-  ];
-
-  // =====================================
-  // FORMULARIO
-  // =====================================
+  private auth = inject(AuthService);
 
   formulario = this.fb.group({
     documento: ['', Validators.required],
@@ -75,28 +28,8 @@ export class Login {
   });
 
   mensajeError = '';
-  usuarioEncontrado: Usuario | null = null;
+  cargando = false;
 
-  // =====================================
-  // IDENTIFICAR TIPO DE USUARIO
-  // =====================================
-
-  identificarUsuario(): void {
-
-    const documento =
-      this.formulario.get('documento')?.value?.trim() || '';
-
-    this.usuarioEncontrado = this.usuarios.find(
-      usuario => usuario.documento === documento
-    ) || null;
-
-    this.mensajeError = '';
-
-  }
-
-  // =====================================
-  // INICIAR SESIÓN
-  // =====================================
 
   iniciarSesion(): void {
 
@@ -114,52 +47,20 @@ export class Login {
     const password =
       this.formulario.value.password;
 
-    // Buscar usuario y validar contraseña
-    const usuario = this.usuarios.find(
-      usuario =>
-        usuario.documento === documento &&
-        usuario.password === password
-    );
-
-    // Si las credenciales son incorrectas
-    if (!usuario) {
-
-      this.usuarioEncontrado = null;
-
-      this.mensajeError =
-        'Documento o contraseña incorrectos.';
-
-      return;
-    }
-
-    // =====================================
-    // GUARDAR USUARIO ACTUAL
-    // =====================================
-
-    localStorage.setItem(
-      'usuarioActual',
-      JSON.stringify({
-        documento: usuario.documento,
-        nombre: usuario.nombre,
-        rol: usuario.rol,
-        grado: usuario.grado || null
-      })
-    );
-
-    // =====================================
-    // REDIRECCIONAR SEGÚN EL ROL
-    // =====================================
-
-    if (usuario.rol === 'profesor') {
-
-      this.router.navigate(['/profesor/seleccionar-grado']);
-
-    } else {
-
-      this.router.navigate(['/estudiante/inicio']);
-
-    }
-
+    if (!documento || !password) return;
+    this.cargando = true;
+    this.auth.login({ documento, password }).subscribe({
+      next: ({ usuario }) => {
+        this.cargando = false;
+        this.router.navigate([usuario.rol === 'profesor' ? '/profesor/seleccionar-grado' : '/estudiante/inicio']);
+      },
+      error: (error: HttpErrorResponse) => {
+        this.cargando = false;
+        this.mensajeError = error.status === 0
+          ? 'No fue posible conectar con el servidor. Intenta de nuevo.'
+          : error.error?.message || 'Documento o contraseña incorrectos.';
+      }
+    });
   }
 
 }

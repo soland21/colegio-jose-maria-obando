@@ -10,9 +10,6 @@ import {
 
 import { EntregaService } from '../../services/entrega.service';
 
-// ==========================================
-// INTERFACES
-// ==========================================
 
 interface Materia {
   nombre: string;
@@ -44,9 +41,6 @@ interface Estudiante {
   grado: string;
 }
 
-// ==========================================
-// COMPONENTE
-// ==========================================
 
 @Component({
   selector: 'app-mis-materias',
@@ -62,29 +56,20 @@ interface Estudiante {
 
 export class MisMaterias {
 
-  // ==========================================
-  // INFORMACIÓN DEL PROFESOR
-  // ==========================================
 
   nombreProfesor = 'Profesor';
   documentoProfesor = '';
 
-  // ==========================================
-  // GRADO SELECCIONADO
-  // ==========================================
+
 
   gradoSeleccionado = '';
   gradoNumero = 0;
 
-  // ==========================================
-  // MATERIA SELECCIONADA
-  // ==========================================
+
 
   materiaSeleccionada = '';
 
-  // ==========================================
-  // CONTROL DE INTERFACES
-  // ==========================================
+
 
   mostrarMaterias = false;
   mostrarMasOpciones = false;
@@ -97,9 +82,7 @@ export class MisMaterias {
     this.mostrarMaterias = !this.mostrarMaterias;
   }
 
-  // ==========================================
-  // CONFIGURACIÓN DE MATERIAS
-  // ==========================================
+
 
   private configuracionMaterias: Record<string, {
     icono: string;
@@ -168,19 +151,14 @@ export class MisMaterias {
     }
   };
 
-  // ==========================================
-  // MATERIAS ASIGNADAS AL PROFESOR
-  // ==========================================
 
   get materias(): Materia[] {
 
-    // Si no hay profesor o grado seleccionado,
-    // no se muestran materias.
+
     if (!this.documentoProfesor || !this.gradoSeleccionado) {
       return [];
     }
 
-    // Consultar las asignaciones del profesor
     const asignaciones = this.entregaService.asignacionesDocentes;
 
     const materiasAsignadas = asignaciones
@@ -195,7 +173,7 @@ export class MisMaterias {
     // Eliminar materias repetidas
     const materiasUnicas = [...new Set(materiasAsignadas)];
 
-    // Construir las tarjetas de las materias
+
     return materiasUnicas.map(nombre => {
 
       const configuracion = this.configuracionMaterias[nombre];
@@ -213,9 +191,6 @@ export class MisMaterias {
 
   }
 
-  // ==========================================
-  // NORMALIZAR TEXTO
-  // ==========================================
 
   private normalizarTexto(texto: string): string {
 
@@ -227,9 +202,6 @@ export class MisMaterias {
 
   }
 
-  // ==========================================
-  // RESUMEN GENERAL
-  // ==========================================
 
   get totalMaterias(): number {
     return this.materias.length;
@@ -263,15 +235,9 @@ export class MisMaterias {
 
   }
 
-  // ==========================================
-  // ENTREGAS PENDIENTES
-  // ==========================================
 
   entregasPorRevisar = 7;
 
-  // ==========================================
-  // ANUNCIOS
-  // ==========================================
 
   anuncios: Anuncio[] = [
     {
@@ -305,9 +271,6 @@ export class MisMaterias {
     
   ];
 
-  // ==========================================
-  // CALIFICACIONES RECIENTES
-  // ==========================================
 
   calificacionesRecientes: Calificacion[] = [
     {
@@ -336,9 +299,6 @@ export class MisMaterias {
     }
   ];
 
-  // ==========================================
-  // ESTUDIANTES DEL CURSO
-  // ==========================================
 
   estudiantes: Estudiante[] = [
     { id: 1, nombre: 'Nicolás Rodríguez', grado: 'Noveno' },
@@ -353,9 +313,6 @@ export class MisMaterias {
     { id: 10, nombre: 'Santiago Pérez', grado: 'Noveno' }
   ];
 
-  // ==========================================
-  // CONSTRUCTOR
-  // ==========================================
 
   constructor(
     private router: Router,
@@ -363,7 +320,6 @@ export class MisMaterias {
     private entregaService: EntregaService
   ) {
 
-    // Recuperar información del profesor
     const usuarioGuardado = localStorage.getItem('usuarioActual');
 
     if (usuarioGuardado) {
@@ -386,7 +342,6 @@ export class MisMaterias {
 
     }
 
-    // Recuperar grado seleccionado
     this.route.queryParams.subscribe(params => {
 
       let numeroGrado = Number(params['grado']);
@@ -413,7 +368,6 @@ export class MisMaterias {
 
       }
 
-      // Validar grado
       if (numeroGrado >= 6 && numeroGrado <= 11) {
 
         this.gradoNumero = numeroGrado;
@@ -421,7 +375,7 @@ export class MisMaterias {
         this.gradoSeleccionado =
           this.obtenerNombreGrado(numeroGrado);
 
-        // Mostrar información para verificar las asignaciones
+
         console.log('========== MIS MATERIAS ==========');
         console.log('Profesor:', this.nombreProfesor);
         console.log('Documento:', this.documentoProfesor);
@@ -442,9 +396,6 @@ export class MisMaterias {
 
   }
 
-  // ==========================================
-  // OBTENER NOMBRE DEL GRADO
-  // ==========================================
 
   obtenerNombreGrado(numero: number): string {
 
@@ -461,9 +412,6 @@ export class MisMaterias {
 
   }
 
-  // ==========================================
-  // SELECCIONAR MATERIA
-  // ==========================================
 
   seleccionarMateria(nombreMateria: string): void {
 
@@ -493,9 +441,6 @@ export class MisMaterias {
 
   }
 
-  // ==========================================
-  // CONSULTAR ANUNCIOS POR MATERIA
-  // ==========================================
 
   obtenerAnunciosPorMateria(nombreMateria: string): Anuncio[] {
 
@@ -505,9 +450,6 @@ export class MisMaterias {
 
   }
 
-  // ==========================================
-  // CONSULTAR CALIFICACIONES POR MATERIA
-  // ==========================================
 
   obtenerCalificacionesPorMateria(
     nombreMateria: string
@@ -519,12 +461,10 @@ export class MisMaterias {
 
   }
 
-  // ==========================================
-  // CERRAR SESIÓN
-  // ==========================================
 
   cerrarSesion(): void {
 
+    localStorage.removeItem('accessToken');
     localStorage.removeItem('usuarioActual');
     localStorage.removeItem('gradoSeleccionado');
     localStorage.removeItem('materiaSeleccionada');

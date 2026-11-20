@@ -1,7 +1,4 @@
 
-/* ==========================================
-   CONFIGURACIÓN GENERAL
-========================================== */
 
 * {
   box-sizing: border-box;
@@ -29,9 +26,6 @@
     url('/josemariaobando.png') center / cover fixed no-repeat;
 }
 
-/* ==========================================
-   BARRA SUPERIOR
-========================================== */
 
 .topbar {
   width: 100%;
@@ -100,9 +94,6 @@
   font-weight: 700;
 }
 
-/* ==========================================
-   DISTRIBUCIÓN GENERAL
-========================================== */
 
 .dashboard-layout {
   display: flex;
@@ -119,9 +110,6 @@
   align-items: stretch;
 }
 
-/* ==========================================
-   MENÚ LATERAL
-========================================== */
 
 .sidebar {
   width: 230px;
@@ -217,9 +205,6 @@
   display: contents;
 }
 
-/* ==========================================
-   CONTENIDO PRINCIPAL
-========================================== */
 
 .main-content {
   flex: 1;
@@ -252,9 +237,6 @@
   background: transparent;
 }
 
-/* ==========================================
-   BIENVENIDA
-========================================== */
 
 .welcome-section {
   position: relative;
@@ -348,9 +330,6 @@
   max-width: 520px;
 }
 
-/* ==========================================
-   GRADO Y MATERIAS
-========================================== */
 
 .welcome-options {
   display: flex;
@@ -398,10 +377,6 @@
   font-size: 15px;
   color: white;
 }
-
-/* ==========================================
-   SELECTOR DE MATERIAS
-========================================== */
 
 .subject-selector {
   position: relative;
@@ -566,9 +541,6 @@
   text-align: center;
 }
 
-/* ==========================================
-   TARJETAS DE RESUMEN
-========================================== */
 
 .summary-grid {
   display: grid;
@@ -641,9 +613,6 @@
   font-size: 23px;
 }
 
-/* ==========================================
-   TARJETAS GENERALES
-========================================== */
 
 .content-card {
   min-width: 0;
@@ -690,9 +659,6 @@
   white-space: nowrap;
 }
 
-/* ==========================================
-   MATERIAS
-========================================== */
 
 .subjects-grid {
   display: grid;
@@ -807,9 +773,6 @@
   font-size: 15px;
 }
 
-/* ==========================================
-   ANUNCIOS Y CALIFICACIONES
-========================================== */
 
 .content-grid {
   display: grid;
@@ -954,9 +917,6 @@
   font-size: 10px;
 }
 
-/* ==========================================
-   TABLA DE ESTUDIANTES
-========================================== */
 
 .table-container {
   width: 100%;
@@ -999,9 +959,6 @@
   font-size: 12px;
 }
 
-/* ==========================================
-   PIE DE PÁGINA
-========================================== */
 
 .footer {
   display: flex;
@@ -1016,9 +973,6 @@
   font-size: 11px;
 }
 
-/* ==========================================
-   TABLET
-========================================== */
 
 @media (max-width: 1100px) {
 
@@ -1036,9 +990,6 @@
 
 }
 
-/* ==========================================
-   MÓVIL
-========================================== */
 
 @media (max-width: 750px) {
 
@@ -1180,10 +1131,6 @@
 
 }
 
-/* ==========================================
-   MÓVILES PEQUEÑOS
-========================================== */
-
 @media (max-width: 480px) {
 
   .topbar {
@@ -1261,10 +1208,6 @@
 
 }
 
-/* ==========================================
-   ACCESIBILIDAD
-========================================== */
-
 @media (prefers-reduced-motion: reduce) {
 
   *,
@@ -1277,10 +1220,6 @@
 
 }
 
-/* ==========================================
-   CORRECCIÓN DEL DESPLEGABLE DE MATERIAS
-========================================== */
-
 /* Permitir que el menú sobresalga del recuadro verde */
 .welcome-section {
   overflow: visible !important;
@@ -1288,7 +1227,6 @@
   z-index: 20;
 }
 
-/* Mantener los controles por encima del contenido */
 .welcome-options {
   position: relative;
   z-index: 30;
@@ -1323,14 +1261,12 @@
   z-index: 1000;
 }
 
-/* Evitar que las tarjetas posteriores tapen el menú */
 .summary-grid,
 .content-card {
   position: relative;
   z-index: 1;
 }
 
-/* Mantener visible el desplegable en celular */
 @media (max-width: 750px) {
 
   .welcome-section {

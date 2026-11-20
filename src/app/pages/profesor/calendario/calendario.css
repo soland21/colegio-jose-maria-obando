@@ -10,7 +10,6 @@
     url('/josemariaobando.png') center / cover fixed no-repeat;
 }
 
-/* ENCABEZADO */
 
 .topbar {
   min-height: 82px;
@@ -90,8 +89,6 @@
   min-width: 0;
 }
 
-/* MENÚ LATERAL */
-
 .sidebar {
   width: 230px;
   flex-shrink: 0;
@@ -164,8 +161,6 @@
   background: #fff0ef;
 }
 
-/* BIENVENIDA */
-
 .calendar-welcome {
   background: linear-gradient(110deg, #105c37, #18804b);
   border-radius: 16px;
@@ -202,8 +197,6 @@
   font-size: 48px;
   opacity: 0.9;
 }
-
-/* CALENDARIO */
 
 .calendar-card,
 .day-events-card {
@@ -321,8 +314,6 @@
   background: #18804b;
 }
 
-/* CUADRÍCULA */
-
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
@@ -427,8 +418,6 @@
   padding-left: 4px;
 }
 
-/* NOTA */
-
 .calendar-note {
   display: flex;
   align-items: flex-start;
@@ -441,8 +430,6 @@
   font-size: 11px;
   line-height: 1.6;
 }
-
-/* AGENDA DEL DÍA */
 
 .day-events-card {
   margin-top: 22px;

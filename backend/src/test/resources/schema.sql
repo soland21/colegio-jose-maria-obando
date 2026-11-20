@@ -1,0 +1,22 @@
+CREATE TABLE users (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  login VARCHAR(120) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  role VARCHAR(20) NOT NULL,
+  first_name VARCHAR(100) NOT NULL,
+  last_name VARCHAR(100) NOT NULL,
+  is_active BOOLEAN NOT NULL DEFAULT TRUE
+);
+
+CREATE TABLE academic_years (id BIGINT AUTO_INCREMENT PRIMARY KEY, is_active BOOLEAN NOT NULL);
+CREATE TABLE class_groups (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  academic_year_id BIGINT NOT NULL,
+  grade_level VARCHAR(30) NOT NULL,
+  is_active BOOLEAN NOT NULL
+);
+CREATE TABLE enrollments (
+  class_group_id BIGINT NOT NULL,
+  student_id BIGINT NOT NULL,
+  status VARCHAR(20) NOT NULL
+);

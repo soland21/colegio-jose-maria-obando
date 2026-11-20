@@ -9,9 +9,6 @@ import {
   PERIODOS_ACADEMICOS
 } from '../../services/entrega.service';
 
-// ==========================================
-// 1. INTERFACES
-// ==========================================
 
 interface FilaCalificacion {
   documentoEstudiante: string;
@@ -22,9 +19,6 @@ interface FilaCalificacion {
   promedios: Record<PeriodoAcademico, number | null>;
 }
 
-// ==========================================
-// 2. COMPONENTE
-// ==========================================
 
 @Component({
   selector: 'app-calificaciones-profesor',
@@ -48,9 +42,6 @@ export class Calificaciones {
 
   entregas: Entrega[] = [];
 
-  // ==========================================
-  // MENÚ DE MÁS OPCIONES
-  // ==========================================
 
   mostrarMasOpciones = false;
 
@@ -63,9 +54,6 @@ export class Calificaciones {
     private router: Router
   ) {
 
-    // ==========================================
-    // RECUPERAR PROFESOR ACTUAL
-    // ==========================================
 
     const usuarioGuardado = localStorage.getItem('usuarioActual');
 
@@ -90,10 +78,6 @@ export class Calificaciones {
 
     }
 
-    // ==========================================
-    // ESCUCHAR ACTUALIZACIONES DE CALIFICACIONES
-    // ==========================================
-
     this.entregaService.entregas$.subscribe(entregas => {
 
       this.entregas = [...entregas];
@@ -101,10 +85,6 @@ export class Calificaciones {
     });
 
   }
-
-  // ==========================================
-  // 3. MATERIAS DEL PROFESOR
-  // ==========================================
 
   get materias(): string[] {
 
@@ -120,9 +100,6 @@ export class Calificaciones {
 
   }
 
-  // ==========================================
-  // 4. CONSTRUIR TABLA DE CALIFICACIONES
-  // ==========================================
 
   get filas(): FilaCalificacion[] {
 
@@ -239,9 +216,6 @@ export class Calificaciones {
 
     });
 
-    // ==========================================
-    // 5. CALCULAR PROMEDIOS POR PERIODO
-    // ==========================================
 
     grupos.forEach(fila => {
 
@@ -279,9 +253,6 @@ export class Calificaciones {
 
     });
 
-    // ==========================================
-    // 6. ORDENAR ESTUDIANTES
-    // ==========================================
 
     return Array.from(grupos.values()).sort((a, b) =>
 
@@ -290,10 +261,6 @@ export class Calificaciones {
     );
 
   }
-
-  // ==========================================
-  // 7. NORMALIZAR PERIODO
-  // ==========================================
 
   normalizarPeriodo(periodo?: string): PeriodoAcademico {
 
@@ -305,9 +272,6 @@ export class Calificaciones {
 
   }
 
-  // ==========================================
-  // 8. NORMALIZAR TEXTO
-  // ==========================================
 
   normalizarTexto(texto: string): string {
 
@@ -323,9 +287,6 @@ export class Calificaciones {
 
   }
 
-  // ==========================================
-  // 9. FORMATO DE NOTAS
-  // ==========================================
 
   formatoNota(nota: number | null): string {
 
@@ -337,9 +298,6 @@ export class Calificaciones {
 
   }
 
-  // ==========================================
-  // 10. CERRAR SESIÓN
-  // ==========================================
 
   cerrarSesion(): void {
 

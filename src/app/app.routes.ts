@@ -12,6 +12,7 @@ import { SeleccionarGrado } from './pages/profesor/seleccionar-grado/seleccionar
 
 import { Calificaciones } from './pages/profesor/calificaciones/calificaciones';
 import { Calendario } from './pages/profesor/calendario/calendario';
+import { authGuard, roleGuard } from './core/auth/auth.guards';
 
 export const routes: Routes = [
 
@@ -27,34 +28,44 @@ export const routes: Routes = [
 
   {
     path: 'estudiante/inicio',
-    component: Dashboard
+    component: Dashboard,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['estudiante'] }
   },
 
   {
     path: 'profesor/inicio',
-    component: DashboardProfesor
+    component: DashboardProfesor,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['profesor'] }
   },
 
   {
     path: 'profesor/materias',
-    component: MisMaterias
+    component: MisMaterias,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['profesor'] }
   },
-
-  // NUEVA RUTA: SELECCIÓN DE GRADO
 
   {
     path: 'profesor/seleccionar-grado',
-    component: SeleccionarGrado
+    component: SeleccionarGrado,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['profesor'] }
   },
 
   {
     path: 'profesor/calificaciones',
-    component: Calificaciones
+    component: Calificaciones,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['profesor'] }
   },
 
   {
     path: 'profesor/calendario',
-    component: Calendario
+    component: Calendario,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['profesor'] }
   },
 
   {

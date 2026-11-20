@@ -1,9 +1,6 @@
 
 <div class="dashboard-page">
 
-  <!-- ==========================================
-       ENCABEZADO
-  =========================================== -->
 
   <header class="topbar">
 
@@ -28,10 +25,6 @@
     </div>
 
   </header>
-
-  <!-- ==========================================
-       DISTRIBUCIÓN GENERAL
-  =========================================== -->
 
   <div class="dashboard-layout">
 
@@ -102,10 +95,6 @@
       </div>
 
     </aside>
-
-    <!-- ==========================================
-         CONTENIDO PRINCIPAL
-    =========================================== -->
 
     <main class="main-content">
 
@@ -193,10 +182,6 @@
 
       </section>
 
-      <!-- ==========================================
-           TARJETAS DE RESUMEN
-      =========================================== -->
-
       <section class="summary-grid">
 
         <!-- ESTUDIANTES -->
@@ -219,7 +204,6 @@
           
         </button>
 
-        <!-- TAREAS PUBLICADAS -->
 
         <article class="summary-card">
 
@@ -234,8 +218,6 @@
           </div>
 
         </article>
-
-        <!-- ENTREGAS POR REVISAR -->
 
         <button
           type="button"
@@ -260,10 +242,6 @@
         </button>
 
       </section>
-
-      <!-- ==========================================
-           TAREAS Y ANUNCIOS
-      =========================================== -->
 
       <div class="content-grid">
 
@@ -367,8 +345,6 @@
 
         </section>
 
-        <!-- ANUNCIOS -->
-
         <section class="content-card announcements-section">
 
           <div class="section-header">
@@ -440,9 +416,6 @@
 
   </div>
 
-  <!-- ==========================================
-       MODAL: ENTREGAS POR REVISAR
-  =========================================== -->
 
   @if (mostrarModalEntregasPendientes) {
 
@@ -650,9 +623,6 @@
 
   }
 
-  <!-- ==========================================
-       MODAL: PUBLICAR / EDITAR TAREA
-  =========================================== -->
 
   @if (mostrarModalTarea) {
 
@@ -667,7 +637,6 @@
         aria-labelledby="task-modal-title"
         (click)="$event.stopPropagation()">
 
-        <!-- CABECERA -->
 
         <div class="task-modal-header">
 
@@ -701,7 +670,6 @@
 
         </div>
 
-        <!-- CUERPO DEL MODAL -->
 
         <div class="task-modal-body">
 
@@ -737,7 +705,6 @@
 
           </div>
 
-          <!-- MATERIA Y GRADO -->
 
           <div class="task-form-row">
 
@@ -791,7 +758,6 @@
 
           </div>
 
-          <!-- PERIODO ACADÉMICO -->
 
           <div class="task-form-group">
 
@@ -817,7 +783,6 @@
 
           </div>
 
-          <!-- FECHA DE ENTREGA -->
 
           <div class="task-form-group">
 
@@ -832,8 +797,6 @@
               [value]="fechaEntregaTareaModal">
 
           </div>
-
-          <!-- ARCHIVO PDF -->
 
           <div class="task-form-group">
 
@@ -903,7 +866,6 @@
 
           </div>
 
-          <!-- INFORMACIÓN DEL DESTINO -->
 
           <div class="task-target-information">
 
@@ -933,7 +895,6 @@
 
         </div>
 
-        <!-- PIE DEL MODAL -->
 
         <div class="task-modal-footer">
 
@@ -969,9 +930,6 @@
 
   }
 
-  <!-- ==========================================
-       MODAL: CREAR ANUNCIO
-  =========================================== -->
 
   @if (mostrarModalAnuncio) {
 
@@ -986,7 +944,6 @@
         aria-labelledby="announcement-modal-title"
         (click)="$event.stopPropagation()">
 
-        <!-- CABECERA -->
 
         <div class="task-modal-header">
 
@@ -1016,11 +973,9 @@
 
         </div>
 
-        <!-- CUERPO DEL MODAL -->
 
         <div class="task-modal-body">
 
-          <!-- TÍTULO -->
 
           <div class="task-form-group">
 
@@ -1037,7 +992,6 @@
 
           </div>
 
-          <!-- MENSAJE -->
 
           <div class="task-form-group">
 
@@ -1054,7 +1008,6 @@
 
           </div>
 
-          <!-- GRADO DESTINATARIO -->
 
           <div class="task-form-group">
 
@@ -1084,7 +1037,6 @@
 
           </div>
 
-          <!-- INFORMACIÓN DEL DESTINO -->
 
           <div class="task-target-information">
 
@@ -1103,7 +1055,6 @@
 
         </div>
 
-        <!-- PIE DEL MODAL -->
 
         <div class="task-modal-footer">
 
@@ -1123,7 +1074,7 @@
               gradoAnuncio.value
             )">
 
-            📢 Publicar anuncio
+             Publicar anuncio
 
           </button>
 

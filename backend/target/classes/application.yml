@@ -1,0 +1,14 @@
+server:
+  port: ${PORT:8080}
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/colegio_jose_maria_obando?useSSL=false&serverTimezone=UTC}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:}
+  sql:
+    init:
+      mode: never
+app:
+  jwt:
+    # Define JWT_SECRET como una clave Base64 de al menos 32 bytes antes de iniciar.
+    secret: ${JWT_SECRET}

@@ -1,0 +1,8 @@
+co\edu\jmo\security\CorsConfig.class
+co\edu\jmo\auth\AuthController$LoginRequest.class
+co\edu\jmo\auth\AuthController.class
+co\edu\jmo\auth\AccountDetailsService.class
+co\edu\jmo\auth\AuthController$UserInfo.class
+co\edu\jmo\auth\AuthController$LoginResponse.class
+co\edu\jmo\ColegioBackendApplication.class
+co\edu\jmo\security\SecurityConfig.class

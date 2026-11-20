@@ -95,7 +95,7 @@
 
       <div class="sidebar-bottom">
 
-        <a routerLink="/" class="menu-item logout">
+        <a routerLink="/" (click)="cerrarSesion()" class="menu-item logout">
           <span>↪</span>
           Cerrar sesión
         </a>
@@ -133,10 +133,8 @@
 
       </section>
 
-      <!-- TARJETAS INFORMATIVAS -->
       <section class="stats-grid">
 
-        <!-- TAREAS PENDIENTES -->
         <article class="stat-card">
 
           <div class="stat-icon pending">
@@ -150,7 +148,6 @@
 
         </article>
 
-        <!-- TAREAS ENTREGADAS: ABRE MODAL -->
         <button
           type="button"
           class="stat-card stat-card-button"
@@ -173,10 +170,8 @@
 
       </section>
 
-      <!-- TAREAS Y ANUNCIOS -->
       <div class="content-grid">
 
-        <!-- PRÓXIMAS TAREAS -->
         <section class="content-card tasks-section">
 
           <div class="section-heading">
@@ -194,7 +189,6 @@
 
           </div>
 
-          <!-- LISTADO CON SCROLL -->
           <div class="tasks-scroll">
 
             @for (tarea of tareasPendientesLista; track tarea.id) {
@@ -343,7 +337,6 @@
 
       </div>
 
-      <!-- RETROALIMENTACIONES -->
       <section class="content-card feedback-section">
 
         <div class="section-heading">
@@ -446,9 +439,6 @@
 
   </div>
 
-  <!-- ======================================
-       MODAL DE TAREAS ENTREGADAS
-  ======================================= -->
 
   @if (mostrarModalEntregadas) {
 
@@ -498,7 +488,7 @@
             <strong>{{ tareasEntregadas }}</strong>
           </div>
 
-          <!-- LISTA DE ENTREGADAS -->
+
           <div class="delivered-list">
 
             @for (
@@ -594,9 +584,6 @@
 
   }
 
-  <!-- ======================================
-       MODAL PARA ENTREGAR TAREA
-  ======================================= -->
 
   @if (mostrarFormularioEntrega && tareaSeleccionada) {
 

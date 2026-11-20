@@ -3,10 +3,6 @@
   box-sizing: border-box;
 }
 
-/* ==========================================
-   PÁGINA GENERAL
-========================================== */
-
 .grades-page {
   min-height: 100vh;
   background:
@@ -14,10 +10,6 @@
     url('/josemariaobando.png') center / cover fixed no-repeat;
   color: #294436;
 }
-
-/* ==========================================
-   ENCABEZADO
-========================================== */
 
 .grades-topbar {
   min-height: 82px;
@@ -76,20 +68,12 @@
   font-size: 13px;
 }
 
-/* ==========================================
-   DISTRIBUCIÓN PRINCIPAL
-========================================== */
-
 .grades-layout {
   min-height: calc(100vh - 82px);
   display: flex;
   gap: 22px;
   padding: 25px;
 }
-
-/* ==========================================
-   MENÚ LATERAL
-========================================== */
 
 .grades-sidebar {
   width: 230px;
@@ -151,10 +135,6 @@
   color: #a94442;
 }
 
-/* ==========================================
-   MENÚ ADICIONAL EN PANTALLAS GRANDES
-========================================== */
-
 .more-options {
   width: 100%;
 }
@@ -192,18 +172,10 @@
   display: none;
 }
 
-/* ==========================================
-   CONTENIDO PRINCIPAL
-========================================== */
-
 .grades-main {
   flex: 1;
   min-width: 0;
 }
-
-/* ==========================================
-   BIENVENIDA Y FILTRO
-========================================== */
 
 .grades-welcome {
   display: flex;
@@ -270,10 +242,6 @@
   background: white;
 }
 
-/* ==========================================
-   TARJETAS DE RESUMEN
-========================================== */
-
 .grades-summary {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -299,10 +267,6 @@
   color: #18324b;
   font-size: 25px;
 }
-
-/* ==========================================
-   TARJETA DE CALIFICACIONES
-========================================== */
 
 .grades-card {
   min-width: 0;
@@ -341,10 +305,6 @@
   font-weight: 700;
   white-space: nowrap;
 }
-
-/* ==========================================
-   TABLA DE CALIFICACIONES
-========================================== */
 
 .grades-table-wrapper {
   width: 100%;
@@ -433,10 +393,6 @@
   color: #a5aea8;
 }
 
-/* ==========================================
-   ESTADO SIN CALIFICACIONES
-========================================== */
-
 .grades-empty {
   padding: 55px 20px;
   text-align: center;
@@ -460,10 +416,6 @@
   font-size: 12px;
   line-height: 1.7;
 }
-
-/* ==========================================
-   TABLET Y PANTALLAS MEDIANAS
-========================================== */
 
 @media (max-width: 1000px) {
 
@@ -490,8 +442,6 @@
   .desktop-more-links {
     display: none;
   }
-
-  /* Mostrar botón de tres puntos */
 
   .mobile-more-options {
     display: flex;
@@ -555,10 +505,6 @@
 
 }
 
-/* ==========================================
-   CELULARES
-========================================== */
-
 @media (max-width: 700px) {
 
   .grades-topbar {
@@ -614,7 +560,6 @@
     font-size: 11px;
   }
 
-  /* Botón de tres puntos en la barra horizontal */
 
   .more-options {
     flex: 0 0 45px;
@@ -631,8 +576,6 @@
     min-height: 40px;
     padding: 5px;
   }
-
-  /* Menú desplegable flotante */
 
   .more-links {
     position: absolute;

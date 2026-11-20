@@ -1,8 +1,4 @@
 
-/* ==========================================
-   CONFIGURACIÓN GENERAL
-========================================== */
-
 * {
   box-sizing: border-box;
 }
@@ -19,9 +15,7 @@
     url('/josemariaobando.png') center / cover fixed no-repeat;
 }
 
-/* ==========================================
-   BARRA SUPERIOR
-========================================== */
+
 
 .topbar {
   min-height: 82px;
@@ -93,9 +87,6 @@
   font-size: 11px;
 }
 
-/* ==========================================
-   DISTRIBUCIÓN PRINCIPAL
-========================================== */
 
 .dashboard-layout {
   display: flex;
@@ -105,9 +96,6 @@
   gap: 22px;
 }
 
-/* ==========================================
-   MENÚ LATERAL
-========================================== */
 
 .sidebar {
   width: 230px;
@@ -171,7 +159,6 @@
   border-left: 3px solid #18804b;
 }
 
-/* Opciones bloqueadas */
 
 .sidebar-menu a.disabled-link,
 .sidebar-bottom a.disabled-link {
@@ -204,18 +191,10 @@
   color: #b42318;
 }
 
-/* ==========================================
-   CONTENIDO PRINCIPAL
-========================================== */
-
 .main-content {
   flex: 1;
   min-width: 0;
 }
-
-/* ==========================================
-   BIENVENIDA - RECUADRO VERDE
-========================================== */
 
 .welcome-section {
   position: relative;
@@ -245,7 +224,6 @@
   box-shadow: 0 8px 24px rgba(0, 55, 32, 0.20);
 }
 
-/* Decoración circular */
 
 .welcome-section::after {
   content: "";
@@ -304,9 +282,6 @@
   max-width: 650px;
 }
 
-/* ==========================================
-   INFORMACIÓN INSTITUCIONAL
-========================================== */
 
 .institution-card {
   display: flex;
@@ -359,9 +334,6 @@
   font-weight: 600;
 }
 
-/* ==========================================
-   SELECCIÓN DE GRADOS
-========================================== */
 
 .grade-section {
   background: rgba(255, 255, 255, 0.97);
@@ -493,9 +465,6 @@
   font-size: 18px;
 }
 
-/* ==========================================
-   PIE DE PÁGINA
-========================================== */
 
 .footer {
   padding: 25px 10px 5px;
@@ -511,10 +480,6 @@
   color: #f4d65e;
 }
 
-/* ==========================================
-   TABLETS
-========================================== */
-
 @media (max-width: 1100px) {
 
   .grade-grid {
@@ -526,10 +491,6 @@
   }
 
 }
-
-/* ==========================================
-   MÓVILES
-========================================== */
 
 @media (max-width: 750px) {
 
@@ -597,7 +558,6 @@
     display: none;
   }
 
-  /* Bienvenida */
 
   .welcome-section {
     min-height: 170px;
@@ -629,9 +589,6 @@
 
 }
 
-/* ==========================================
-   MÓVILES PEQUEÑOS
-========================================== */
 
 @media (max-width: 480px) {
 

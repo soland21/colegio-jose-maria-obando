@@ -20,9 +20,6 @@ import {
   TareaPublicada
 } from '../../services/entrega.service';
 
-// ==========================================
-// 1. INTERFACES
-// ==========================================
 
 interface Tarea extends TareaPublicada {
   fecha: string;
@@ -39,10 +36,6 @@ interface Anuncio {
   fecha: string;
 }
 
-// ==========================================
-// 2. COMPONENTE
-// ==========================================
-
 @Component({
   selector: 'app-dashboard-estudiante',
   standalone: true,
@@ -56,9 +49,6 @@ interface Anuncio {
 
 export class Dashboard implements OnInit, OnDestroy {
 
-  // ==========================================
-  // 3. SERVICIO
-  // ==========================================
 
   private entregaService = inject(EntregaService);
 
@@ -66,39 +56,21 @@ export class Dashboard implements OnInit, OnDestroy {
 
   private readonly ANUNCIOS_STORAGE_KEY = 'anunciosColegio';
 
-  // ==========================================
-  // 4. INFORMACIÓN DEL ESTUDIANTE
-  // ==========================================
-
   nombreEstudiante = 'Estudiante';
 
   grado = '';
 
   documentoEstudiante = '';
 
-  // ==========================================
-  // 5. TAREAS Y ENTREGAS
-  // ==========================================
-
   tareas: Tarea[] = [];
 
   entregasEstudiante: Entrega[] = [];
 
-  // ==========================================
-  // 6. ANUNCIOS
-  // ==========================================
-
   anuncios: Anuncio[] = [];
-
-  // ==========================================
-  // 7. INICIALIZACIÓN
-  // ==========================================
 
   ngOnInit(): void {
 
     this.cargarUsuario();
-
-    // Escuchar cambios en las tareas.
 
     this.suscripciones.add(
       this.entregaService.tareas$.subscribe(() => {
@@ -106,15 +78,11 @@ export class Dashboard implements OnInit, OnDestroy {
       })
     );
 
-    // Escuchar cambios en las entregas.
-
     this.suscripciones.add(
       this.entregaService.entregas$.subscribe(() => {
         this.cargarEntregasEstudiante();
       })
     );
-
-    // Cargar información inicial.
 
     this.cargarTareasEstudiante();
 
@@ -123,10 +91,6 @@ export class Dashboard implements OnInit, OnDestroy {
     this.cargarAnunciosEstudiante();
 
   }
-
-  // ==========================================
-  // 8. DETECTAR CAMBIOS EN OTRAS PESTAÑAS
-  // ==========================================
 
   @HostListener('window:storage', ['$event'])
   detectarCambiosStorage(event: StorageEvent): void {
@@ -149,9 +113,6 @@ export class Dashboard implements OnInit, OnDestroy {
 
     }
 
-    // Actualizar anuncios cuando el profesor publique
-    // uno nuevo desde otra pestaña.
-
     if (
       event.key === this.ANUNCIOS_STORAGE_KEY ||
       event.key === null
@@ -163,17 +124,9 @@ export class Dashboard implements OnInit, OnDestroy {
 
   }
 
-  // ==========================================
-  // 9. DESTRUIR SUSCRIPCIONES
-  // ==========================================
-
   ngOnDestroy(): void {
     this.suscripciones.unsubscribe();
   }
-
-  // ==========================================
-  // 10. CARGAR USUARIO ACTUAL
-  // ==========================================
 
   cargarUsuario(): void {
 
@@ -241,9 +194,10 @@ export class Dashboard implements OnInit, OnDestroy {
 
   }
 
-  // ==========================================
-  // 11. CARGAR TAREAS DEL ESTUDIANTE
-  // ==========================================
+  cerrarSesion(): void {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('usuarioActual');
+  }
 
   cargarTareasEstudiante(): void {
 
@@ -279,10 +233,6 @@ export class Dashboard implements OnInit, OnDestroy {
 
   }
 
-  // ==========================================
-  // 12. FORMATEAR FECHA
-  // ==========================================
-
   formatearFecha(fecha: string): string {
 
     if (!fecha) {
@@ -300,10 +250,6 @@ export class Dashboard implements OnInit, OnDestroy {
     return `${dia}/${mes}/${anio}`;
 
   }
-
-  // ==========================================
-  // 13. FORMATEAR FECHA Y HORA DE ENTREGA
-  // ==========================================
 
   formatearFechaHora(fecha: string): string {
 
@@ -333,10 +279,6 @@ export class Dashboard implements OnInit, OnDestroy {
 
   }
 
-  // ==========================================
-  // 14. CARGAR ENTREGAS DEL ESTUDIANTE
-  // ==========================================
-
   cargarEntregasEstudiante(): void {
 
     if (!this.documentoEstudiante) {
@@ -356,10 +298,6 @@ export class Dashboard implements OnInit, OnDestroy {
     this.actualizarEstadoTareas();
 
   }
-
-  // ==========================================
-  // 15. ACTUALIZAR ESTADOS DE LAS TAREAS
-  // ==========================================
 
   actualizarEstadoTareas(): void {
 
@@ -399,10 +337,6 @@ export class Dashboard implements OnInit, OnDestroy {
 
   }
 
-  // ==========================================
-  // 16. NORMALIZAR TEXTOS
-  // ==========================================
-
   private normalizarTexto(texto: string): string {
 
     return String(texto || '')
@@ -412,10 +346,6 @@ export class Dashboard implements OnInit, OnDestroy {
       .toLowerCase();
 
   }
-
-  // ==========================================
-  // 17. CARGAR ANUNCIOS DEL GRADO
-  // ==========================================
 
   cargarAnunciosEstudiante(): void {
 
@@ -474,9 +404,6 @@ export class Dashboard implements OnInit, OnDestroy {
 
   }
 
-  // ==========================================
-  // 18. LISTADO DE TAREAS PENDIENTES
-  // ==========================================
 
   get tareasPendientesLista(): Tarea[] {
 
@@ -486,9 +413,6 @@ export class Dashboard implements OnInit, OnDestroy {
 
   }
 
-  // ==========================================
-  // 19. LISTADO DE TAREAS ENTREGADAS
-  // ==========================================
 
   get tareasEntregadasLista(): Tarea[] {
 
@@ -498,10 +422,6 @@ export class Dashboard implements OnInit, OnDestroy {
 
   }
 
-  // ==========================================
-  // 20. CONTADORES
-  // ==========================================
-
   get tareasPendientes(): number {
     return this.tareasPendientesLista.length;
   }
@@ -510,9 +430,6 @@ export class Dashboard implements OnInit, OnDestroy {
     return this.tareasEntregadasLista.length;
   }
 
-  // ==========================================
-  // 21. VENTANA DE TAREAS ENTREGADAS
-  // ==========================================
 
   mostrarModalEntregadas = false;
 
@@ -524,10 +441,6 @@ export class Dashboard implements OnInit, OnDestroy {
     this.mostrarModalEntregadas = false;
   }
 
-  // ==========================================
-  // 22. BUSCAR ENTREGA ASOCIADA A UNA TAREA
-  // ==========================================
-
   obtenerEntregaDeTarea(tareaId: string): Entrega | undefined {
 
     return this.entregasEstudiante.find(
@@ -536,19 +449,11 @@ export class Dashboard implements OnInit, OnDestroy {
 
   }
 
-  // ==========================================
-  // 23. MENÚ DE OPCIONES
-  // ==========================================
-
   mostrarMasOpciones = false;
 
   alternarOpciones(): void {
     this.mostrarMasOpciones = !this.mostrarMasOpciones;
   }
-
-  // ==========================================
-  // 24. FORMULARIO DE ENTREGA
-  // ==========================================
 
   mostrarFormularioEntrega = false;
 
@@ -557,10 +462,6 @@ export class Dashboard implements OnInit, OnDestroy {
   archivoSeleccionado: File | null = null;
 
   mensajeEntrega = '';
-
-  // ==========================================
-  // 25. ABRIR FORMULARIO
-  // ==========================================
 
   entregarTarea(tarea: Tarea): void {
 
@@ -578,9 +479,6 @@ export class Dashboard implements OnInit, OnDestroy {
 
   }
 
-  // ==========================================
-  // 26. SELECCIONAR ARCHIVO PDF
-  // ==========================================
 
   seleccionarArchivo(event: Event): void {
 
@@ -628,10 +526,6 @@ export class Dashboard implements OnInit, OnDestroy {
 
   }
 
-  // ==========================================
-  // 27. TAMAÑO DEL ARCHIVO
-  // ==========================================
-
   obtenerTamanoArchivo(tamano: number): string {
 
     const tamanoEnMB = tamano / (1024 * 1024);
@@ -640,9 +534,6 @@ export class Dashboard implements OnInit, OnDestroy {
 
   }
 
-  // ==========================================
-  // 28. QUITAR ARCHIVO
-  // ==========================================
 
   quitarArchivo(): void {
 
@@ -659,10 +550,6 @@ export class Dashboard implements OnInit, OnDestroy {
     }
 
   }
-
-  // ==========================================
-  // 29. CONFIRMAR ENTREGA
-  // ==========================================
 
   confirmarEntrega(): void {
 
@@ -706,10 +593,6 @@ export class Dashboard implements OnInit, OnDestroy {
     }
 
   }
-
-  // ==========================================
-  // 30. CERRAR FORMULARIO
-  // ==========================================
 
   cerrarFormularioEntrega(): void {
 

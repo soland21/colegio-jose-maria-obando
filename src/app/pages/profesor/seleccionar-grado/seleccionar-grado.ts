@@ -32,9 +32,6 @@ export class SeleccionarGrado implements OnInit {
     this.cargarProfesor();
   }
 
-  // =====================================
-  // RECUPERAR EL PROFESOR AUTENTICADO
-  // =====================================
 
   cargarProfesor(): void {
 
@@ -65,9 +62,6 @@ export class SeleccionarGrado implements OnInit {
     }
   }
 
-  // =====================================
-  // GRADOS DISPONIBLES
-  // =====================================
 
   grados: Grado[] = [
     {
@@ -102,14 +96,9 @@ export class SeleccionarGrado implements OnInit {
     }
   ];
 
-  // =====================================
-  // SELECCIONAR GRADO
-  // =====================================
 
   seleccionarGrado(grado: Grado): void {
 
-    // Guardar únicamente el grado seleccionado.
-    // No modificar usuarioActual.
 
     localStorage.setItem(
       'gradoSeleccionado',
@@ -124,12 +113,9 @@ export class SeleccionarGrado implements OnInit {
 
   }
 
-  // =====================================
-  // CERRAR SESIÓN
-  // =====================================
-
   cerrarSesion(): void {
 
+    localStorage.removeItem('accessToken');
     localStorage.removeItem('usuarioActual');
     localStorage.removeItem('gradoSeleccionado');
 

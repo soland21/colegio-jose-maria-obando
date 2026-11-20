@@ -1,7 +1,6 @@
 
 <div class="login-page">
 
-  <!-- Presentación institucional -->
   <section class="hero">
 
     <div class="hero-content">
@@ -20,7 +19,6 @@
 
   </section>
 
-  <!-- Tarjeta de inicio de sesión -->
   <section class="login-section">
 
     <div class="login-card">
@@ -43,7 +41,6 @@
         (ngSubmit)="iniciarSesion()"
       >
 
-        <!-- Documento -->
         <div class="input-group">
           <span>♟</span>
 
@@ -52,7 +49,6 @@
             formControlName="documento"
             placeholder="Documento de identidad"
             autocomplete="username"
-            (input)="identificarUsuario()"
           >
         </div>
 
@@ -63,8 +59,6 @@
           </small>
         }
 
-
-        <!-- Contraseña -->
         <div class="input-group">
           <span>🔒</span>
 
@@ -83,7 +77,6 @@
           </small>
         }
 
-        <!-- Mensaje de error -->
         @if (mensajeError) {
           <div class="error-message">
             {{ mensajeError }}
@@ -103,8 +96,8 @@
 
         </div>
 
-        <button class="login-button" type="submit">
-          Ingresar
+        <button class="login-button" type="submit" [disabled]="cargando">
+          {{ cargando ? 'Ingresando…' : 'Ingresar' }}
         </button>
 
       </form>
@@ -113,7 +106,6 @@
 
   </section>
 
-  <!-- Pie de página -->
   <footer class="footer">
     <span>🎓</span>
     <span>Colegio José María Obando</span>
